@@ -2,21 +2,32 @@ var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+		var constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
+		var damagedStructures = creep.room.find(FIND_STRUCTURES,{ filter: (structure) => {
+			return ( (100*structure.hits)/structure.hitsMax < 80 );
+		}});
 
-	    if(creep.memory.building && creep.carry.energy == 0) {
-            creep.memory.building = false;
-            creep.say('harvest');
+
+	    if(creep.memory.building && creep.carry.energy == 0 || creep.memory.repair && creep.carry.energy == 0) {
+			creep.memory.building = false;
+			creep.memory.repair = false;
+			creep.say('harvest');
 	    }
 	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
-	        creep.memory.building = true;
-	        creep.say('build');
+	        
+            if(!constructionSites.length) {
+				creep.memory.repair = true;
+				creep.say('repair');
+			} else {
+				creep.memory.building = true;
+				creep.say('build');
+			}
 	    }
 
 	    if(creep.memory.building) {
-	        var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-            if(targets.length) {
-                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            if(constructionSites.length) {
+                if(creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(constructionSites[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }else {
                 var targets = creep.room.find(FIND_STRUCTURES, {
@@ -26,13 +37,25 @@ var roleBuilder = {
                 });
                 creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
             }
-	    }
-	    else {
+	    } else if(creep.memory.repair){
+			if(damagedStructures.length) {
+                if(creep.repair(damagedStructures[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(damagedStructures[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            }else {
+                var targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return ( structure.structureType == STRUCTURE_SPAWN);
+                    }
+                });
+                creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+            }
+		} else {
 			var droppedResources = _.sortBy(creep.room.find(FIND_DROPPED_RESOURCES), s => creep.pos.getRangeTo(s));
+            var container = _.sortBy(creep.room.find(FIND_STRUCTURES, { filter: (structure) => {return (structure.structureType == STRUCTURE_CONTAINER)}}), s => creep.pos.getRangeTo(s));
             for (i = 0; i < droppedResources.length; i++) {
                 creep.pickup(droppedResources[i])
             } 
-            var container = _.sortBy(creep.room.find(FIND_STRUCTURES, { filter: (structure) => {return (structure.structureType == STRUCTURE_CONTAINER)}}), s => creep.pos.getRangeTo(s));
             if(!container.length || container[0].store[RESOURCE_ENERGY] < creep.carryCapacity) {
                 if(creep.pickup(droppedResources[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(droppedResources[0], {visualizePathStyle: {stroke: '#ffaa00'}});

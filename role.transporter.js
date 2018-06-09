@@ -13,19 +13,16 @@ var roleTransporter = {
                     creep.moveTo(container);
                 }
             }else {
-                if(creep.pickup(resources[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(resources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                if(creep.pickup(droppedResources[0]) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(droppedResources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
-            
-            
         }
         else {
             var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION || 
-                        structure.structureType == STRUCTURE_SPAWN ) &&
-                            (structure.energy || structure.store[RESOURCE_ENERGY]) < (structure.energyCapacity || structure.storeCapacity);
+                        return (structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION ) 
+                        && (structure.energy || structure.store[RESOURCE_ENERGY]) < (structure.energyCapacity || structure.storeCapacity);
                     }
             });
             // targets = _.sortBy(targets, t => creep.pos.getRangeTo(t));

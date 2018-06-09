@@ -22,7 +22,7 @@ module.exports.loop = function () {
     var upgradersLimit = 1;
 
     var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    var buildersLimit = 0;
+    var buildersLimit = 1;
 
     if(harvesters.length < harvestersLimit) {
         var newName = 'Harvester' + Game.time;

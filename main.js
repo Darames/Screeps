@@ -34,7 +34,7 @@ module.exports.loop = function () {
     }
     if(transporters.length < transportersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Transporter' + Game.time;
-        Game.spawns['Darames'].spawnCreep([CARRY,CARRY,MOVE,MOVE], newName, 
+        Game.spawns['Darames'].spawnCreep([CARRY,CARRY,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'transporter'}});
     }
     if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit) {

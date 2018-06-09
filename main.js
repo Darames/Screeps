@@ -13,7 +13,7 @@ module.exports.loop = function () {
     }
 
     var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-    var harvestersLimit = 1;
+    var harvestersLimit = 2;
 
     var transporters = _.filter(Game.creeps, (creep) => creep.memory.role == 'transporter');
     var transportersLimit = 1;
@@ -22,12 +22,15 @@ module.exports.loop = function () {
     var upgradersLimit = 1;
 
     var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    var buildersLimit = 3;
+    var buildersLimit = 0;
 
     if(harvesters.length < harvestersLimit) {
         var newName = 'Harvester' + Game.time;
-        Game.spawns['Darames'].spawnCreep([WORK,WORK,MOVE], newName, 
-            {memory: {role: 'harvester'}});
+        var source = 0;
+        var harvesterOnSource = _.filter(Game.creeps, (creep) => creep.memory.source == 0 );
+        if(harvesterOnSource.length){var source = 1;}
+
+        Game.spawns['Darames'].spawnCreep([WORK,WORK,MOVE], newName, {memory: {role: 'harvester', source: source }});
     }
     if(transporters.length < transportersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Transporter' + Game.time;
@@ -65,8 +68,8 @@ module.exports.loop = function () {
         if(creep.memory.role == 'builder') {
             roleBuilder.run(creep);
         }
-        if(creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
+        if(creep.memory.role == 'transporter') {
+            roleTransporter.run(creep);
         }
     }
 }

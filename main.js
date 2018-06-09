@@ -12,7 +12,7 @@ module.exports.loop = function () {
     }
 
     var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-    var harvestersLimit = 2;
+    var harvestersLimit = 1;
 
     var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
     var upgradersLimit = 1;

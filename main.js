@@ -18,7 +18,7 @@ module.exports.loop = function () {
     var upgradersLimit = 1;
 
     var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    var buildersLimit = 1;
+    var buildersLimit = 3;
     // console.log('Harvesters: ' + harvesters.length);
     
     // for(var name in Game.rooms) {

@@ -17,6 +17,7 @@ var roleHarvester = {
                             (structure.energy || structure.store[RESOURCE_ENERGY]) < (structure.energyCapacity || structure.storeCapacity);
                     }
             });
+            targets = _.sortBy(targets, t => creep.pos.getRangeTo(t));
             if(targets.length > 0) {
                 if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});

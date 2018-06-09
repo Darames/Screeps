@@ -27,19 +27,19 @@ module.exports.loop = function () {
 
     if(harvesters.length < harvestersLimit) {
         var newName = 'Harvester' + Game.time;
-        console.log('Spawning new harvester: ' + newName);
+        // console.log('Spawning new harvester: ' + newName);
         Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
             {memory: {role: 'harvester'}});
     }
     if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Upgrader' + Game.time;
-        console.log('Spawning new Upgrader: ' + newName);
-        Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE], newName, 
+        // console.log('Spawning new Upgrader: ' + newName);
+        Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
             {memory: {role: 'upgrader'}});
     }
-    if(builders.length < buildersLimit && harvesters.length == harvestersLimit) {
+    if(builders.length < buildersLimit && harvesters.length == harvestersLimit ) {
         var newName = 'Builder' + Game.time;
-        console.log('Spawning new Builder: ' + newName);
+        // console.log('Spawning new Builder: ' + newName);
         Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
             {memory: {role: 'builder'}});
     }

@@ -30,7 +30,7 @@ module.exports.loop = function () {
         var harvesterOnSource = _.filter(Game.creeps, (creep) => creep.memory.source == 0 );
         if(harvesterOnSource.length){var source = 1;}
 
-        Game.spawns['Darames'].spawnCreep([WORK,WORK,MOVE], newName, {memory: {role: 'harvester', source: source }});
+        Game.spawns['Darames'].spawnCreep([WORK,WORK,WORK,MOVE,MOVE], newName, {memory: {role: 'harvester', source: source }});
     }
     if(transporters.length < transportersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Transporter' + Game.time;
@@ -39,7 +39,7 @@ module.exports.loop = function () {
     }
     if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Upgrader' + Game.time;
-        Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
+        Game.spawns['Darames'].spawnCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'upgrader'}});
     }
     if(builders.length < buildersLimit && harvesters.length == harvestersLimit ) {

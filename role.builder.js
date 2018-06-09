@@ -52,8 +52,13 @@ var roleBuilder = {
             }
 		} else {
 			var droppedResources = _.sortBy(creep.room.find(FIND_DROPPED_RESOURCES), s => creep.pos.getRangeTo(s));
-            var container = _.sortBy(creep.room.find(FIND_STRUCTURES, { filter: (structure) => {return (structure.structureType == STRUCTURE_CONTAINER)}}), s => creep.pos.getRangeTo(s));
-            for (i = 0; i < droppedResources.length; i++) {
+			var sources = _.sortBy(creep.room.find(FIND_SOURCES), s => creep.pos.getRangeTo(s));
+            var container = sources[0].pos.findInRange(FIND_STRUCTURES, 2, {
+                filter: (structure) => {
+                    return structure.structureType === STRUCTURE_CONTAINER
+                }
+            })
+			for (i = 0; i < droppedResources.length; i++) {
                 creep.pickup(droppedResources[i])
             } 
             if(!container.length || container[0].store[RESOURCE_ENERGY] < creep.carryCapacity) {

@@ -28,28 +28,28 @@ module.exports.loop = function () {
     if(harvesters.length < harvestersLimit) {
         var newName = 'Harvester' + Game.time;
         console.log('Spawning new harvester: ' + newName);
-        Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
+        Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
             {memory: {role: 'harvester'}});
     }
     if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Upgrader' + Game.time;
         console.log('Spawning new Upgrader: ' + newName);
-        Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName, 
+        Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE], newName, 
             {memory: {role: 'upgrader'}});
     }
     if(builders.length < buildersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Builder' + Game.time;
         console.log('Spawning new Builder: ' + newName);
-        Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
+        Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
             {memory: {role: 'builder'}});
     }
     
-    if(Game.spawns['Spawn1'].spawning) { 
-        var spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];
-        Game.spawns['Spawn1'].room.visual.text(
+    if(Game.spawns['Darames'].spawning) { 
+        var spawningCreep = Game.creeps[Game.spawns['Darames'].spawning.name];
+        Game.spawns['Darames'].room.visual.text(
             '🛠️' + spawningCreep.memory.role,
-            Game.spawns['Spawn1'].pos.x + 1, 
-            Game.spawns['Spawn1'].pos.y, 
+            Game.spawns['Darames'].pos.x + 1, 
+            Game.spawns['Darames'].pos.y, 
             {align: 'left', opacity: 0.8});
     }
 

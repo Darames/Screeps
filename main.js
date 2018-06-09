@@ -47,7 +47,7 @@ module.exports.loop = function () {
     if(Game.spawns['Darames'].spawning) { 
         var spawningCreep = Game.creeps[Game.spawns['Darames'].spawning.name];
         Game.spawns['Darames'].room.visual.text(
-            '🛠️' + spawningCreep.memory.role,
+            'spawn' + spawningCreep.memory.role,
             Game.spawns['Darames'].pos.x + 1, 
             Game.spawns['Darames'].pos.y, 
             {align: 'left', opacity: 0.8});

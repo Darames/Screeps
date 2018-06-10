@@ -1,3 +1,5 @@
+var moveToSourceContainer = require('tools.functions');
+
 var roleBuilder = {
 
     /** @param {Creep} creep **/
@@ -55,25 +57,7 @@ var roleBuilder = {
                 creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
             }
 		} else {
-			var droppedResources = _.sortBy(creep.room.find(FIND_DROPPED_RESOURCES), s => creep.pos.getRangeTo(s));
-			var sources = _.sortBy(creep.room.find(FIND_SOURCES), s => creep.pos.getRangeTo(s));
-            var container = sources[0].pos.findInRange(FIND_STRUCTURES, 2, {
-                filter: (structure) => {
-                    return structure.structureType === STRUCTURE_CONTAINER
-                }
-            })
-			for (i = 0; i < droppedResources.length; i++) {
-                creep.pickup(droppedResources[i]);
-            } 
-            if(!container.length || container[0].store[RESOURCE_ENERGY] < creep.carryCapacity) {
-                if(creep.pickup(droppedResources[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(droppedResources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
-            }else {
-                if(creep.withdraw(container[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(container[0]);
-                }
-            }
+			moveToSourceContainer.run(creep);
 	    }
 	}
 };

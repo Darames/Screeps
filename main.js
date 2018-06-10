@@ -19,10 +19,10 @@ module.exports.loop = function () {
     var transportersLimit = 1;
 
     var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-    var upgradersLimit = 1;
+    var upgradersLimit = 2;
 
     var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    var buildersLimit = 1;
+    var buildersLimit = 2;
 
     if(harvesters.length < harvestersLimit) {
         var newName = 'Harvester' + Game.time;

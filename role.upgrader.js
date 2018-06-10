@@ -5,7 +5,7 @@ var roleUpgrader = {
     /** @param {Creep} creep **/
     run: function(creep) {
         // set upgrading mode
-        if(creep.memory.upgrading && creep.carry.energy == 0) { creep.memory.upgrading = false; creep.say('getting energy'); }
+        if(creep.memory.upgrading && creep.carry.energy == 0) { creep.memory.upgrading = false; creep.say('get energy'); }
         // set geting energy mode
 	    if(!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) { creep.memory.upgrading = true; creep.say('upgrade'); }
         // upgrading Controller

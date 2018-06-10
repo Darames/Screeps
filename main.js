@@ -43,6 +43,11 @@ module.exports.loop = function () {
         var newName = 'Builder' + Game.time;
         Game.spawns['Darames'].spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'builder'}});
+    }else if(!transporters.length && Game.room.energyAvailable < 460) {
+        //backup transporter
+        var newName = 'Transporter' + Game.time;
+        Game.spawns['Darames'].spawnCreep([CARRY,CARRY,MOVE,MOVE], newName, 
+            {memory: {role: 'transporter'}});
     }
     
     if(Game.spawns['Darames'].spawning) { 

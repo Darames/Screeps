@@ -8,7 +8,7 @@ var roleBuilder = {
 		var damagedStructures = creep.room.find(FIND_STRUCTURES,{ filter: (structure) => { return ( (100*structure.hits)/structure.hitsMax != 100 ); } });
         // set get energy mode
 	    if(creep.memory.building && creep.carry.energy == 0 || creep.memory.repairing && creep.carry.energy == 0) {
-			creep.memory.building = false; creep.memory.repairing = false; creep.say('harvest');
+			creep.memory.building = false; creep.memory.repairing = false; creep.say('get energy');
         }
         // set building or repairing mode
 	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {

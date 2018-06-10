@@ -33,7 +33,7 @@ module.exports.loop = function () {
         Game.spawns['Darames'].spawnCreep([WORK,WORK,WORK,MOVE,MOVE], newName, {memory: {role: 'harvester', source: source }});
     }else if(transporters.length < transportersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Transporter' + Game.time;
-        Game.spawns['Darames'].spawnCreep([CARRY,CARRY,CARRY,MOVE,MOVE,MOVE], newName, 
+        Game.spawns['Darames'].spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'transporter'}});
     }else if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
         var newName = 'Upgrader' + Game.time;
@@ -43,7 +43,7 @@ module.exports.loop = function () {
         var newName = 'Builder' + Game.time;
         Game.spawns['Darames'].spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'builder'}});
-    }else if(!transporters.length && Game.room.energyAvailable < 460) {
+    }else if(!transporters.length && Game.room.energyAvailable < 510) {
         //backup transporter
         var newName = 'Transporter' + Game.time;
         Game.spawns['Darames'].spawnCreep([CARRY,CARRY,MOVE,MOVE], newName, 

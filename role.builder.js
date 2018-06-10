@@ -5,7 +5,7 @@ var roleBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
 		var constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-		var damagedStructures = creep.room.find(FIND_STRUCTURES,{ filter: (structure) => { return ( (100*structure.hits)/structure.hitsMax != 100 ) && structure.structureType != STRUCTURE_Controller); } });
+		var damagedStructures = creep.room.find(FIND_STRUCTURES,{ filter: (structure) => { return ( (100*structure.hits)/structure.hitsMax != 100 ) && structure.structureType != STRUCTURE_Controller; } });
         // set get energy mode
 	    if(creep.memory.building && creep.carry.energy == 0 || creep.memory.repairing && creep.carry.energy == 0) {
 			creep.memory.building = false; creep.memory.repairing = false; creep.say('get energy');

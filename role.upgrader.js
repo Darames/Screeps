@@ -26,7 +26,7 @@ var roleUpgrader = {
                 }
             })
             for (i = 0; i < droppedResources.length; i++) {
-                creep.pickup(droppedResources[i])
+                creep.pickup(droppedResources[i]);
             } 
             if(droppedResources.length) {
                 if(creep.pickup(droppedResources[0]) == ERR_NOT_IN_RANGE) {

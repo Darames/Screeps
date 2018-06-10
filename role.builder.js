@@ -63,7 +63,7 @@ var roleBuilder = {
                 }
             })
 			for (i = 0; i < droppedResources.length; i++) {
-                creep.pickup(droppedResources[i])
+                creep.pickup(droppedResources[i]);
             } 
             if(!container.length || container[0].store[RESOURCE_ENERGY] < creep.carryCapacity) {
                 if(creep.pickup(droppedResources[0]) == ERR_NOT_IN_RANGE) {

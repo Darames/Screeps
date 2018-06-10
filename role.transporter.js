@@ -26,11 +26,15 @@ var roleTransporter = {
         }
         else {
             var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN 
-                        // || structure.structureType == STRUCTURE_CONTAINER
-                        ) && (structure.energy || structure.store[RESOURCE_ENERGY]) < (structure.energyCapacity || structure.storeCapacity);
-                    }
+                filter: (structure) => {
+                    return (structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_SPAWN 
+                    // || structure.structureType == STRUCTURE_CONTAINER
+                    ) && (structure.energy 
+                    //|| structure.store[RESOURCE_ENERGY]
+                    ) < (structure.energyCapacity 
+                    //|| structure.storeCapacity
+                    );
+                }
             });
             // targets = _.sortBy(targets, t => creep.pos.getRangeTo(t));
             if(targets.length > 0) {

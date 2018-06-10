@@ -1,16 +1,12 @@
-
-var sources = creep.room.find(FIND_SOURCES);
-var droppedResources = creep.room.find(FIND_DROPPED_RESOURCES);
-
 // move to source container
 // 
-
 var moveToSourceContainer = {
     
     /** @param {Creep} creep **/
     run: function(creep) {
-        // var sources = creep.room.find(FIND_SOURCES);
-        // var droppedResources = creep.room.find(FIND_DROPPED_RESOURCES);
+        var sources = creep.room.find(FIND_SOURCES);
+        var droppedResources = creep.room.find(FIND_DROPPED_RESOURCES);
+        
         var source = _.sortBy(sources, s => creep.pos.getRangeTo(s));
         var sourceContainer = source[0].pos.findInRange(FIND_STRUCTURES, 2, { filter: (structure) => {return structure.structureType === STRUCTURE_CONTAINER} })
         for (i = 0; i < droppedResources.length; i++) {

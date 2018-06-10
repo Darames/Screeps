@@ -11,7 +11,7 @@ var roleBuilder = {
 			creep.memory.building = false; creep.memory.repairing = false; creep.say('get energy');
         }
         // set building or repairing mode
-	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
+	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity || creep.memory.repairing && && creep.carry.energy != creep.carryCapacity) {
             // set repairing mode
             if(!constructionSites.length) { creep.memory.repairing = true; creep.say('repair'); } 
             // set building mode

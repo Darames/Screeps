@@ -31,27 +31,24 @@ module.exports.loop = function () {
         if(harvesterOnSource.length){var source = 1;}
 
         Game.spawns['Darames'].spawnCreep([WORK,WORK,WORK,MOVE,MOVE], newName, {memory: {role: 'harvester', source: source }});
-    }
-    if(transporters.length < transportersLimit && harvesters.length == harvestersLimit) {
+    }else if(transporters.length < transportersLimit && harvesters.length == harvestersLimit) {
         var newName = 'Transporter' + Game.time;
         Game.spawns['Darames'].spawnCreep([CARRY,CARRY,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'transporter'}});
-    }
-    if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
+    }else if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
         var newName = 'Upgrader' + Game.time;
-        Game.spawns['Darames'].spawnCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE], newName, 
+        Game.spawns['Darames'].spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'upgrader'}});
-    }
-    if(builders.length < buildersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
+    }else if(builders.length < buildersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
         var newName = 'Builder' + Game.time;
-        Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
+        Game.spawns['Darames'].spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'builder'}});
     }
     
     if(Game.spawns['Darames'].spawning) { 
         var spawningCreep = Game.creeps[Game.spawns['Darames'].spawning.name];
         Game.spawns['Darames'].room.visual.text(
-            'spawn' + spawningCreep.memory.role,
+            'spawn ' + spawningCreep.memory.role,
             Game.spawns['Darames'].pos.x + 1, 
             Game.spawns['Darames'].pos.y, 
             {align: 'left', opacity: 0.8});

@@ -4,7 +4,7 @@ var roleBuilder = {
     run: function(creep) {
 		var constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
 		var damagedStructures = creep.room.find(FIND_STRUCTURES,{ filter: (structure) => {
-			return ( (100*structure.hits)/structure.hitsMax < 80 );
+			return ( (100*structure.hits)/structure.hitsMax != 100 );
 		}});
 
 

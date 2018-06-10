@@ -37,12 +37,12 @@ module.exports.loop = function () {
         Game.spawns['Darames'].spawnCreep([CARRY,CARRY,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'transporter'}});
     }
-    if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit) {
+    if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
         var newName = 'Upgrader' + Game.time;
         Game.spawns['Darames'].spawnCreep([WORK,CARRY,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'upgrader'}});
     }
-    if(builders.length < buildersLimit && harvesters.length == harvestersLimit ) {
+    if(builders.length < buildersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
         var newName = 'Builder' + Game.time;
         Game.spawns['Darames'].spawnCreep([WORK,CARRY,MOVE,MOVE], newName, 
             {memory: {role: 'builder'}});

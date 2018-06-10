@@ -5,40 +5,26 @@ var roleBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
 		var constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
-		var damagedStructures = creep.room.find(FIND_STRUCTURES,{ filter: (structure) => {
-			return ( (100*structure.hits)/structure.hitsMax != 100 );
-		}});
-
-
+		var damagedStructures = creep.room.find(FIND_STRUCTURES,{ filter: (structure) => { return ( (100*structure.hits)/structure.hitsMax != 100 ); } });
+        // set get energy mode
 	    if(creep.memory.building && creep.carry.energy == 0 || creep.memory.repairing && creep.carry.energy == 0) {
-			creep.memory.building = false;
-			creep.memory.repairing = false;
-			creep.say('harvest');
-	    }
+			creep.memory.building = false; creep.memory.repairing = false; creep.say('harvest');
+        }
+        // set building or repairing mode
 	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
-	        
-            if(!constructionSites.length) {
-				creep.memory.repairing = true;
-				creep.say('repair');
-			} else {
-				creep.memory.building = true;
-				creep.say('build');
-			}
+            // set repairing mode
+            if(!constructionSites.length) { creep.memory.repairing = true; creep.say('repair'); } 
+            // set building mode
+            else { creep.memory.building = true; creep.say('build'); }
 	    }
 
 	    if(creep.memory.building) {
             if(constructionSites.length) {
-                if(creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(constructionSites[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                }
+                if(creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE) {  creep.moveTo(constructionSites[0], {visualizePathStyle: {stroke: '#ffffff'}}); }
             }else {
-                creep.memory.repairing = true;
-                creep.memory.building = false;
-                var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return ( structure.structureType == STRUCTURE_SPAWN);
-                    }
-                });
+                creep.memory.repairing = true; creep.memory.building = false;
+                // parking at spawn
+                var targets = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return ( structure.structureType == STRUCTURE_SPAWN); } });
                 creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
             }
 	    } else if(creep.memory.repairing){
@@ -47,13 +33,9 @@ var roleBuilder = {
                     creep.moveTo(damagedStructures[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }else {
-                creep.memory.repairing = false;
-                creep.memory.building = true;
-                var targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return ( structure.structureType == STRUCTURE_SPAWN);
-                    }
-                });
+                creep.memory.repairing = false; creep.memory.building = true;
+                // parking at spawn
+                var targets = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return ( structure.structureType == STRUCTURE_SPAWN); } });
                 creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
             }
 		} else {

@@ -8,7 +8,7 @@ var roleBuilder = {
 		}});
 
 
-	    if(creep.memory.building && creep.carry.energy == 0 || creep.memory.repair && creep.carry.energy == 0) {
+	    if(creep.memory.building && creep.carry.energy == 0 || creep.memory.repairing && creep.carry.energy == 0) {
 			creep.memory.building = false;
 			creep.memory.repairing = false;
 			creep.say('harvest');

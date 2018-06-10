@@ -10,7 +10,7 @@ var roleTransporter = {
             // set delivering mode
             if(creep.carry.energy == creep.carryCapacity) { creep.memory.delivering = true; creep.say('delivering'); }
 
-            moveToSourceContainer.run(creep);
+            moveToSourceContainer(creep);
             
             // var droppedResources = _.sortBy(creep.room.find(FIND_DROPPED_RESOURCES), s => creep.pos.getRangeTo(s));
             // var sources = _.sortBy(creep.room.find(FIND_SOURCES), s => creep.pos.getRangeTo(s));

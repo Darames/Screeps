@@ -1,4 +1,4 @@
-var defendRoom = {
+var structureTower = {
 
     run: function (roomName) {
         var hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
@@ -12,4 +12,4 @@ var defendRoom = {
     }
 };
 
-module.exports = defendRoom;
+module.exports = structureTower;

@@ -2,7 +2,7 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleTransporter = require('role.transporter');
-var defendRoom = require('structure.tower');
+var structureTower = require('structure.tower');
 
 module.exports.loop = function () {
 
@@ -60,8 +60,7 @@ module.exports.loop = function () {
             {align: 'left', opacity: 0.8});
     }
     for(var name in Game.rooms){
-        var room = Game.rooms[name];
-        defendRoom.run(room);
+        structureTower.run(name);
     }
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];

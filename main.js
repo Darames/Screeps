@@ -2,6 +2,7 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleTransporter = require('role.transporter');
+var defendRoom = require('structure.tower');
 
 module.exports.loop = function () {
 
@@ -58,7 +59,10 @@ module.exports.loop = function () {
             Game.spawns['Darames'].pos.y, 
             {align: 'left', opacity: 0.8});
     }
-
+    for(var name in Game.rooms){
+        var room = Game.rooms[name];
+        defendRoom.run(room);
+    }
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         if(creep.memory.role == 'harvester') {

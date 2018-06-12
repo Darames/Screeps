@@ -1,4 +1,4 @@
-var moveToSourceContainer = require('tools.functions');
+var moveTo = require('tools.functions');
 
 var roleUpgrader = {
 
@@ -14,7 +14,7 @@ var roleUpgrader = {
         }
         else {
             // geting energy
-            moveToSourceContainer.run(creep);
+            moveTo.controllerContainer(creep);
         }
 	}
 };

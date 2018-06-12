@@ -1,4 +1,4 @@
-var moveToSourceContainer = require('tools.functions');
+var moveTo = require('tools.functions');
 
 var roleBuilder = {
 
@@ -36,7 +36,7 @@ var roleBuilder = {
                 creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
             }
 		} else {
-			moveToSourceContainer.run(creep);
+			moveTo.sourceContainer(creep);
 	    }
 	}
 };

@@ -1,4 +1,4 @@
-var moveToSourceContainer = require('tools.functions');
+var moveTo = require('tools.functions');
 
 var roleTransporter = {
 
@@ -10,7 +10,7 @@ var roleTransporter = {
             // set deliver mode
             if(creep.carry.energy == creep.carryCapacity) { creep.memory.delivering = true; creep.say('deliver mode'); }
             // geting energy
-            moveToSourceContainer.run(creep);
+            moveTo.sourceContainer(creep);
         } else {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {

@@ -1,5 +1,4 @@
-
-var variable = {
+var variables = {
     
     /** @param {Creep} creep **/
     
@@ -10,9 +9,12 @@ var variable = {
     droppedResources: function(creep) {
         var droppedResources = creep.room.find(FIND_DROPPED_RESOURCES);
         return droppedResources;
-    }
-
+    },
+    container: function(creep) {
+        var container = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_CONTAINER } });
+        return container;
+    },
 };
 
 
-module.exports = variable;
+module.exports = variables;

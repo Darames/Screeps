@@ -1,17 +1,16 @@
 var variables = require('variables');
 // move to source container
 // 
-var moveToSourceContainer = {
+var moveTo = {
     
     /** @param {Creep} creep **/
-    run: function(creep) {
-        var sources = creep.room.find(FIND_SOURCES);
-        var droppedResources = creep.room.find(FIND_DROPPED_RESOURCES);
+
+    sourceContainer: function(creep) {
         
-        var source = _.sortBy(sources, s => creep.pos.getRangeTo(s));
+        var source = _.sortBy(variables.sources(creep), s => creep.pos.getRangeTo(s));
         var sourceContainer = source[0].pos.findInRange(FIND_STRUCTURES, 2, { filter: (structure) => {return structure.structureType === STRUCTURE_CONTAINER} })
-        for (i = 0; i < droppedResources.length; i++) {
-            creep.pickup(droppedResources[i]);
+        for (i = 0; i < variables.droppedResources(creep).length; i++) {
+            creep.pickup(variables.droppedResources(creep)[i]);
         } 
         if(!sourceContainer.length || sourceContainer[0].store[RESOURCE_ENERGY] < creep.carryCapacity) {
             var droppedResource = _.sortBy(droppedResources, s => creep.pos.getRangeTo(s));
@@ -19,7 +18,11 @@ var moveToSourceContainer = {
         }else {
             if(creep.withdraw(sourceContainer[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { creep.moveTo(sourceContainer[0]); }
         }
+    },
+    controllerContainer: function(creep){
+        var controllerContainer = _.sortBy(variables.container(creep).pos.getRangeTo(creep.room.controller));
+        if(creep.withdraw(controllerContainer[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { creep.moveTo(controllerContainer[0]); }
     }
 };
 
-module.exports = moveToSourceContainer;
+module.exports = moveTo;

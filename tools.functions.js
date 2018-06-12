@@ -20,7 +20,7 @@ var moveTo = {
         }
     },
     controllerContainer: function(creep){
-        var controllerContainer = _.sortBy(variables.container(creep).pos.getRangeTo(creep.room.controller));
+        var controllerContainer = _.sortBy(variables.container(creep), s => s.pos.getRangeTo(creep.room.controller));
         if(creep.withdraw(controllerContainer[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { creep.moveTo(controllerContainer[0]); }
     }
 };

@@ -14,7 +14,7 @@ var roleUpgrader = {
         }
         else {
             // geting energy
-            moveTo.controllerContainer(creep);
+            moveTo.sourceContainer(creep);
         }
 	}
 };

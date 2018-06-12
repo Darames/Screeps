@@ -3,10 +3,8 @@ var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleTransporter = require('role.transporter');
 var structureTower = require('structure.tower');
-var variables = require('variables');
 
 module.exports.loop = function () {
-    console.log(variables.sources);
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
             delete Memory.creeps[name];

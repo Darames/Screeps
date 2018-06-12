@@ -15,7 +15,7 @@ var variables = {
         return container;
     },
     spawn: function(creep) {
-        var spawn = creep.room.find(FIND_SPAWN);
+        var spawn = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_SPAWN } });
         return spawn;
     },
     extensions: function(creep) {

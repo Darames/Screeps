@@ -13,9 +13,10 @@ var roleTransporter = {
             // geting energy
             moveTo.sourceContainer(creep);
         } else {
-
-            if(variables.spawn(creep).energy < variables.spawn(creep).energyCapacity){
-                targets = variables.spawn(creep);
+            for (i = 0; i < variables.spawn(creep).length; i++) {
+                if(variables.spawn(creep)[i].energy < variables.spawn(creep)[i].energyCapacity){
+                    targets = variables.spawn(creep)[i];
+                }
             }
             for (i = 0; i < variables.extensions(creep).length; i++) {
                 if(variables.extensions(creep)[i].energy < variables.extensions(creep)[i].energyCapacity){

@@ -5,19 +5,19 @@ var roleTransporter = {
     /** @param {Creep} creep **/
     run: function(creep) {
         // set get energy mode
-        if(creep.memory.delivering && creep.carry.energy == 0) { creep.memory.delivering = false; creep.say('get energy'); }
+        if(creep.memory.delivering && creep.carry.energy == 0) { creep.memory.delivering = false; creep.say('refill'); }
 	    if(!creep.memory.delivering) {
-            // set delivering mode
-            if(creep.carry.energy == creep.carryCapacity) { creep.memory.delivering = true; creep.say('delivering'); }
+            // set deliver mode
+            if(creep.carry.energy == creep.carryCapacity) { creep.memory.delivering = true; creep.say('deliver mode'); }
             // geting energy
             moveToSourceContainer.run(creep);
         } else {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
-                return (structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity) 
-                    || (structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
+                return (structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity)
+                    || (structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity) 
                     || (structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity)
-                    // || (structure.structureType == STRUCTURE_CONTAINER && structure.pos.findInRange(FIND_STRUCTURES, 3, { filter: (s) => {return s.structureType == STRUCTURE_CONTROLLER} }) && structure.store[RESOURCE_ENERGY] < structure.storeCapacity );
+                    || (structure.structureType == STRUCTURE_CONTAINER && structure.pos.inRangeTo(structure.room.controller, 3) && structure.store[RESOURCE_ENERGY] < structure.storeCapacity )
                 }
             });
             // targets = _.sortBy(targets, t => creep.pos.getRangeTo(t));

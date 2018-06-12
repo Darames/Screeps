@@ -1,3 +1,4 @@
+var variables = require('variables');
 // move to source container
 // 
 var moveToSourceContainer = {

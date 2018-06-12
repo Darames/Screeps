@@ -8,14 +8,14 @@ var roleBuilder = {
 		var damagedStructures = creep.room.find(FIND_STRUCTURES,{ filter: (structure) => { return ( (100*structure.hits)/structure.hitsMax != 100 ) && structure.structureType != STRUCTURE_CONTROLLER; } });
         // set get energy mode
 	    if(creep.memory.building && creep.carry.energy == 0 || creep.memory.repairing && creep.carry.energy == 0) {
-			creep.memory.building = false; creep.memory.repairing = false; creep.say('get energy');
+			creep.memory.building = false; creep.memory.repairing = false; creep.say('refill');
         }
         // set building or repairing mode
 	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity || creep.memory.repairing && creep.carry.energy != creep.carryCapacity) {
             // set repairing mode
-            if(!constructionSites.length) { creep.memory.repairing = true; creep.say('repair'); } 
+            if(!constructionSites.length) { creep.memory.repairing = true; if(!creep.memory.repairing){ creep.say('repair mode'); } } 
             // set building mode
-            else { creep.memory.building = true; creep.say('build'); }
+            else { creep.memory.building = true; creep.say('build mode'); }
 	    }
 
 	    if(creep.memory.building) {

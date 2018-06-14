@@ -13,7 +13,7 @@ var roleBuilder = {
         // set building or repairing mode
 	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity || creep.memory.repairing && creep.carry.energy != creep.carryCapacity) {
             // set repairing mode
-            if(!constructionSites.length) { creep.memory.repairing = true; if(!creep.memory.repairing){ creep.say('repair mode'); } } 
+            if(!constructionSites.length) { creep.memory.repairing = true; creep.memory.building = false; if(!creep.memory.repairing){ creep.say('repair mode'); } } 
             // set building mode
             else { creep.memory.building = true; creep.say('build mode'); }
 	    }

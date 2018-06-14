@@ -12,6 +12,11 @@ var variables = {
     },
     container: function(creep) {
         var container = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_CONTAINER } });
+        container.forEach(function(item, index) {
+                item["energy"] = item.store[RESOURCE_ENERGY];
+                item["energyCapacity"] = item.storeCapacity;
+                container[index] = item;
+            });
         return container;
     },
     spawn: function(creep) {

@@ -1,3 +1,4 @@
+var roomMemory = require('rooms');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
@@ -11,12 +12,15 @@ module.exports.loop = function () {
             console.log('Clearing non-existing creep memory:', name);
         }
     }
-
+    
+    roomMemory.run();
+    // console.log(Game.rooms);
+    
     var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
     var harvestersLimit = 2;
 
     var transporters = _.filter(Game.creeps, (creep) => creep.memory.role == 'transporter');
-    var transportersLimit = 2;
+    var transportersLimit = 1;
 
     var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
     var upgradersLimit = 2;
@@ -43,7 +47,8 @@ module.exports.loop = function () {
         var newName = 'Builder' + Game.time;
         Game.spawns['Darames'].spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, 
             {memory: {role: 'builder'}});
-    }else if(transporters.length < transportersLimit) {
+    }
+    if(transporters.length < transportersLimit) {
         //backup transporter
         var newName = 'BTransporter' + Game.time;
         Game.spawns['Darames'].spawnCreep([CARRY,CARRY,MOVE,MOVE], newName, 
@@ -58,9 +63,9 @@ module.exports.loop = function () {
             Game.spawns['Darames'].pos.y, 
             {align: 'left', opacity: 0.8});
     }
-    // for(var name in Game.rooms){
-    //     structureTower.run(name);
-    // }
+    for(var name in Game.rooms){
+        structureTower.run(name);
+    }
     for(var name in Game.creeps) {
         var creep = Game.creeps[name];
         if(creep.memory.role == 'harvester') {

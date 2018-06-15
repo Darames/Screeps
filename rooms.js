@@ -1,18 +1,32 @@
 var roomMemory = {
     
-    /** @param {Creep} creep **/
-    
-    run: function(creep) {
-        for (i = 0; i < Game.rooms.length; i++) {
-            if(Game.constructionSites){
-                Game.rooms[i].memory.scanMode = true;
+    run: function() {
+        
+        for (var roomName in Game.rooms) {
+        
+            var thisRoom = Game.rooms[roomName];
+            
+            // for (var constructionSitesName in Game.constructionSites) {
+            // console.log(constructionSitesName);
+            // }
+            if(!thisRoom.memory.scanMode){
+                thisRoom.memory.scanMode = true;
             }
-            if(Game.rooms[i].memory.scanMode = true){
-                Game.rooms[i].memory.sources = creep.room.find(FIND_SOURCES).id;
-                Game.rooms[i].memory.container = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_CONTAINER } }).id;
-                Game.rooms[i].memory.spawn = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_SPAWN } }).id;
-                Game.rooms[i].memory.extensions = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_EXTENSION } }).id;
-                Game.rooms[i].memory.towers = creep.room.find(FIND_STRUCTURES, { filter: (structure) => { return  structure.structureType == STRUCTURE_TOWER } }).id;
+            if(Game.constructionSites){
+                thisRoom.memory.scanMode = "preparing";
+            }
+            
+            if(! Game.constructionSites && thisRoom.memory.scanMode === "preparing"){
+                thisRoom.memory.scanMode = true;
+            }
+            if(thisRoom.memory.scanMode === true){
+                thisRoom.memory.sources = thisRoom.find(FIND_SOURCES).id;
+                thisRoom.memory.container = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_CONTAINER } }).id;
+                thisRoom.memory.spawn = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_SPAWN } }).id;
+                thisRoom.memory.extensions = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return structure.structureType == STRUCTURE_EXTENSION } }).id;
+                thisRoom.memory.towers = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return  structure.structureType == STRUCTURE_TOWER } }).id;
+                
+                thisRoom.memory.scanMode = false;
             }
         } 
     },

@@ -1,11 +1,27 @@
-var roomMemory = require('rooms');
+var room = require('rooms');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 var roleTransporter = require('role.transporter');
 var structureTower = require('structure.tower');
+var roleClaimer = require('role.claimer');
+var roleRemoteBuilder = require('role.remoteBuilder');
 
 module.exports.loop = function () {
+    // console.log(Game.cpu.bucket);
+
+    //toDo = flags deklarieren und dann übergeben wenn gebraucht z.B an creep upgrader
+    for (var flag in Game.flags) {
+        if( Game.flags[flag].name.substr(0, 4) == "uPos"){
+            Game.rooms[Game.flags[flag].pos.roomName].upgraderFlag = Game.flags[flag];
+        }
+    }
+    
+    // console.log(Game.getObjectById("blub"));
+
+    //toDo = harvester anpassen sourcefindung bei einem container defekt
+    //toDo = wenn drop näher dann drop
+    
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
             delete Memory.creeps[name];
@@ -13,72 +29,55 @@ module.exports.loop = function () {
         }
     }
     
-    roomMemory.run();
-    // console.log(Game.rooms);
+    room.memory(); //room memory update
+    room.spawn(); //room spawn creeps
     
-    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-    var harvestersLimit = 2;
+    for(var nameRoom in Game.rooms){
+        
+        var damagedStructures = Game.rooms[nameRoom].find(FIND_STRUCTURES,{
+            filter: (structure) => {
+                return ( ( 100 * structure.hits ) / structure.hitsMax != 100 ) && structure.structureType != STRUCTURE_CONTROLLER; 
+            } 
+        });
 
-    var transporters = _.filter(Game.creeps, (creep) => creep.memory.role == 'transporter');
-    var transportersLimit = 1;
-
-    var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-    var upgradersLimit = 2;
-
-    var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    var buildersLimit = 2;
-
-    if(harvesters.length < harvestersLimit) {
-        var newName = 'Harvester' + Game.time;
-        var source = 0;
-        var harvesterOnSource = _.filter(Game.creeps, (creep) => creep.memory.source == 0 );
-        if(harvesterOnSource.length){var source = 1;}
-
-        Game.spawns['Darames'].spawnCreep([WORK,WORK,WORK,MOVE,MOVE], newName, {memory: {role: 'harvester', source: source }});
-    }else if(transporters.length < transportersLimit && harvesters.length == harvestersLimit) {
-        var newName = 'Transporter' + Game.time;
-        Game.spawns['Darames'].spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], newName, 
-            {memory: {role: 'transporter'}});
-    }else if(upgraders.length < upgradersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
-        var newName = 'Upgrader' + Game.time;
-        Game.spawns['Darames'].spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, 
-            {memory: {role: 'upgrader'}});
-    }else if(builders.length < buildersLimit && harvesters.length == harvestersLimit && transporters.length == transportersLimit) {
-        var newName = 'Builder' + Game.time;
-        Game.spawns['Darames'].spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, 
-            {memory: {role: 'builder'}});
+        if(Game.rooms[nameRoom].memory.towers){
+            structureTower.run(nameRoom, damagedStructures);
+        }
     }
-    if(transporters.length < transportersLimit) {
-        //backup transporter
-        var newName = 'BTransporter' + Game.time;
-        Game.spawns['Darames'].spawnCreep([CARRY,CARRY,MOVE,MOVE], newName, 
-            {memory: {role: 'transporter'}});
-    } 
-    
-    if(Game.spawns['Darames'].spawning) { 
-        var spawningCreep = Game.creeps[Game.spawns['Darames'].spawning.name];
-        Game.spawns['Darames'].room.visual.text(
-            'spawn ' + spawningCreep.memory.role,
-            Game.spawns['Darames'].pos.x + 1, 
-            Game.spawns['Darames'].pos.y, 
-            {align: 'left', opacity: 0.8});
-    }
-    for(var name in Game.rooms){
-        structureTower.run(name);
-    }
-    for(var name in Game.creeps) {
-        var creep = Game.creeps[name];
+    for(var nameCreep in Game.creeps) {
+        var creep = Game.creeps[nameCreep];
+        
+        // if(creep.memory.role == 'transporter') {
+        //     var found = creep.pos.lookFor(LOOK_STRUCTURES);
+        //     // console.log(found);
+        //     if(!found.length) {
+        //         creep.pos.createConstructionSite(STRUCTURE_ROAD);
+        //     }
+        // }
+        
         if(creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
-        }
-        if(creep.memory.role == 'upgrader') {
+        }else if(creep.memory.role == 'upgrader') {
             roleUpgrader.run(creep);
-        }
-        if(creep.memory.role == 'builder') {
+        }else if(creep.memory.role == 'builder') {
             roleBuilder.run(creep);
-        }
-        if(creep.memory.role == 'transporter') {
+        }else if(creep.memory.role == 'transporter') {
             roleTransporter.run(creep);
+        }else if(creep.memory.role == 'claimer') {
+            roleClaimer.run(creep);
+        }else if(creep.memory.role == 'remoteBuilder') {
+            roleRemoteBuilder.run(creep);
+        }else if(creep.memory.role == 'scout') {
+        
+            if(creep.pos.roomName != "E36S29" ){
+                creep.moveTo(new RoomPosition(25, 25, 'E36S29'));
+                console.log(creep.pos.roomName);
+            } else {
+                creep.moveTo(new RoomPosition(25, 48, 'E36S29'));
+                creep.say("I'm there");
+            }
+            // Game.spawns['Darames'].spawnCreep([MOVE], "Scout", {memory: {role: 'scout'}});
+            
         }
     }
 }

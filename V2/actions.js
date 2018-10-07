@@ -30,7 +30,6 @@ var actions = {
 
 
 
-
     droppedResources: function(creep, droppedResources){
             droppedResources = _.sortBy( droppedResources, s => s.pos.getRangeTo(creep) );
             

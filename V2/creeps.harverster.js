@@ -1,6 +1,11 @@
 var harvester = {
 
     /** @param {Creep} creep **/
+    target: function(roomName){
+    	var thisRoom = Game.rooms[roomName];
+	var thisRoom.sources = _.sortBy(thisRoom.sources, s => s.pos.getRangeTo(thisRoom.spawns[0]);
+    }
+    
     run: function(creep) {
         var creepRoom = Game.rooms[creep.pos.roomName];
         var sources = creepRoom.sources;

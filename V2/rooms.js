@@ -20,7 +20,7 @@ var room = {
                 thisRoom.structures = _.filter(Game.structures, s => s.room.name == roomName);
                 thisRoom.container = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5 ) );
                 thisRoom.controllerContainer = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5 ) );
-                thisRoom.spawn = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_SPAWN );
+                thisRoom.spawns = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_SPAWN );
                 thisRoom.extensions = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_EXTENSION );
                 thisRoom.towers = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_TOWER  );
                 thisRoom.links = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_LINK );

@@ -18,25 +18,8 @@ var structureTower = {
             } else if(damagedStructures.length > 0){
                 
                 var roomSpawns = _.filter(Game.spawns, (spawn) => spawn.room == towerRoom);
-                // if(towerRoom.name == "E36S29"){
-                //     // damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" &&  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 25000) ) || ( structures.structureType == "rampart" && !(structures.hits > 25000) ) );
-                //     damagedStructures = _.filter( damagedStructures, (structures) => ( structures.pos.getRangeTo(roomSpawns[0]) >= 15 && structures.structureType != "constructedWall" &&  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 25000) ) || ( structures.structureType == "rampart" && !(structures.hits > 25000) ) );
-                // } else if(towerRoom.name == "E37S27"){
-                //     damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType == "constructedWall" && !(structures.hits > 25000) ) || ( structures.structureType == "rampart" && !(structures.hits > 25000) ) );
-                // } else {
-                //     damagedStructures = _.filter( damagedStructures, (structures) => ( structures.pos.getRangeTo(roomSpawns[0]) >= 15 && structures.structureType != "constructedWall" &&  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 65000) ) || ( structures.structureType == "rampart" && !(structures.hits > 65000) ) );
-                // }
-                
-                if(towerRoom.name == "E34S29"){
-                    damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" &&  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 175000) ) || ( structures.structureType == "rampart" && !(structures.hits > 175000) ) );
-                } else {
-                    damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" &&  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 85000) ) || ( structures.structureType == "rampart" && !(structures.hits > 85000) ) );
-                }
+                damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" &&  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 120000) ) || ( structures.structureType == "rampart" && !(structures.hits > 120000) ) );
 
-                // if(damagedStructures.length > 0){
-                //     towers[0].repair(damagedStructures[0]);
-                // }
-                
                 for(i = 0; i < towerRoom.memory.towers.length; i ++){
                     if(damagedStructures.length > 0){
                         towers[i].repair(damagedStructures[0]);

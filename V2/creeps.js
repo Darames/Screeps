@@ -9,6 +9,9 @@ var roleRemoteBuilder = require('role.remoteBuilder');
 
 var creeps = {
     run: function() {
+        for(var roomName in Game.rooms){
+            harvester.target(roomName);
+        }
         for(var nameCreep in Game.creeps) {
             var creep = Game.creeps[nameCreep];
             

@@ -14,6 +14,7 @@ var room = {
             var thisRoom = Game.rooms[roomName];
             if(thisRoom.controller.my){
                 thisRoom.visual.text( Game.cpu.bucket , 48, 48, {align: 'right', opacity: 0.8});
+                thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == roomName && c.my);
                 thisRoom.sources = thisRoom.find(FIND_SOURCES);
                 thisRoom.constructionSites = _.filter(Game.constructionSites, cS => cS.room.name == roomName);
                 thisRoom.damagedStructures = creepRoom.find(FIND_STRUCTURES,{ filter: (structure) => { return ( ( 100 * structure.hits ) / structure.hitsMax != 100 ) && structure.structureType != STRUCTURE_CONTROLLER; } });
@@ -30,6 +31,42 @@ var room = {
         } 
     },
 
+    spawns: function() {
+        for (var roomName in Game.rooms) {
+            var thisRoom = Game.rooms[roomName];
+            if(thisRoom.controller !== 'undefined'){
+                var roomGotSpawn = false;
+                if(thisRoom.spawns.length > 0){
+                    roomGotSpawn = true;
+                }
+            }
+            if(roomGotSpawn = true){
+                var roomCapacity = thisRoom.energyCapacityAvailable;
+                var harvesters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'harvester');
+                var transporters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'transporter');
+                var upgraders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'upgrader');
+                var builders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'builder');
+                //var spawn = thisRoom.spawns[0];
+                //if(thisRoom.spawns.length > 1 && thisRoom.spawns[0].spawning ){
+                //    spawn = thisRoom.spawns[1];
+                //}
+                var harvestersLimit = 1;
+                var transportersLimit = 1;
+                var upgradersLimit = 1;
+                var buildersLimit = 1;
+                
+                
+                if(spawn.spawning) { 
+                    var spawningCreep = Game.creeps[spawn.spawning.name];
+                    spawn.room.visual.text(
+                        'spawn ' + spawningCreep.memory.role,
+                        spawn.pos.x + 1, 
+                        spawn.pos.y, 
+                        {align: 'left', opacity: 0.8});
+                }
+            }
+        }
+    },
 
 
 
@@ -40,8 +77,7 @@ var room = {
 
 
 
-
-    spawn: function() {
+    spawns: function() {
         for (var roomName in Game.rooms) {
             var thisRoom = Game.rooms[roomName];
             if(thisRoom.controller !== 'undefined'){

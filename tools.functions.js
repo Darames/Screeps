@@ -68,25 +68,25 @@ var moveTo = {
                 //         creep.withdraw( storages[0], RESOURCE_ENERGY );
                 //     }
                 // } else 
-                
-                if ( targets.length > 1 && targets[0].store[RESOURCE_ENERGY] < creep.carryCapacity ){
-                    if ( targets[0].store[RESOURCE_ENERGY] < creep.carryCapacity && targets[1].store[RESOURCE_ENERGY] < creep.carryCapacity && storages.length > 0 ){
+                var creepCapacity = creep.carryCapacity - _.sum(creep.carry);
+                if ( targets.length > 1 && targets[0].store[RESOURCE_ENERGY] < creepCapacity ){
+                    if ( targets[0].store[RESOURCE_ENERGY] < creepCapacity && targets[1].store[RESOURCE_ENERGY] < creepCapacity && storages.length > 0 ){
                         if( !creep.pos.isNearTo( storages[0] ) ) {
                             creep.moveTo( storages[0], {reusePath: 20, maxOps: 300} ); 
                         }else {
                             creep.withdraw( storages[0], RESOURCE_ENERGY ); return;
                         }
-                    } else if( targets[0].store[RESOURCE_ENERGY] < creep.carryCapacity && targets[1].store[RESOURCE_ENERGY] < creep.carryCapacity  ) {
+                    } else if( targets[0].store[RESOURCE_ENERGY] < creepCapacity && targets[1].store[RESOURCE_ENERGY] < creepCapacity  ) {
                         if( !creep.pos.isNearTo( targets[0] ) ) {
                             creep.moveTo( targets[0], {reusePath: 20, maxOps: 300} ); 
                         }
-                    } else if( targets[0].store[RESOURCE_ENERGY] < creep.carryCapacity ) {
+                    } else if( targets[0].store[RESOURCE_ENERGY] < creepCapacity ) {
                         if( !creep.pos.isNearTo( targets[1] ) ) {
                             creep.moveTo( targets[1], {reusePath: 20, maxOps: 300} ); 
                         }
                     }
                 } else {
-                    if(targets[0].store[RESOURCE_ENERGY] < creep.carryCapacity ){
+                    if(targets[0].store[RESOURCE_ENERGY] < creepCapacity ){
                         for (i = 0; i < variables.droppedResources(creep).length; i++) {
                             droppedResources.push(variables.droppedResources(creep)[i]);
                         }

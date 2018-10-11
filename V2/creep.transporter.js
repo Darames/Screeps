@@ -14,7 +14,7 @@ var transporter = {
                 targets.push(spawn); 
             }
         }
-        if(creepRoom.extensions.length > 0){
+        if(thisRoom.extensions.length > 0){
             for (var exId in thisRoom.extensions) {
                 let extension = thisRoom.extensions[sId];
                 if(extension !== null){
@@ -34,9 +34,9 @@ var transporter = {
                 }
 			}
 		}
-        if(creepRoom.controllerContainer.length > 0){
+        if(thisRoom.controllerContainer.length > 0){
             for (var ccId in thisRoom.controllerContainer) {
-                let controllerContainer = creepRoom.controllerContainer[ccId];
+                let controllerContainer = thisRoom.controllerContainer[ccId];
                 if(controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.storeCapacity){
 					controllerContainer.priority = 1;
 					controllerContainer.energy = controllerContainer.store[RESOURCE_ENERGY]; 
@@ -45,27 +45,29 @@ var transporter = {
 				}
             }
         }
-    
-    
-
-
-
-		
-        
-        
-		if(creepRoom.memory.storage.length > 0){
-			if ( containers.length > 1 && containers[0].store[RESOURCE_ENERGY] < creep.carryCapacity ){
-				if ( containers[0].store[RESOURCE_ENERGY] < creep.carryCapacity && containers[1].store[RESOURCE_ENERGY] < creep.carryCapacity){
-					var storage = Game.getObjectById(creepRoom.memory.storage[0]);
-					if(storage.store[RESOURCE_ENERGY] < (storage.storeCapacity / 2)){
-						storage.priority = -1;
-						storage.energy = storage.store[RESOURCE_ENERGY]; storage.energyCapacity = storage.storeCapacity;
-						targets.push(storage); 
+		if(thisRoom.storage.length > 0){
+			var storage = thisRoom.storage;
+			if(storage.store[RESOURCE_ENERGY] < (storage.storeCapacity / 2)){
+				storage.priority = -1;
+				storage.energy = storage.store[RESOURCE_ENERGY]; storage.energyCapacity = storage.storeCapacity;
+				targets.push(storage); 
+			}
+		}
+    	if(targets.length > 1) {
+			for(i = 0; i < targets.length; i ++ ){
+				if( ( ( targets[i].energy * 100 )/targets[i].energyCapacity ) < 60 ){
+						targets[i].priority = targets[i].priority + 1;
+					if( ( ( targets[i].energy * 100 )/targets[i].energyCapacity ) < 40 && targets[i].structureType != "container" ){
+						targets[i].priority = targets[i].priority + 1;
 					}
 				}
 			}
 		}
 
+
+		
+
+		
 		if(targets.length > 1) {
 			for(i = 0; i < targets.length; i ++ ){
 				for( var name in Game.creeps ){

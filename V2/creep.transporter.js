@@ -6,7 +6,6 @@ var transporter = {
     targets: function(roomName){
 		if(thisRoom.container){ var containers = thisRoom.container; }
 		var targets = new Array();
-		
 		function priority(target){
 			if( ( ( target.energy * 100 ) / target.energyCapacity ) < 60 ){
 					target.priority = target.priority + 1;
@@ -15,7 +14,6 @@ var transporter = {
 				}
 			}
 		}
-	
 	    for (var sId in thisRoom.spawns) {
 		    let spawn = thisRoom.spawns[sId];
 			if(spawn.energy < spawn.energyCapacity){ 
@@ -65,43 +63,27 @@ var transporter = {
 				targets.push(storage); 
 			}
 		}
-		
-		
-		
-		
-		
-
-
-
-		
-
-		
-		// targets = _.sortByAll( targets, 'priority', s => creep.pos.getRangeTo(s) );
-		// targets = _.sortBy( targets, 'priority' );
-		if(targets.length > 1){
-			var targets = targets.sort(function(a, b){
-				if(a.priority > b.priority){
-					return -1;
-				} else if(a.priority < b.priority){
-					return 1;
-				}
-				return 0;
-			});
-		}
+		targets = _.sortBy( targets, 'priority' );
 		thisRoom.transporterTargets =  targets;
 	},
 	
     run: function(creep) {
 		var creepRoom = Game.rooms[creep.pos.roomName];
-		var targets = creepRoom.transporterTargets;
+		var targets = creepRoom.transporterTargets; targets = _.sortByAll( targets, 'priority', s => creep.pos.getRangeTo(s) );
 		var target = Game.getObjectById(creep.memory.target);
 		if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
         if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
         
+		
+		
+		
+		
+		
+		
         if( ( creep.memory.target === "none" && creep.memory.delivering ) ){
             if(targets.length > 0) {
                 creep.memory.target = targets[0].id;
-                target = Game.getObjectById(targets[0].id);
+                target = targets[0];
             } else {
                 creep.memory.target = "none";
             }

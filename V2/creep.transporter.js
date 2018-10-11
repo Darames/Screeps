@@ -76,8 +76,8 @@ var transporter = {
 		
 
 		
-
-		// targets = _.sortBy( targets, s => creep.pos.getRangeTo(s) );
+		// targets = _.sortByAll( targets, 'priority', s => creep.pos.getRangeTo(s) );
+		// targets = _.sortBy( targets, 'priority' );
 		if(targets.length > 1){
 			var targets = targets.sort(function(a, b){
 				if(a.priority > b.priority){

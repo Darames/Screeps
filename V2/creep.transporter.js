@@ -6,6 +6,15 @@ var transporter = {
     targets: function(roomName){
 		if(thisRoom.container){ var containers = thisRoom.container; }
 		var targets = new Array();
+		
+		function priority(target){
+			if( ( ( target.energy * 100 ) / target.energyCapacity ) < 60 ){
+					target.priority = target.priority + 1;
+				if( ( ( target.energy * 100 ) / target.energyCapacity ) < 40 ){
+					target.priority = target.priority + 1;
+				}
+			}
+		}
 	
 	    for (var sId in thisRoom.spawns) {
 		    let spawn = thisRoom.spawns[sId];
@@ -20,6 +29,7 @@ var transporter = {
                 if(extension !== null){
 				    if(extension.energy < extension.energyCapacity){ 
                         extension.priority = 2; 
+						priority(extension);
                         targets.push(extension); 
                     }
 				}
@@ -30,6 +40,7 @@ var transporter = {
 				let tower = creepRoom.towers[tId];
 				if(tower.energy < tower.energyCapacity){ 
                     tower.priority = 1; 
+					priority(tower);
                     targets.push(tower); 
                 }
 			}
@@ -39,6 +50,7 @@ var transporter = {
                 let controllerContainer = thisRoom.controllerContainer[ccId];
                 if(controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.storeCapacity){
 					controllerContainer.priority = 1;
+					priority(controllerContainer);
 					controllerContainer.energy = controllerContainer.store[RESOURCE_ENERGY]; 
                     controllerContainer.energyCapacity = controllerContainer.storeCapacity;
 					targets.push(controllerContainer);
@@ -53,47 +65,18 @@ var transporter = {
 				targets.push(storage); 
 			}
 		}
-    	if(targets.length > 1) {
-			for(i = 0; i < targets.length; i ++ ){
-				if( ( ( targets[i].energy * 100 )/targets[i].energyCapacity ) < 60 ){
-						targets[i].priority = targets[i].priority + 1;
-					if( ( ( targets[i].energy * 100 )/targets[i].energyCapacity ) < 40 && targets[i].structureType != "container" ){
-						targets[i].priority = targets[i].priority + 1;
-					}
-				}
-			}
-		}
+		
+		
+		
+		
+		
+
 
 
 		
 
 		
-		if(targets.length > 1) {
-			for(i = 0; i < targets.length; i ++ ){
-				for( var name in Game.creeps ){
-					var creepsWithTarget = Game.creeps[name];
-					if(creepsWithTarget.id != creep.id){
-						if( creepsWithTarget.memory.role == "transporter" && creepsWithTarget.memory.target == targets[i].id ){
-							targets[i].priority = targets[i].priority - 1;
-							if( creepsWithTarget.carry[RESOURCE_ENERGY] >= (targets[i].energyCapacity - targets[i].energy)){
-								targets[i].priority = targets[i].priority - 3
-							}
-						}
-					}
-				}
-				// if( targets[i].energy < targets[i].energyCapacity && (targets[i].energyCapacity - targets[i].energy) > creep.carry[RESOURCE_ENERGY] ){
-				//     targets[i].priority = targets[i].priority + 1;
-				// }
-				if( ( ( targets[i].energy * 100 )/targets[i].energyCapacity ) < 60 ){
-						targets[i].priority = targets[i].priority + 1;
-					if( ( ( targets[i].energy * 100 )/targets[i].energyCapacity ) < 40 && targets[i].structureType != "container" ){
-						targets[i].priority = targets[i].priority + 1;
-					// }else if( ( ( targets[i].energy * 100 )/targets[i].energyCapacity ) < 20 && targets[i].structureType == "container"  ){
-					//     targets[i].priority = targets[i].priority + 2;
-					}
-				}
-			}
-		}
+
 		// targets = _.sortBy( targets, s => creep.pos.getRangeTo(s) );
 		if(targets.length > 1){
 			var targets = targets.sort(function(a, b){
@@ -105,28 +88,15 @@ var transporter = {
 				return 0;
 			});
 		}
-		return targets;
+		thisRoom.transporterTargets =  targets;
 	},
 	
     run: function(creep) {
-        var creepRoom = Game.rooms[creep.pos.roomName];
-        
-        // let costs = new PathFinder.CostMatrix;
-        // let pos = creep.pos;
-        // console.log( costs.get(pos.x, pos.y) );
-        
-        
-        
-        var targets = getTarget(creep);
-        
-        var target = Game.getObjectById(creep.memory.target);
-        
-        if(typeof creep.memory.delivering === 'undefined' ){
-            creep.memory.delivering = false;
-        }
-        if( typeof creep.memory.target === 'undefined' ){
-            creep.memory.target = "none";
-        }
+		var creepRoom = Game.rooms[creep.pos.roomName];
+		var targets = creepRoom.transporterTargets;
+		var target = Game.getObjectById(creep.memory.target);
+		if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
+        if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
         
         if( ( creep.memory.target === "none" && creep.memory.delivering ) ){
             if(targets.length > 0) {

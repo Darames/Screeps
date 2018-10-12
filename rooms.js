@@ -184,7 +184,7 @@ var room = {
                     } else if (roomName == "E36S29" || roomName == "E37S27"){
                         var upgradersLimit = 2;
                     } else {
-                        var upgradersLimit = 3;
+                        var upgradersLimit = 1;
                     }
                     var builders = _.filter(roomCreeps, (creep) => creep.memory.role == 'builder');
                     if(roomCapacity <= 1200){
@@ -237,7 +237,7 @@ var room = {
                         } else if(roomCapacity <= 1200){
                             spawn.spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, {memory: {role: 'upgrader'}});
                         } else{
-                            spawn.spawnCreep([WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'upgrader'}});
+                            spawn.spawnCreep([WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'upgrader'}});
                         }
                     }else if(builders.length < buildersLimit) {
                         var newName = 'Builder' + Game.time;

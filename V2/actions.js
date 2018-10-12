@@ -4,7 +4,7 @@ var actions = {
     
     /** @param {Creep} creep **/
     
-    withdraw: function(target){
+    withdraw: function(creep,target){
         if( !creep.pos.isNearTo( target ) ) {
             creep.moveTo( target, {reusePath: 20, maxOps: 300} ); 
         }else {

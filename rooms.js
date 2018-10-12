@@ -179,13 +179,7 @@ var room = {
                         var transportersLimit = 2;
                     }
                     var upgraders = _.filter(roomCreeps, (creep) => creep.memory.role == 'upgrader');
-                    if(roomCapacity <= 1200){
-                        var upgradersLimit = 1;
-                    } else if (roomName == "E36S29" || roomName == "E37S27"){
-                        var upgradersLimit = 2;
-                    } else {
-                        var upgradersLimit = 1;
-                    }
+                    var upgradersLimit = 1;
                     var builders = _.filter(roomCreeps, (creep) => creep.memory.role == 'builder');
                     if(roomCapacity <= 1200){
                         var buildersLimit = 1;

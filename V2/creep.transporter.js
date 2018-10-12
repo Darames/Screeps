@@ -73,29 +73,29 @@ var transporter = {
 		var target = Game.getObjectById(creep.memory.target);
 		if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
         if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
-        
-		
-		
-		
-		
-		
-		
-        if( ( creep.memory.target === "none" && creep.memory.delivering ) ){
-            if(targets.length > 0) {
+
+		function newTarget(creep, targets){
+			if(targets.length > 0) {
                 creep.memory.target = targets[0].id;
                 target = targets[0];
             } else {
                 creep.memory.target = "none";
             }
+			return target;
+		}
+        if( creep.memory.target === "none" && creep.memory.delivering ){
+            target = newTarget(creep, targets);
         } else if( creep.memory.target != "none" && ( target.energy == target.energyCapacity ) ){
-            if(targets.length > 0) {
-                creep.memory.target = targets[0].id;
-                target = Game.getObjectById(targets[0].id);
-            } else {
-                creep.memory.target = "none";
-            }
-        }
-
+            target = newTarget(creep, targets);
+        } 
+	    
+	    
+		
+		
+		
+		
+		
+		
         if( ( creep.memory.delivering && creep.carry.energy == 0 ) || !creep.memory.delivering ) {
             if(creepRoom.memory.storage.length > 2){
                 // var droppedResources = new Array();

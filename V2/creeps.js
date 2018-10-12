@@ -1,9 +1,9 @@
 var harvester = require('creeps.harvester');
 var builder = require('creeps.builder');
+var transporter = require('creeps.transporter');
 
 
 var roleUpgrader = require('role.upgrader');
-var roleTransporter = require('role.transporter');
 var roleClaimer = require('role.claimer');
 var roleRemoteBuilder = require('role.remoteBuilder');
 
@@ -11,6 +11,7 @@ var creeps = {
     run: function() {
         for(var roomName in Game.rooms){
             harvester.target(roomName);
+            transporter.targets(roomName);
         }
         for(var nameCreep in Game.creeps) {
             var creep = Game.creeps[nameCreep];

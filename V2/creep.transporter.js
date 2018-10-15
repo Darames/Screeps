@@ -78,6 +78,10 @@ var transporter = {
 			if(targets.length > 0) {
                 creep.memory.target = targets[0].id;
                 target = targets[0];
+				if(creep.carry[RESOURCE_ENERGY] >= (target.energyCapacity - target.energy)){
+					removedTarget = targets.shift();
+					creepRoom.transporterTargets = targets;
+				}
             } else {
                 creep.memory.target = "none";
             }
@@ -88,8 +92,33 @@ var transporter = {
         } else if( creep.memory.target != "none" && ( target.energy == target.energyCapacity ) ){
             target = newTarget(creep, targets);
         } 
-	    
-	    
+
+		
+		
+		
+	    if( ( creep.memory.delivering && creep.carry.energy == 0 ) || !creep.memory.delivering ) {
+			actions.withdraw(creep, energyTarget); // geting energy
+			creep.memory.target = "none";
+			if( creep.memory.delivering ){ creep.memory.delivering = false; }// set refill mode
+			if( creep.carry.energy == creep.carryCapacity ) {  creep.memory.delivering = true; } // set deliver mode
+		} else {         
+            if(target) {
+				if(creep.pos.isNearTo(target)) {
+					creep.transferEnergy(target);
+				} else {
+                    creep.moveTo( target, {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 400 });
+                }
+            } else {
+                if(creep.carry.energy < creep.carryCapacity){
+                    creep.memory.delivering = false;// set refill mode
+                    creep.memory.target = "none";
+					actions.withdraw(creep, energyTarget); // geting energy
+                }else{
+                    creep.moveTo(creepRoom.spawns[0], {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 400});
+                    creep.memory.target = "none";
+                }
+            }
+        }
 		
 		
 		

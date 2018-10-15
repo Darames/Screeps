@@ -18,7 +18,21 @@ var actions = {
         return element;
     },
     getEnergy: function(creep){
+
         // toDo
+    },
+    setEnergyTargets: function(roomName){
+        var thisRoom = Game.rooms[roomName];
+        var targets = thisRoom.container.concat(arr2, arr3);
+        if(thisRoom.storage && thisRoom.container){
+            var targets = thisRoom.container.concat(thisRoom.storage);
+        } else if(thisRoom.container){
+            var targets = thisRoom.container;
+        } else {
+            var targets = thisRoom.droppedEnergy;
+        }
+        
+        thisRoom.energyTargets = targets;
     },
 
 

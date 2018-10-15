@@ -184,7 +184,9 @@ var roleTransporter = {
             // }
             
             if(targets.length > 0) {
-                if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                if(creep.pos.isNearTo(target)) {
+					creep.transfer(target, RESOURCE_ENERGY);
+				} else {
                     creep.moveTo( target, {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 400 });
                 }
             } else {

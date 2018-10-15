@@ -17,7 +17,9 @@ var actions = {
         if( element == "null" ){ thisRoom.memory.scanMode = true; }
         return element;
     },
-
+    getEnergy: function(creep){
+        // toDo
+    },
 
 
 

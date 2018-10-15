@@ -97,14 +97,14 @@ var transporter = {
 		
 		
 	    if( ( creep.memory.delivering && creep.carry.energy == 0 ) || !creep.memory.delivering ) {
-			actions.withdraw(creep, energyTarget); // geting energy
+			actions.getEnergy(creep); // geting energy
 			creep.memory.target = "none";
 			if( creep.memory.delivering ){ creep.memory.delivering = false; }// set refill mode
 			if( creep.carry.energy == creep.carryCapacity ) {  creep.memory.delivering = true; } // set deliver mode
 		} else {         
             if(target) {
 				if(creep.pos.isNearTo(target)) {
-					creep.transferEnergy(target);
+					creep.transfer(target, RESOURCE_ENERGY);
 				} else {
                     creep.moveTo( target, {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 400 });
                 }
@@ -112,7 +112,7 @@ var transporter = {
                 if(creep.carry.energy < creep.carryCapacity){
                     creep.memory.delivering = false;// set refill mode
                     creep.memory.target = "none";
-					actions.withdraw(creep, energyTarget); // geting energy
+					actions.getEnergy(creep); // geting energy
                 }else{
                     creep.moveTo(creepRoom.spawns[0], {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 400});
                     creep.memory.target = "none";

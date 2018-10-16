@@ -12,6 +12,7 @@ var creeps = {
         for(var roomName in Game.rooms){
             harvester.target(roomName);
             transporter.targets(roomName);
+            actions.setEnergyTargets(roomName);
         }
         for(var nameCreep in Game.creeps) {
             var creep = Game.creeps[nameCreep];

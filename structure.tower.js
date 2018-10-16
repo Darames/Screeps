@@ -18,7 +18,7 @@ var structureTower = {
             } else if(damagedStructures.length > 0){
                 
                 var roomSpawns = _.filter(Game.spawns, (spawn) => spawn.room == towerRoom);
-                damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" &&  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 120000) ) || ( structures.structureType == "rampart" && !(structures.hits > 120000) ) );
+                damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" &&  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 170000) ) || ( structures.structureType == "rampart" && !(structures.hits > 170000) ) );
 
                 for(i = 0; i < towerRoom.memory.towers.length; i ++){
                     if(damagedStructures.length > 0){

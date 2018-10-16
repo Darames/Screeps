@@ -73,7 +73,6 @@ var transporter = {
 		var target = Game.getObjectById(creep.memory.target);
 		if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
         if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
-
 		function newTarget(creep, targets){
 			if(targets.length > 0) {
                 creep.memory.target = targets[0].id;

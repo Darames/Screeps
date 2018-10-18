@@ -215,13 +215,17 @@ var room = {
                         }
                     }else if(transporters.length < transportersLimit) {
                         var newName = 'Transporter' + Game.time;
+                        var bodyParts = [CARRY,CARRY,MOVE,MOVE];
                         if(roomCapacity <= 600){
-                            spawn.spawnCreep([CARRY,CARRY,MOVE,MOVE], newName, {memory: {role: 'transporter', delivering: 'false', target: 'none'}});
+                            spawn.spawnCreep(bodyParts, newName, {memory: {role: 'transporter', delivering: 'false', target: 'none'}});
                         } else if(roomCapacity <= 1200){
+                            var body = bodyParts.concat(bodyParts);
                             spawn.spawnCreep([CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'transporter', delivering: 'false', target: 'none'}});
                         } else if(roomCapacity <= 2000){
+                            var body = bodyParts.concat(bodyParts, bodyParts);
                             spawn.spawnCreep([CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'transporter', delivering: 'false', target: 'none'}});
                         } else {
+                            var body = bodyParts.concat(bodyParts, bodyParts, bodyParts, bodyParts, bodyParts, bodyParts);
                             spawn.spawnCreep([CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE,CARRY,MOVE], newName, {memory: {role: 'transporter', delivering: 'false', target: 'none'}});
                         }
                     }else if(upgraders.length < upgradersLimit) {

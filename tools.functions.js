@@ -102,7 +102,7 @@ var moveTo = {
                     } else {
                         if( variables.droppedResources(creep).length > 0 ){
                             for (i = 0; i < variables.droppedResources(creep).length; i++) {
-                                if( variables.droppedResources(creep)[i].pos.inRangeTo( targets[0], 1 ) ){
+                                if( variables.droppedResources(creep)[i].pos.inRangeTo( targets[0], 1 ) && variables.droppedResources(creep)[i].amount < 100 ){
                                     if( creep.pickup( variables.droppedResources(creep)[i] ) == ERR_NOT_IN_RANGE ) {
                                         creep.moveTo( variables.droppedResources(creep)[i], {reusePath: 20, maxOps: 300} );
                                         

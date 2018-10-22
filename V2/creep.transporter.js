@@ -73,6 +73,7 @@ var transporter = {
 		var target = Game.getObjectById(creep.memory.target);
 		if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
         if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
+		
 		function newTarget(creep, targets){
 			if(targets.length > 0) {
                 creep.memory.target = targets[0].id;
@@ -86,15 +87,13 @@ var transporter = {
             }
 			return target;
 		}
+		
         if( creep.memory.target === "none" && creep.memory.delivering ){
             target = newTarget(creep, targets);
         } else if( creep.memory.target != "none" && ( target.energy == target.energyCapacity ) ){
             target = newTarget(creep, targets);
         } 
 
-		
-		
-		
 	    if( ( creep.memory.delivering && creep.carry.energy == 0 ) || !creep.memory.delivering ) {
 			actions.getEnergy(creep); // geting energy
 			creep.memory.target = "none";
@@ -119,76 +118,6 @@ var transporter = {
             }
         }
 		
-		
-		
-		
-		
-		
-        if( ( creep.memory.delivering && creep.carry.energy == 0 ) || !creep.memory.delivering ) {
-            if(creepRoom.memory.storage.length > 2){
-                // var droppedResources = new Array();
-                // for (i = 0; i < variables.droppedResources(creep).length; i++) {
-                //     if(droppedResources.resourceType != "energy"){
-                //         droppedResources.push(variables.droppedResources(creep)[i]);
-                //     }
-                // }
-                // if(droppedResources.length > 0){
-                //     moveTo.droppedResources(creep, droppedResources);
-                    // creep.memory.target = "droppedResources";
-                // } else if(droppedResources.length == 0 && _.sum(creep.carry) > 0 && creep.carry.energy == 0){
-                    // creep.memory.delivering = true; 
-                    // creep.memory.target = "none";
-                // } else {
-                    moveTo.container(creep, "withdraw"); // geting energy
-                    creep.memory.target = "none";
-                    if( creep.memory.delivering ){ 
-                        creep.memory.delivering = false;
-                        creep.say( 'refill' );
-                    }// set refill mode
-                    if( creep.carry.energy == creep.carryCapacity ) { 
-                        creep.memory.delivering = true; 
-                        creep.say('deliver'); 
-                    } // set deliver mode
-                // }
-            } else {
-                moveTo.container(creep, "withdraw"); // geting energy
-                creep.memory.target = "none";
-                if( creep.memory.delivering ){ 
-                    creep.memory.delivering = false;
-                    creep.say( 'refill' );
-                }// set refill mode
-                if( creep.carry.energy == creep.carryCapacity ) { 
-                    creep.memory.delivering = true; 
-                    creep.say('deliver'); 
-                } // set deliver mode
-            }
-        } else {
-            // if( creep.carry.energy == 0 &&  _.sum(creep.carry) > 0 ) {
-                // var targets = new Array();
-            //     var target = Game.getObjectById(creepRoom.memory.storage[0]);
-            //     if( storage.store[RESOURCE_ENERGY] < (storage.storeCapacity / 2) ){
-            //         storage.energy = storage.store[RESOURCE_ENERGY]; storage.energyCapacity = storage.storeCapacity;
-            //         targets.push(target); 
-            
-            //     }
-            // }
-            
-            if(targets.length > 0) {
-                if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo( target, {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 400 });
-                }
-            } else {
-                if(creep.carry.energy < creep.carryCapacity){
-                    creep.memory.delivering = false;
-                    creep.memory.target = "none";
-                    creep.say( "refill" );
-                    moveTo.container(creep, "withdraw");
-                }else{
-                    creep.moveTo(Game.getObjectById(creepRoom.memory.spawn[0]), {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 400});
-                    creep.memory.target = "none";
-                }
-            }
-        }
 	}
 };
 

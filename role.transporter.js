@@ -56,14 +56,14 @@ var roleTransporter = {
             }
             if(creepRoom.memory.storage.length > 0){
                 if ( containers.length > 1 && containers[0].store[RESOURCE_ENERGY] < creep.carryCapacity ){
-                    if ( containers[0].store[RESOURCE_ENERGY] < creep.carryCapacity && containers[1].store[RESOURCE_ENERGY] < creep.carryCapacity){
+                    //if ( containers[0].store[RESOURCE_ENERGY] < creep.carryCapacity && containers[1].store[RESOURCE_ENERGY] < creep.carryCapacity){
                         var storage = Game.getObjectById(creepRoom.memory.storage[0]);
                         if(storage.store[RESOURCE_ENERGY] < (storage.storeCapacity / 2)){
                             storage.priority = -1;
                             storage.energy = storage.store[RESOURCE_ENERGY]; storage.energyCapacity = storage.storeCapacity;
                             targets.push(storage); 
                         }
-                    }
+                    //}
                 }
             }
             

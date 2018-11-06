@@ -63,13 +63,13 @@ var transporter = {
 				targets.push(storage); 
 			}
 		}
-		targets = _.sortBy( targets, 'priority' );
+		targets = _.sortBy( targets, s => s.priority );
 		thisRoom.transporterTargets =  targets;
 	},
 	
     run: function(creep) {
 		var creepRoom = Game.rooms[creep.pos.roomName];
-		var targets = creepRoom.transporterTargets; targets = _.sortByAll( targets, 'priority', s => creep.pos.getRangeTo(s) );
+		var targets = creepRoom.transporterTargets; targets = _.sortByAll( targets, [s => s.priority, s => creep.pos.getRangeTo(s)] );
 		var target = Game.getObjectById(creep.memory.target);
 		if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
         if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }

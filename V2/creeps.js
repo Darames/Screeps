@@ -1,11 +1,11 @@
-var harvester = require('creeps.harvester');
-var builder = require('creeps.builder');
-var transporter = require('creeps.transporter');
+var harvester = require('creep.harvester');
+var builder = require('creep.builder');
+var transporter = require('creep.transporter');
 
 
-var roleUpgrader = require('role.upgrader');
-var roleClaimer = require('role.claimer');
-var roleRemoteBuilder = require('role.remoteBuilder');
+var upgrader = require('role.upgrader');
+var claimer = require('role.claimer');
+var remoteBuilder = require('role.remoteBuilder');
 
 var creeps = {
     run: function() {
@@ -26,13 +26,13 @@ var creeps = {
             // }
             
             if(creep.memory.role == 'harvester') {
-                roleHarvester.run(creep);
+                harvester.run(creep);
             }else if(creep.memory.role == 'upgrader') {
                 roleUpgrader.run(creep);
             }else if(creep.memory.role == 'builder') {
                 builder.run(creep);
             }else if(creep.memory.role == 'transporter') {
-                roleTransporter.run(creep);
+                transporter.run(creep);
             }else if(creep.memory.role == 'claimer') {
                 roleClaimer.run(creep);
             }else if(creep.memory.role == 'remoteBuilder') {

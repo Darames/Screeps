@@ -23,7 +23,7 @@ var actions = {
     getElement: function(roomName, sId) {
         var thisRoom = Game.rooms[roomName];
         var element = Game.getObjectById(sId);
-        if( element == "null" ){ thisRoom.memory.scanMode = true; }
+        if( element == null ){ thisRoom.memory.scanMode = true; }
         return element;
     },
     

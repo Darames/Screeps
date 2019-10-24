@@ -3,12 +3,12 @@ var variables = require('variables');
 var room = {
     
     memory: function() {
-        function getElement(roomName, sId) {
-            var thisRoom = Game.rooms[roomName];
-            var element = Game.getObjectById(sId);
-            if( element == "null" ){ thisRoom.memory.scanMode = true; }
-            return element;
-        }
+        // function getElement(roomName, sId) {
+        //     var thisRoom = Game.rooms[roomName];
+        //     var element = Game.getObjectById(sId);
+        //     if( element == "null" ){ thisRoom.memory.scanMode = true; }
+        //     return element;
+        // }
         
         for (var roomName in Game.rooms) {
             var thisRoom = Game.rooms[roomName];

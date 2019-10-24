@@ -2,8 +2,8 @@ var manager = {
     /** @param {Creep} creep **/
     run: function(creep) {
         var creepRoom = Game.rooms[creep.pos.roomName];
-        var terminal = creepRoom.storage;
-        var staroage = creepRoom.terminal;
+        var terminal = creepRoom.terminal;
+        var storage = creepRoom.storage;
         var creepPosition; creepPosition.x = (storage.pos.x + terminal.pos.x)/2; creepPosition.y = (storage.pos.y + terminal.pos.y)/2;
         
        

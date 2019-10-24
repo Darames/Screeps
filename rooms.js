@@ -164,7 +164,7 @@ var room = {
                     var harvesters = _.filter(roomCreeps, (creep) => creep.memory.role == 'harvester');
                     if(roomCapacity <= 1200){
                         var harvestersLimit = 1;
-                        if (roomName == "E37S27"){
+                        if (roomName == "E38S36"){
                             harvestersLimit = 2;
                         }
                     } else {
@@ -184,7 +184,7 @@ var room = {
                     if(roomCapacity <= 1200){
                         var buildersLimit = 1;
                     } else{
-                        var buildersLimit = 1;
+                        var buildersLimit = 2;
                     }
                     
                     // if(thisRoom.memory.constructionSites.length > 0){
@@ -197,8 +197,11 @@ var room = {
                         var spawn = roomSpawns[0];
                     }
                     
-                    //console.log(roomName + " " + thisRoom.energyCapacityAvailable);
-                    
+                    // console.log(roomName + " " + thisRoom.energyCapacityAvailable);
+                    // console.log('harvesters ' + harvesters.length + ' ' + harvestersLimit);
+                    // console.log('transporters ' + transporters.length + ' ' + transportersLimit);
+                    // console.log('upgraders ' + upgraders.length + ' ' + upgradersLimit);
+                    // console.log('builders ' + upgraders.length + ' ' + buildersLimit);
         
                     if(harvesters.length < harvestersLimit) {
                         var newName = 'Harvester' + Game.time; 
@@ -213,6 +216,7 @@ var room = {
                         } else {
                             spawn.spawnCreep([WORK,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, {memory: {role: 'harvester', source: source }});
                         }
+                        console.log('harvesters');
                     }else if(transporters.length < transportersLimit) {
                         var newName = 'Transporter' + Game.time;
                         var bodyParts = [CARRY,CARRY,MOVE,MOVE];
@@ -226,25 +230,34 @@ var room = {
                             var body = bodyParts.concat(bodyParts, bodyParts, bodyParts, bodyParts, bodyParts, bodyParts);
                         }
                         spawn.spawnCreep(body, newName, {memory: {role: 'transporter', delivering: 'false', target: 'none'}});
+                        console.log('Transporter');
                     }else if(upgraders.length < upgradersLimit) {
                         var newName = 'Upgrader' + Game.time;
                         if(roomCapacity <= 600){
                             spawn.spawnCreep([WORK,CARRY,MOVE,MOVE], newName, {memory: {role: 'upgrader'}});
-                        } else if(roomCapacity <= 1200){
+                        } else if(roomCapacity <= 1600){
                             spawn.spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, {memory: {role: 'upgrader'}});
+                        } else if(roomCapacity <= 1800){
+                            spawn.spawnCreep([WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'upgrader'}});
                         } else{
                             spawn.spawnCreep([WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE,WORK,WORK,WORK,WORK,CARRY,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'upgrader'}});
                         }
                     }else if(builders.length < buildersLimit) {
                         var newName = 'Builder' + Game.time;
+                        var builderNr = 0;
+                        var builderNr = _.filter(roomCreeps, (creep) => creep.memory.builderNr == 0 );
+                        if(builderNr.length){var builderNr = 1;}
                         if(roomCapacity <= 600){
-                            spawn.spawnCreep([WORK,CARRY,MOVE,MOVE], newName, {memory: {role: 'builder'}});
+                            spawn.spawnCreep([WORK,CARRY,MOVE,MOVE], newName, {memory: {role: 'builder', builderNr: builderNr}});
                         } else if(roomCapacity <= 1200){
-                            spawn.spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, {memory: {role: 'builder'}});
+                            spawn.spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, {memory: {role: 'builder', builderNr: builderNr}});
                         } else {
-                            spawn.spawnCreep([WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'builder'}});
+                            spawn.spawnCreep([WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'builder', builderNr: builderNr}});
                         }
                     }
+                    // console.log(roomCapacity);
+                    // var newName = 'Upgrader' + Game.time;
+                    // spawn.spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, {memory: {role: 'upgrader'}});
                     
                     // else if(mDefender.length < mDefenderLimit) {
                     //     var newName = 'MeleeDefender' + Game.time;

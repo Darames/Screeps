@@ -30,11 +30,7 @@ var roleTransporter = {
                     if(extension.energy < extension.energyCapacity){ extension.priority = 2; targets.push(extension); }
                     }
                 }
-                
-                // for (var exId in creepRoom.extensions) {
-                //     console.log(creepRoom.extensions[exId]);
-                    
-                // }
+                 targets = _.sortBy( targets, s => creep.pos.getRangeTo(s) );
             }
             if(creepRoom.towers.length > 0){
                 for(i = 0; i < creepRoom.memory.towers.length; i ++){
@@ -55,15 +51,22 @@ var roleTransporter = {
                 }
             }
             if(creepRoom.memory.storage.length > 0){
-                if ( containers.length > 1 && containers[0].store[RESOURCE_ENERGY] < creep.carryCapacity ){
-                    //if ( containers[0].store[RESOURCE_ENERGY] < creep.carryCapacity && containers[1].store[RESOURCE_ENERGY] < creep.carryCapacity){
+                if ( containers.length > 1){
+                    var containersNotEmpty = false;
+                    for(i = 0; i < containers.length; i ++){
+                        if ( containers[i].store[RESOURCE_ENERGY] > creep.carryCapacity){
+                            containersNotEmpty = true;
+                        }
+                    }
+                    
+                    if (containersNotEmpty){
                         var storage = Game.getObjectById(creepRoom.memory.storage[0]);
                         if(storage.store[RESOURCE_ENERGY] < (storage.storeCapacity / 2)){
                             storage.priority = -1;
                             storage.energy = storage.store[RESOURCE_ENERGY]; storage.energyCapacity = storage.storeCapacity;
                             targets.push(storage); 
                         }
-                    //}
+                    }
                 }
             }
             

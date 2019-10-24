@@ -7,8 +7,7 @@ var roleBuilder = {
         var creepRoom = Game.rooms[creep.pos.roomName];
 		var constructionSites =  _.filter( Game.constructionSites, (c) => c.pos.roomName == creep.pos.roomName );
 		var damagedStructures = creepRoom.find(FIND_STRUCTURES,{ filter: (structure) => { return ( ( 100 * structure.hits ) / structure.hitsMax != 100 ) && structure.structureType != STRUCTURE_CONTROLLER; } });
-
-		
+        var builderNr = creep.memory.builderNr;
         // set get energy mode
 	    if(creep.memory.building && creep.carry.energy == 0 || creep.memory.repairing && creep.carry.energy == 0) {
 			creep.memory.building = false; creep.memory.repairing = false; creep.say('refill');
@@ -33,22 +32,24 @@ var roleBuilder = {
                 creep.memory.repairing = true;
             }
 	    } else if(creep.memory.repairing){
-	        if(creepRoom.name != "E34S29" || creepRoom.name != "E37S27" || creepRoom.name != "E36S29" ){
-	            damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" ||  structures.structureType != "rampart" ) || ( structures.structureType == "constructedWall" && !(structures.hits > 25000) ) || ( structures.structureType == "rampart" && !(structures.hits > 25000) ) );
-	        }
+	        if(damagedStructures.length >= 1){builderNr = 0}
+	        if(creepRoom.name != "E38S36" || creepRoom.name != "E37S27" || creepRoom.name != "E36S29" ){
+	            damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" ||  structures.structureType != "rampart" ) || ( structures.structureType == "rampart" && !(structures.hits > 25000) ) );
+	        } //  || ( structures.structureType == "constructedWall" && !(structures.hits > 25000) )
 			if(damagedStructures.length) {
 			 //   damagedStructures = _.filter( damagedStructures, (structures) => ( structures.structureType != "constructedWall" ||  structures.structureType != "rampart" ) );
-    		    if(damagedStructures[0].structureType == "constructedWall"){
+    		    if(damagedStructures[builderNr].structureType == "constructedWall"){
     		        damagedStructures = _.sortBy( damagedStructures, s => creep.pos.getRangeTo(s) );
     		        damagedStructures = _.sortBy( damagedStructures, s => ( 100 * s.hits ) / s.hitsMax );
 			    }
-                if(creep.repair(damagedStructures[0]) == ERR_NOT_IN_RANGE) {
+			 //   damagedStructures = _.sortBy( damagedStructures, s => ( s.hitsMax ));
+                if(creep.repair(damagedStructures[builderNr]) == ERR_NOT_IN_RANGE) {
                     if(creepRoom.name == "E36S29" || creepRoom.name == "E37S27"){
-                        creep.moveTo(damagedStructures[0], {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 200});
+                        creep.moveTo(damagedStructures[builderNr], {visualizePathStyle: {stroke: '#ffffff'}, maxOps: 200});
                     } else {
-                        creep.moveTo(damagedStructures[0], {visualizePathStyle: {stroke: '#ffffff'}, ignoreRoads: true, maxOps: 200});
+                        creep.moveTo(damagedStructures[builderNr], {visualizePathStyle: {stroke: '#ffffff'}, ignoreRoads: true, maxOps: 200});
                     }
-                    creep.repair(damagedStructures[0]);
+                    creep.repair(damagedStructures[builderNr]);
                 }
             }else {
                 creep.memory.building = false;

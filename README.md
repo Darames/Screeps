@@ -1,2 +1,0 @@
-# Screeps
-My Screeps Scripts

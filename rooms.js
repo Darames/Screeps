@@ -183,8 +183,8 @@ var room = {
                     var builders = _.filter(roomCreeps, (creep) => creep.memory.role == 'builder');
                     if(roomCapacity <= 1200){
                         var buildersLimit = 1;
-                    } else{
-                        var buildersLimit = 2;
+                    // } else{
+                    //     var buildersLimit = 2;
                     }
                     
                     // if(thisRoom.memory.constructionSites.length > 0){
@@ -244,16 +244,18 @@ var room = {
                         }
                     }else if(builders.length < buildersLimit) {
                         var newName = 'Builder' + Game.time;
+                        var bodyParts = [WORK,CARRY,MOVE,MOVE];
                         var builderNr = 0;
                         var builderNr = _.filter(roomCreeps, (creep) => creep.memory.builderNr == 0 );
                         if(builderNr.length){var builderNr = 1;}
                         if(roomCapacity <= 600){
-                            spawn.spawnCreep([WORK,CARRY,MOVE,MOVE], newName, {memory: {role: 'builder', builderNr: builderNr}});
+                            var body = bodyParts.concat(bodyParts);
                         } else if(roomCapacity <= 1200){
-                            spawn.spawnCreep([WORK,WORK,CARRY,MOVE,MOVE,MOVE], newName, {memory: {role: 'builder', builderNr: builderNr}});
+                            var body = bodyParts.concat(bodyParts, bodyParts);
                         } else {
-                            spawn.spawnCreep([WORK,WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'builder', builderNr: builderNr}});
+                            var body = bodyParts.concat(bodyParts, bodyParts, bodyParts);
                         }
+                        spawn.spawnCreep(body, newName, {memory: {role: 'builder', builderNr: builderNr}});
                     }
                     // console.log(roomCapacity);
                     // var newName = 'Upgrader' + Game.time;

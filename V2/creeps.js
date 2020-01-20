@@ -1,20 +1,20 @@
 var harvester = require('creep.harvester');
 var builder = require('creep.builder');
 var transporter = require('creep.transporter');
+var upgrader = require('creep.upgrader');
 
 
-var upgrader = require('role.upgrader');
 var claimer = require('role.claimer');
 var remoteBuilder = require('role.remoteBuilder');
 
 var creeps = {
     run: function() {
-        for(var roomName in Game.rooms){
-            harvester.target(roomName);
-            transporter.targets(roomName);
-            actions.setEnergyTargets(roomName);
-        }
         for(var nameCreep in Game.creeps) {
+            if(!Game.creeps[nameCreep]) {
+                delete Memory.creeps[nameCreep];
+                console.log('Clearing non-existing creep memory:', nameCreep);
+                continue;
+            }
             var creep = Game.creeps[nameCreep];
             
             // if(creep.memory.role == 'transporter') {
@@ -28,7 +28,7 @@ var creeps = {
             if(creep.memory.role == 'harvester') {
                 harvester.run(creep);
             }else if(creep.memory.role == 'upgrader') {
-                roleUpgrader.run(creep);
+                upgrader.run(creep);
             }else if(creep.memory.role == 'builder') {
                 builder.run(creep);
             }else if(creep.memory.role == 'transporter') {
@@ -39,12 +39,8 @@ var creeps = {
                 roleRemoteBuilder.run(creep);
             }else if(creep.memory.role == 'scout') {
             
-                if(creep.pos.roomName != "E36S29" ){
-                    creep.moveTo(new RoomPosition(25, 25, 'E36S29'));
-                    console.log(creep.pos.roomName);
-                } else {
-                    creep.moveTo(new RoomPosition(25, 48, 'E36S29'));
-                    creep.say("I'm there");
+                if(creep.pos.roomName != Memory.rooms.toScout[0] ){
+                    creep.moveTo(new RoomPosition(25, 25, Memory.rooms.toScout[0]));
                 }
                 // Game.spawns['Darames'].spawnCreep([MOVE], "Scout", {memory: {role: 'scout'}});
                 

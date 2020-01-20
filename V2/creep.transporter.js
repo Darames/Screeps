@@ -3,7 +3,7 @@ var actions = require('actions');
 var transporter = {
     /** @param {Creep} creep **/
 
-    targets: function(roomName){
+    targets: function(thisRoom){
 		if(thisRoom.container){ var containers = thisRoom.container; }
 		var targets = new Array();
 		function priority(target){
@@ -69,10 +69,9 @@ var transporter = {
 	
     run: function(creep) {
 		var creepRoom = Game.rooms[creep.pos.roomName];
-		var targets = creepRoom.transporterTargets; targets = _.sortByAll( targets, [s => s.priority, s => creep.pos.getRangeTo(s)] );
 		var target = Game.getObjectById(creep.memory.target);
-		if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
-        if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
+		// if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
+        // if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
 		
 		function newTarget(creep, targets){
 			if(targets.length > 0) {
@@ -89,8 +88,10 @@ var transporter = {
 		}
 		
         if( creep.memory.target === "none" && creep.memory.delivering ){
+			let targets = creepRoom.transporterTargets; targets = _.sortByAll( targets, [s => s.priority, s => creep.pos.getRangeTo(s)] );
             target = newTarget(creep, targets);
-        } else if( creep.memory.target != "none" && ( target.energy == target.energyCapacity ) ){
+        } else if( creep.memory.target != "none" && target.energy == target.energyCapacity ){
+			let targets = creepRoom.transporterTargets; targets = _.sortByAll( targets, [s => s.priority, s => creep.pos.getRangeTo(s)] );
             target = newTarget(creep, targets);
         } 
 

@@ -1,8 +1,18 @@
 var flags = {
     run: function() {
         for (var flag in Game.flags) {
-            if( Game.flags[flag].name.substr(0, 4) == "uPos"){
-                Game.rooms[Game.flags[flag].pos.roomName].upgraderFlag = Game.flags[flag];
+            let thisRoom = Game.rooms[Game.flags[flag].pos.roomName];
+            let thisFlag = Game.flags[flag];
+
+            if( thisFlag.name.substr(0, 4) == "uPos"){
+                thisRoom.memory.upgraderPos = thisFlag.pos;
+                thisFlag.remove;
+            } else if (thisFlag.name.substr(0, 5) == "claim") {
+                Memory.rooms.toClaim.push(thisRoom);
+                thisFlag.remove;
+            }else if (thisFlag.name.substr(0, 5) == "scout") {
+                Memory.rooms.toScout.push(thisRoom);
+                thisFlag.remove;
             }
         }
     }

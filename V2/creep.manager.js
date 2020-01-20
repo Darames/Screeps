@@ -6,7 +6,9 @@ var manager = {
         var storage = creepRoom.storage;
         var creepPosition; creepPosition.x = (storage.pos.x + terminal.pos.x)/2; creepPosition.y = (storage.pos.y + terminal.pos.y)/2;
         
-       
+        if(!creep.pos.isNearTo(creepPosition)) {
+            creep.moveTo( target, {maxOps: 200 });
+        }
         
         
         

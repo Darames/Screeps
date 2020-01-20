@@ -1,15 +1,17 @@
-var moveTo = require('tools.functions');
+var actions = require('actions');
 
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
         var creepRoom = Game.rooms[creep.pos.roomName];
-        var upgraderFlag = "none";
+        var upgraderPos = "none";
+        var upgradeContainer = false;
+        if( creepRoom.memory.controllerContainer !== 'undefined' ){ upgradeContainer = action.getElement(creepRoom, creepRoom.memory.controllerContainer) }
         
         // get upgrader position flag
-        if(Game.rooms[creep.pos.roomName].upgraderFlag){
-            upgraderFlag = Game.rooms[creep.pos.roomName].upgraderFlag;
+        if(creepRoom.memory.upgraderPos){
+            upgraderPos = creepRoom.memory.upgraderPos;
         }
 
         // set upgrading mode
@@ -22,24 +24,33 @@ var roleUpgrader = {
 	    }
         // upgrading Controller
 	    if(creep.memory.upgrading) {
-	        if(upgraderFlag !== "none"){
-	            if(creep.pos.inRangeTo(upgraderFlag, 1)) {
+	        if(upgraderPos !== "none"){
+	            if(creep.pos.inRangeTo(upgraderPos, 1)) {
                     creep.upgradeController(creepRoom.controller);
                 } else {
-                    creep.moveTo(upgraderFlag, {maxOps: 200}); 
-                    // creep.upgradeController(creepRoom.controller);
+                    creep.moveTo(upgraderPos, {maxOps: 200}); 
+                    creep.upgradeController(creepRoom.controller);
                 }
 	        } else {
 	            if(creep.pos.inRangeTo(creepRoom.controller, 2)) {
                     creep.upgradeController(creepRoom.controller);
                 } else {
                     creep.moveTo(creepRoom.controller, {maxOps: 200}); 
-                    // creep.upgradeController(creepRoom.controller);
+                    creep.upgradeController(creepRoom.controller);
                 }
 	        }
         } else {
         // geting energy
-            moveTo.container(creep, "withdraw", "controller");
+            if (upgradeContainer) {
+                if (upgradeContainer.store[RESOURCE_ENERGY] > 0 ) {
+                    actions.withdraw(creep, upgradeContainer);
+                    creep.memory.upgrading = true; 
+                } else {
+                    actions.getEnergy(creep);
+                }
+            } else {
+                actions.getEnergy(creep);
+            }
         }
 	}
 };

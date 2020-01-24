@@ -39,8 +39,10 @@ let room = {
             let thisRoom = Game.rooms[roomName];
 
             if (thisRoom.controller !== 'undefined') {
-                this.memory(thisRoom);
-                this.spawns(thisRoom);
+                if (thisRoom.controller.my) {
+                    this.memory(thisRoom);
+                    this.spawns(thisRoom);
+                }
             }
 
             if (thisRoom.memory.towers) {
@@ -54,33 +56,29 @@ let room = {
     },
 
     memory: function (thisRoom) {
-        if (thisRoom.controller.my) {
-            thisRoom.visual.text(Game.cpu.bucket, 48, 48, { align: 'right', opacity: 0.8 });
-            thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == thisRoom.name && c.my);
-            thisRoom.sources = thisRoom.find(FIND_SOURCES);
-            thisRoom.constructionSites = _.filter(Game.constructionSites, cS => cS.room.name == thisRoom.name);
-            thisRoom.damagedStructures = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return ((100 * structure.hits) / structure.hitsMax != 100) && structure.structureType != STRUCTURE_CONTROLLER; } });
-            thisRoom.damagedStructures = _.filter(thisRoom.damagedStructures, (structures) => (structures.structureType != "constructedWall" && structures.structureType != "rampart") || (structures.structureType == "constructedWall" && !(structures.hits > 170000)) || (structures.structureType == "rampart" && !(structures.hits > 170000)));
-            thisRoom.structures = _.filter(Game.structures, s => s.room.name == thisRoom.name);
-            thisRoom.container = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
-            thisRoom.controllerContainer = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
-            thisRoom.spawns = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_SPAWN);
-            thisRoom.extensions = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_EXTENSION);
-            thisRoom.towers = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_TOWER);
-            thisRoom.links = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_LINK);
-            thisRoom.sourceLinks = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.source[0], 3) || s.pos.inRangeTo(thisRoom.source[1], 3)));
-            thisRoom.droppedEnergy = thisRoom.find(FIND_DROPPED_RESOURCES, { filter: (r) => { return r.resourceType == RESOURCE_ENERGY } });
-        } // got my contorler
+        thisRoom.visual.text(Game.cpu.bucket, 48, 48, { align: 'right', opacity: 0.8 });
+        thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == thisRoom.name && c.my);
+        thisRoom.sources = thisRoom.find(FIND_SOURCES);
+        thisRoom.constructionSites = _.filter(Game.constructionSites, cS => cS.room.name == thisRoom.name);
+        thisRoom.damagedStructures = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return ((100 * structure.hits) / structure.hitsMax != 100) && structure.structureType != STRUCTURE_CONTROLLER; } });
+        thisRoom.damagedStructures = _.filter(thisRoom.damagedStructures, (structures) => (structures.structureType != "constructedWall" && structures.structureType != "rampart") || (structures.structureType == "constructedWall" && !(structures.hits > 170000)) || (structures.structureType == "rampart" && !(structures.hits > 170000)));
+        thisRoom.structures = _.filter(Game.structures, s => s.room.name == thisRoom.name);
+        thisRoom.container = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
+        thisRoom.controllerContainer = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
+        thisRoom.spawns = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_SPAWN);
+        thisRoom.extensions = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_EXTENSION);
+        thisRoom.towers = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_TOWER);
+        thisRoom.links = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_LINK);
+        thisRoom.sourceLinks = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.sources[0], 3) || s.pos.inRangeTo(thisRoom.sources[1], 3)));
+        thisRoom.droppedEnergy = thisRoom.find(FIND_DROPPED_RESOURCES, { filter: (r) => { return r.resourceType == RESOURCE_ENERGY } });
     },
 
     spawns: function (thisRoom) {
-        if (thisRoom.controller !== void(0)) {
-            thisRoom.roomGotSpawn = false;
-            if (thisRoom.spawns.length > 0) { thisRoom.roomGotSpawn = true; }
-        }
+        thisRoom.roomGotSpawn = false;
+        if (thisRoom.spawns.length > 0) { thisRoom.roomGotSpawn = true; }
         if (thisRoom.roomGotSpawn == true) {
             let roomCapacity = thisRoom.energyCapacityAvailable;
-            let creeps;
+            let creeps = {};
             creeps.harvesters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'harvester');
             creeps.transporters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'transporter');
             creeps.upgraders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'upgrader');
@@ -105,7 +103,7 @@ let room = {
             if (creeps.harvesters.length < harvestersLimit) {
                 let newName = 'Harvester' + Game.time;
                 let source = 0;
-                let harvesterOnSource = _.filter(roomCreeps, (creep) => creep.memory.source == 0);
+                let harvesterOnSource = _.filter(creeps, (creep) => creep.memory.source == 0);
                 let body = [WORK, MOVE];
                 let bodyCost = 150;
                 let moveCount = 1;

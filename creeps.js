@@ -4,8 +4,8 @@ var transporter = require('creep.transporter');
 var upgrader = require('creep.upgrader');
 
 
-var claimer = require('role.claimer');
-var remoteBuilder = require('role.remoteBuilder');
+// var claimer = require('role.claimer');
+// var remoteBuilder = require('role.remoteBuilder');
 
 var creeps = {
     run: function() {
@@ -34,9 +34,9 @@ var creeps = {
             }else if(creep.memory.role == 'transporter') {
                 transporter.run(creep);
             }else if(creep.memory.role == 'claimer') {
-                roleClaimer.run(creep);
+                // roleClaimer.run(creep);
             }else if(creep.memory.role == 'remoteBuilder') {
-                roleRemoteBuilder.run(creep);
+                // roleRemoteBuilder.run(creep);
             }else if(creep.memory.role == 'scout') {
             
                 if(creep.pos.roomName != Memory.rooms.toScout[0] ){

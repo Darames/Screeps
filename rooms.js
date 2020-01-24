@@ -9,26 +9,7 @@ let room = {
 
     run: function () {
         if (Memory.rooms.toClaim.length > 0) {
-            let rangeToClaimRoom = [];
-            for (const roomName in Game.rooms) {
-                let thisRoom = Game.rooms[roomName];
-                if (thisRoom.controller !== 'undefined') {
-                    if (thisRoom.controller.my) {
-                        let claimRoom = Memory.rooms.toClaim[0];
-                        let roomX = thisRoom.name.slice(1, 3), roomY = thisRoom.name.slice(4),
-                            claimRoomX = claimRoom.slice(1, 3), claimRoomY = claimRoom.slice(4),
-                            roomRange = Math.abs(roomX - claimRoomX) + Math.abs(roomY - claimRoomY);
-                        if (roomRange = 1) {
-                            thisRoom.memory.claiming = claimRoom;
-                            Memory.rooms.toClaim.shift();
-                        } else {
-                            rangeToClaimRoom.push([thisRoom.name, roomRange]);
-                        }
-                    }
-                }
-            }
-            if (rangeToClaimRoom.length > 1) { rangeToClaimRoom.sort(function (a, b) { return a[1] - b[1]; }); }
-            if (rangeToClaimRoom.length >= 1) { thisRoom.memory.claiming = rangeToClaimRoom[0][0]; }
+            this.claimRooms();
         }
 
         for (const roomName in Game.rooms) {
@@ -43,6 +24,29 @@ let room = {
                 }
             }
         }
+    },
+    
+    claimRooms: function () {
+        let rangeToClaimRoom = [];
+        for (const roomName in Game.rooms) {
+            let thisRoom = Game.rooms[roomName];
+            if (thisRoom.controller !== 'undefined') {
+                if (thisRoom.controller.my) {
+                    let claimRoom = Memory.rooms.toClaim[0];
+                    let roomX = thisRoom.name.slice(1, 3), roomY = thisRoom.name.slice(4),
+                        claimRoomX = claimRoom.slice(1, 3), claimRoomY = claimRoom.slice(4),
+                        roomRange = Math.abs(roomX - claimRoomX) + Math.abs(roomY - claimRoomY);
+                    if (roomRange = 1) {
+                        thisRoom.memory.claiming = claimRoom;
+                        Memory.rooms.toClaim.shift();
+                    } else {
+                        rangeToClaimRoom.push([thisRoom.name, roomRange]);
+                    }
+                }
+            }
+        }
+        if (rangeToClaimRoom.length > 1) { rangeToClaimRoom.sort(function (a, b) { return a[1] - b[1]; }); }
+        if (rangeToClaimRoom.length >= 1) { thisRoom.memory.claiming = rangeToClaimRoom[0][0]; }
     },
 
     memory: function (thisRoom) {

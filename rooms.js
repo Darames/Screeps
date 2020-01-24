@@ -92,7 +92,6 @@ let room = {
             let upgradersLimit = 1;
             let buildersLimit = 1;
             let claimersLimit = 1;
-            let roomCapacity = thisRoom.energyCapacityAvailable;
 
             if (thisRoom.spawns.length > 1 && thisRoom.spawns[0].spawning) { spawn = thisRoom.spawns[1]; }
             if (roomCapacity > 1200) { harvestersLimit = 2; }

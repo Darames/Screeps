@@ -14,7 +14,7 @@ module.exports.loop = function () {
 
     flags.run(); //save new flags in memory
     rooms.run(); //room memory update
-    rooms.spawn(); //room spawn creeps
+    rooms.spawns(); //room spawn creeps
 
     //toDo = harvester anpassen sourcefindung bei einem container defekt
     //toDo = wenn drop näher dann drop

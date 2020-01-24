@@ -38,8 +38,10 @@ let room = {
         for (const roomName in Game.rooms) {
             let thisRoom = Game.rooms[roomName];
 
-            this.memory(thisRoom);
-            this.spawns(thisRoom);
+            if (thisRoom.controller !== 'undefined') {
+                this.memory(thisRoom);
+                this.spawns(thisRoom);
+            }
 
             if (thisRoom.memory.towers) {
                 structureTower.run(nameRoom, thisRoom.memory.damagedStructures);
@@ -71,8 +73,8 @@ let room = {
         } // got my contorler
     },
 
-    spawns: function () {
-        if (thisRoom.controller !== 'undefined') {
+    spawns: function (thisRoom) {
+        if (thisRoom.controller !== void(0)) {
             thisRoom.roomGotSpawn = false;
             if (thisRoom.spawns.length > 0) { thisRoom.roomGotSpawn = true; }
         }

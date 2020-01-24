@@ -33,9 +33,9 @@ var transporter = {
 				}
             }
         }
-        if(creepRoom.towers.length > 0){
+        if(thisRoom.towers.length > 0){
 			for (var tId in thisRoom.towers) {
-				let tower = creepRoom.towers[tId];
+				let tower = thisRoom.towers[tId];
 				if(tower.energy < tower.energyCapacity){ 
                     tower.priority = 1; 
 					priority(tower);
@@ -55,7 +55,7 @@ var transporter = {
 				}
             }
         }
-		if(thisRoom.storage.length > 0){
+		if(thisRoom.storage){
 			var storage = thisRoom.storage;
 			if(storage.store[RESOURCE_ENERGY] < (storage.storeCapacity / 2)){
 				storage.priority = -1;

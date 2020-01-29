@@ -17,14 +17,14 @@ var roleHarvester = {
         }
         
         // harvest energy
-        if(creep.harvest(sources[creep.memory.source]) == ERR_NOT_IN_RANGE) {
-            if( targets.length > 0 ){
-                // if( targets.length == 1 ){
-                    creep.moveTo(targets[0].pos, {visualizePathStyle: {stroke: '#ffaa00'}, maxOps: 200});
-                // } else {
-                //     creep.moveTo(targets[creep.memory.source], {visualizePathStyle: {stroke: '#ffaa00'}, maxOps: 200});
-                // }
-            } else {
+       if(targets.length > 0){
+            if(creep.pos.isEqualTo(targets[0])) {
+				creep.harvest(sources[creep.memory.source]);
+			} else {
+                creep.moveTo(targets[0].pos, {visualizePathStyle: {stroke: '#ffaa00'}, maxOps: 200});
+            }
+        } else {
+            if(creep.harvest(sources[creep.memory.source]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[creep.memory.source], {visualizePathStyle: {stroke: '#ffaa00'}, maxOps: 200});
             }
         }

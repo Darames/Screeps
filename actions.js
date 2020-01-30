@@ -73,6 +73,30 @@ var actions = {
                 this.pickup( creep, energyTarget );
             }
         }
+    },
+
+    moveTo: function (creep, target) {
+        let range = creep.pos.getRangeTo(target);
+        let reusePath = 20;
+        let maxOps = 200;
+
+        if (!creep.memory.rangeToTarget) {
+            creep.memory.rangeToTarget = range;
+        } else if (range == 0) {
+            creep.memory.rangeToTarget = null;
+        } else {
+            range = creep.memory.rangeToTarget;
+        }
+
+        if (range < 40) {
+            reusePath = range / 2;
+        } else {
+            reusePath = 20;
+        }
+
+        maxOps = reusePath * 10;
+
+        creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}, reusePath: reusePath, maxOps: maxOps});
     }
 };
 

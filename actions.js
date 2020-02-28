@@ -1,76 +1,76 @@
 // var variables = require('variables');
 
 var actions = {
-    
+
     /** @param {Creep} creep **/
-    
-    pickup: function(creep,target){
-        if( !creep.pos.isNearTo( target ) ) {
-            creep.moveTo( target, {reusePath: 20, maxOps: 300} ); 
-        }else {
-            creep.pickup( target, RESOURCE_ENERGY );
+
+    pickup: function (creep, target) {
+        if (!creep.pos.isNearTo(target)) {
+            creep.moveTo(target, { reusePath: 20, maxOps: 300 });
+        } else {
+            creep.pickup(target, RESOURCE_ENERGY);
         }
     },
 
-    withdraw: function(creep,target){
-        if( !creep.pos.isNearTo( target ) ) {
-            creep.moveTo( target, {reusePath: 20, maxOps: 300} ); 
-        }else {
-            creep.withdraw( target, RESOURCE_ENERGY );
+    withdraw: function (creep, target) {
+        if (!creep.pos.isNearTo(target)) {
+            creep.moveTo(target, { reusePath: 20, maxOps: 300 });
+        } else {
+            creep.withdraw(target, RESOURCE_ENERGY);
         }
     },
-    
-    transfer: function(creep,target){
-        if( !creep.pos.isNearTo( target ) ) {
-            creep.moveTo( target, {reusePath: 20, maxOps: 300} ); 
-        }else {
-            creep.transfer( target, RESOURCE_ENERGY );
+
+    transfer: function (creep, target) {
+        if (!creep.pos.isNearTo(target)) {
+            creep.moveTo(target, { reusePath: 20, maxOps: 300 });
+        } else {
+            creep.transfer(target, RESOURCE_ENERGY);
         }
     },
-    
-    getElement: function(roomName, sId) {
+
+    getElement: function (roomName, sId) {
         var thisRoom = Game.rooms[roomName];
         var element = Game.getObjectById(sId);
-        if( element == null ){ thisRoom.memory.scanMode = true; }
+        if (element == null) { thisRoom.memory.scanMode = true; }
         return element;
     },
-    
-    setEnergyTargets: function(thisRoom){
+
+    setEnergyTargets: function (thisRoom) {
         let targets;
-        if(thisRoom.storage && thisRoom.container){
+        if (thisRoom.storage && thisRoom.container) {
             targets = thisRoom.container.concat(thisRoom.storage);
-        } else if(thisRoom.container){
+        } else if (thisRoom.container) {
             targets = thisRoom.container;
         }
         targets = targets.concat(thisRoom.droppedEnergy);
         thisRoom.energyTargets = targets;
     },
-    
-    getEnergy: function(creep){
+
+    getEnergy: function (creep) {
         var creepRoom = Game.rooms[creep.pos.roomName];
-        var energyTargets = _.sortBy( creepRoom.energyTargets, s => s.pos.getRangeTo(creep) );
+        var energyTargets = _.sortBy(creepRoom.energyTargets, s => s.pos.getRangeTo(creep));
 
         if (energyTargets.length > 1) {
             let targetCounter = 0;
             for (const target in energyTargets) {
                 targetCounter = targetCounter++;
                 if (target.structureType) {
-                    if ( target.store[RESOURCE_ENERGY] < creep.carryCapacity) {
-                        if ( targetCounter == energyTargets.length ) {
-                            moveAndGetEnergy( creep, energyTargets[0] );
+                    if (target.store[RESOURCE_ENERGY] < creep.carryCapacity) {
+                        if (targetCounter == energyTargets.length) {
+                            moveAndGetEnergy(creep, energyTargets[0]);
                         } else {
                             continue;
                         }
-                    } else { moveAndGetEnergy( creep, target ); }
-                } else { moveAndGetEnergy( creep, target ); }
+                    } else { moveAndGetEnergy(creep, target); }
+                } else { moveAndGetEnergy(creep, target); }
             }
-        } else { moveAndGetEnergy( creep, energyTargets[0] ); }
-        
+        } else { moveAndGetEnergy(creep, energyTargets[0]); }
+
         function moveAndGetEnergy(creep, energyTarget) {
-            if( energyTarget.structureType ){
-                this.withdraw( creep, energyTarget );
+            if (energyTarget.structureType) {
+                this.withdraw(creep, energyTarget);
             } else {
-                this.pickup( creep, energyTarget );
+                this.pickup(creep, energyTarget);
             }
         }
     },
@@ -96,7 +96,7 @@ var actions = {
 
         maxOps = reusePath * 10;
 
-        creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}, reusePath: reusePath, maxOps: maxOps});
+        creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' }, reusePath: reusePath, maxOps: maxOps });
     }
 };
 

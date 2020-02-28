@@ -14,7 +14,7 @@ let room = {
 
         for (const roomName in Game.rooms) {
             let thisRoom = Game.rooms[roomName];
-            if (thisRoom.controller !== 'undefined') {
+            if (typeof thisRoom.controller !== 'undefined') {
                 if (thisRoom.controller.my) {
                     this.memory(thisRoom);
                     this.spawns(thisRoom);
@@ -25,14 +25,15 @@ let room = {
             }
         }
     },
-    
+
     claimRooms: function () {
         let rangeToClaimRoom = [];
+        let claimRoom = Memory.rooms.toClaim[0];
+
         for (const roomName in Game.rooms) {
             let thisRoom = Game.rooms[roomName];
-            if (thisRoom.controller !== 'undefined') {
+            if (typeof thisRoom.controller !== 'undefined') {
                 if (thisRoom.controller.my) {
-                    let claimRoom = Memory.rooms.toClaim[0];
                     let roomX = thisRoom.name.slice(1, 3), roomY = thisRoom.name.slice(4),
                         claimRoomX = claimRoom.slice(1, 3), claimRoomY = claimRoom.slice(4),
                         roomRange = Math.abs(roomX - claimRoomX) + Math.abs(roomY - claimRoomY);
@@ -45,26 +46,85 @@ let room = {
                 }
             }
         }
+
         if (rangeToClaimRoom.length > 1) { rangeToClaimRoom.sort(function (a, b) { return a[1] - b[1]; }); }
-        if (rangeToClaimRoom.length >= 1) { thisRoom.memory.claiming = rangeToClaimRoom[0][0]; }
+        if (rangeToClaimRoom.length >= 1) { Game.rooms[rangeToClaimRoom[0][0]].memory.claiming = claimRoom; }
     },
 
     memory: function (thisRoom) {
+        if (typeof thisRoom.memory.limits === 'undefined') {
+            thisRoom.memory.limits.tran.value = 1;
+            thisRoom.memory.limits.tran.autoChange = true;
+            thisRoom.memory.limits.upgr.value = 1;
+            thisRoom.memory.limits.upgr.autoChange = false;
+            thisRoom.memory.limits.buil.value = 1;
+            thisRoom.memory.limits.buil.autoChange = true;
+            thisRoom.memory.limits.harv.value = 1;
+            thisRoom.memory.limits.harv.autoChange = false;
+            thisRoom.memory.limits.capacity = roomCapacity;
+        }
+
         thisRoom.visual.text(Game.cpu.bucket, 48, 48, { align: 'right', opacity: 0.8 });
         thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == thisRoom.name && c.my);
+        thisRoom.creeps.harvesters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'harvester');
+        thisRoom.creeps.transporters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'transporter');
+        thisRoom.creeps.upgraders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'upgrader');
+        thisRoom.creeps.builders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'builder');
+        if (thisRoom.memory.claiming) {
+            thisRoom.creeps.claimers = _.filter(Game.creeps, (creep) => creep.memory.homeRoom == thisRoom.name && creep.memory.role == 'claimer');
+        }
         thisRoom.sources = thisRoom.find(FIND_SOURCES);
         thisRoom.constructionSites = _.filter(Game.constructionSites, cS => cS.room.name == thisRoom.name);
         thisRoom.damagedStructures = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return ((100 * structure.hits) / structure.hitsMax != 100) && structure.structureType != STRUCTURE_CONTROLLER; } });
         thisRoom.damagedStructures = _.filter(thisRoom.damagedStructures, (structures) => (structures.structureType != "constructedWall" && structures.structureType != "rampart") || (structures.structureType == "constructedWall" && !(structures.hits > 170000)) || (structures.structureType == "rampart" && !(structures.hits > 170000)));
-        thisRoom.structures = _.filter(Game.structures, s => s.room.name == thisRoom.name);
-        thisRoom.container = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
-        thisRoom.controllerContainer = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
-        thisRoom.spawns = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_SPAWN);
-        thisRoom.extensions = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_EXTENSION);
-        thisRoom.towers = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_TOWER);
-        thisRoom.links = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_LINK);
-        thisRoom.sourceLinks = _.filter(thisRoom.structures, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.sources[0], 3) || s.pos.inRangeTo(thisRoom.sources[1], 3)));
         thisRoom.droppedEnergy = thisRoom.find(FIND_DROPPED_RESOURCES, { filter: (r) => { return r.resourceType == RESOURCE_ENERGY } });
+        thisRoom.limits = thisRoom.memory.limits;
+
+        if (typeof thisRoom.memory.scanMode === 'undefined') {
+            thisRoom.memory.scanMode = true;
+            thisRoom.memory.constructionSites = thisRoom.constructionSites;
+        } else {
+            if (thisRoom.constructionSites) {
+                if (thisRoom.constructionSites.length != thisRoom.memory.constructionSites.length) {
+                    thisRoom.memory.scanMode = true;
+                    thisRoom.memory.constructionSites = thisRoom.constructionSites;
+                }
+            }
+        }
+
+        if (thisRoom.memory.scanMode === true) {
+            thisRoom.structuresAll = _.filter(Game.structures, s => s.room.name == thisRoom.name);
+            thisRoom.container = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
+            thisRoom.controllerContainer = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
+            thisRoom.spawns = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_SPAWN);
+            thisRoom.extensions = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_EXTENSION);
+            thisRoom.structures.towers = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_TOWER);
+            thisRoom.links = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK);
+            thisRoom.sourceLinks = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.sources[0], 3) || s.pos.inRangeTo(thisRoom.sources[1], 3)));
+            thisRoom.storage = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_STORAGE);
+
+            for (i = 0; i < thisRoom.structuresAll.length; i++) { thisRoom.memory.structuresAll.push(structuresAll[i].id); }
+            for (i = 0; i < thisRoom.container.length; i++) { thisRoom.memory.container.push(container[i].id); }
+            for (i = 0; i < thisRoom.controllerContainer.length; i++) { thisRoom.memory.controllerContainer.push(controllerContainer[i].id); }
+            for (i = 0; i < thisRoom.spawns.length; i++) { thisRoom.memory.spawns.push(spawn[i].id); }
+            for (i = 0; i < thisRoom.extensions.length; i++) { thisRoom.memory.extensions.push(extensions[i].id); }
+            for (i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.towers.push(towers[i].id); }
+            for (i = 0; i < thisRoom.storage.length; i++) { thisRoom.memory.storage.push(storage[i].id); }
+            for (i = 0; i < thisRoom.links.length; i++) { thisRoom.memory.links.push(links[i].id); }
+            for (i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(sourceLinks[i].id); }
+
+            thisRoom.memory.scanMode = false;
+        } else {
+            for (let id in thisRoom.memory.structuresAll) { thisRoom.structuresAll.push(actions.getElement(thisRoom.name, thisRoom.memory.structuresAll[id])); }
+            for (let id in thisRoom.memory.container) { thisRoom.container.push(actions.getElement(thisRoom.name, thisRoom.memory.container[id])); }
+            for (let id in thisRoom.memory.controllerContainer) { thisRoom.controllerContainer.push(actions.getElement(thisRoom.name, thisRoom.memory.controllerContainer[id])); }
+            for (let id in thisRoom.memory.spawns) { thisRoom.spawns.push(actions.getElement(thisRoom.name, thisRoom.memory.spawn[id])); }
+            for (let id in thisRoom.memory.extensions) { thisRoom.extensions.push(actions.getElement(thisRoom.name, thisRoom.memory.extensions[id])); }
+            for (let id in thisRoom.memory.structures.towers) { thisRoom.towers.push(actions.getElement(thisRoom.name, thisRoom.memory.towers[id])); }
+            for (let id in thisRoom.memory.storage) { thisRoom.storage.pushactions.getElement(thisRoom.name, thisRoom.memory.(storage[i].id)); }
+            for (let id in thisRoom.memory.links) { thisRoom.links.push(actions.getElement(thisRoom.name, thisRoom.memory.links[id])); }
+            for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(sactions.getElement(thisRoom.name, thisRoom.memory.ourceLinks[id])); }
+        }
     },
 
     spawns: function (thisRoom) {
@@ -72,37 +132,40 @@ let room = {
         if (thisRoom.spawns.length > 0) { thisRoom.roomGotSpawn = true; }
         if (thisRoom.roomGotSpawn == true) {
             let roomCapacity = thisRoom.energyCapacityAvailable;
-            let creeps = {};
-            creeps.harvesters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'harvester');
-            creeps.transporters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'transporter');
-            creeps.upgraders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'upgrader');
-            creeps.builders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'builder');
-            if (thisRoom.memory.claiming) {
-                creeps.claimers = _.filter(Game.creeps, (creep) => creep.memory.homeRoom == thisRoom.name && creep.memory.role == 'claimer');
-            }
+            let creeps = thisRoom.creeps;
             let spawn = thisRoom.spawns[0];
-            let harvestersLimit = 1;
-            let transportersLimit = 1;
-            let upgradersLimit = 1;
-            let buildersLimit = 1;
-            let claimersLimit = 1;
+            let limits = thisRoom.limits;
 
             if (thisRoom.spawns.length > 1 && thisRoom.spawns[0].spawning) { spawn = thisRoom.spawns[1]; }
-            if (roomCapacity > 1200) { harvestersLimit = 2; }
-            if (roomCapacity > 1200) { transportersLimit = 2; }
-            if (roomCapacity > 1200) { upgradersLimit = 1; }
-            if (roomCapacity > 1200) { buildersLimit = 1; }
+            if (roomCapacity > 1200) {
+                limits.harv.value = 2;
+                limits.capacity = roomCapacity;
 
+                if (limits.capacity === roomCapacity && limits.tran.value <= 2 && limits.tran.autoChange) {
+                    thisRoom.memory.limits.tran.value = 2;
+                    thisRoom.memory.limits.tran.autoChange = false;
+                }
+                if (limits.capacity === roomCapacity && limits.buil.autoChange) {
+                    thisRoom.memory.limits.buil.value = 0;
+                    thisRoom.memory.limits.buil.autoChange = false;
+                }
+            }
 
-            if (creeps.harvesters.length < harvestersLimit) {
-                let newName = 'Harvester' + Game.time;
+            let newName = '';
+            let body = [];
+            let memory = {};
+
+            if (creeps.harvesters.length < limits.harv.value) {
+                newName = 'Harvester' + Game.time;
                 let source = 0;
                 let harvesterOnSource = _.filter(creeps, (creep) => creep.memory.source == 0);
-                let body = [WORK, MOVE];
+                body = [WORK, MOVE];
                 let bodyCost = 150;
                 let moveCount = 1;
                 let stepCost = 150;
-                if (harvesterOnSource.length) { source = 1; }
+                memory = { role: 'harvester', source: source };
+
+                if (harvesterOnSource.length > 0) { source = 1; }
 
                 while ((bodyCost + stepCost) < roomCapacity && bodyCost < 650) {
                     body = body.concat([WORK]);
@@ -115,28 +178,27 @@ let room = {
                         stepCost = stepCost + 50;
                     }
                 }
-
-                spawn.spawnCreep(body, newName, { memory: { role: 'harvester', source: source } });
-            } else if (creeps.transporters.length < transportersLimit) {
-                let newName = 'Transporter' + Game.time;
-                let body = [CARRY, MOVE, CARRY, MOVE];
+            } else if (creeps.transporters.length < limits.tran.value) {
+                newName = 'Transporter' + Game.time;
+                body = [CARRY, MOVE, CARRY, MOVE];
                 let bodyCost = 200;
                 let stepCost = 200;
+                memory = { role: 'transporter', delivering: 'false', target: 'none' };
 
                 while ((bodyCost + stepCost) < roomCapacity && bodyCost < 1400) {
                     body = body.concat([CARRY, MOVE]);
                     bodyCost = bodyCost + 100;
                     stepCost = 100;
                 }
-                spawn.spawnCreep(body, newName, { memory: { role: 'transporter', delivering: 'false', target: 'none' } });
-            } else if (creeps.upgraders.length < upgradersLimit) {
-                let newName = 'Upgrader' + Game.time;
-                let body = [WORK, MOVE, CARRY, MOVE];
+            } else if (creeps.upgraders.length < limits.upgr.value) {
+                newName = 'Upgrader' + Game.time;
+                body = [WORK, MOVE, CARRY, MOVE];
                 let bodyCost = 250;
                 let carryCount = 1;
                 let stepCost = 250;
+                memory = { role: 'upgrader' };
 
-                while ((bodyCost + stepCost) < roomCapacity && thisRoom.controller.level < 8) {
+                while ((bodyCost + stepCost) < roomCapacity && thisRoom.controller.level < 8 && bodyCost < 1400) {
                     body = body.concat([WORK, MOVE]);
                     bodyCost = bodyCost + 150;
                     stepCost = 150;
@@ -147,31 +209,22 @@ let room = {
                         stepCost = stepCost + 100;
                     }
                 }
-                spawn.spawnCreep(body, newName, { memory: { role: 'upgrader' } });
-            } else if (creeps.builders.length < buildersLimit) {
-                let newName = 'Builder' + Game.time;
-                let body = [WORK, MOVE, CARRY, MOVE];
+            } else if (creeps.builders.length < limits.buil.value) {
+                newName = 'Builder' + Game.time;
+                body = [WORK, MOVE, CARRY, MOVE];
                 let bodyCost = 250;
                 let stepCost = 250;
+                memory = { role: 'builder' };
 
                 while ((bodyCost + stepCost) < roomCapacity && bodyCost < 2000) {
                     body = body.concat([WORK, MOVE, CARRY, MOVE]);
                     bodyCost = bodyCost + 250;
                     stepCost = 250;
                 }
-                spawn.spawnCreep(body, newName, { memory: { role: 'builder' } });
             } else if (creeps.claimers.length = 0 && thisRoom.memory.claiming) {
-                let newName = 'Builder' + Game.time;
-                let body = [WORK, MOVE, CARRY, MOVE];
-                let bodyCost = 250;
-                let stepCost = 250;
-
-                while ((bodyCost + stepCost) < roomCapacity && bodyCost < 2000) {
-                    body = body.concat([WORK, MOVE, CARRY, MOVE]);
-                    bodyCost = bodyCost + 250;
-                    stepCost = 250;
-                }
-                spawn.spawnCreep(body, newName, { memory: { role: 'builder' } });
+                newName = 'Claimer' + Game.time;
+                body = [CLAIM, MOVE, MOVE];
+                memory = { role: 'claimer' };
             }
             // else if(mDefender.length < mDefenderLimit) {
             //     let newName = 'MeleeDefender' + Game.time;
@@ -184,7 +237,7 @@ let room = {
             //     }
             // }
 
-            // if (thisRoom.energyAvailable <= 600) {
+            // if (thisRoom.energyAvailable <= 300 && thisRoom.energyAvailable != roomCapacity) {
             //     if (creeps.harvesters.length < 1) {
             //         //backup harvester
             //         let newName = 'BHarvester' + Game.time;
@@ -197,6 +250,9 @@ let room = {
             //     }
             // }
 
+            if (newName && body && memory) {
+                spawn.spawnCreep(body, newName, { memory: memory });
+            }
             if (spawn.spawning) {
                 let spawningCreep = Game.creeps[spawn.spawning.name];
                 spawn.room.visual.text(

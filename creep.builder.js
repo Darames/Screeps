@@ -24,6 +24,10 @@ var roleBuilder = {
                 creep.memory.repairing = true;
             }
         }
+        if(creep.memory.builderNr == 1 && damagedStructures.length > 0 && creep.carry.energy != 0 && creepRoom.structures.towers.length < 1) {
+            creep.memory.repairing = true;
+            creep.memory.building = false;
+        }
 
         if (creep.memory.building) {
             if (constructionSites.length) {

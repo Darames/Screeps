@@ -3,7 +3,7 @@ let tower = require('structure.tower');
 var structures = {
 
     run: function (thisRoom) {
-        if (thisRoom.memory.towers) {
+        if (thisRoom.structures.towers) {
             tower.run(thisRoom);
         }
     }

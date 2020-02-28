@@ -121,7 +121,7 @@ let room = {
             for (let id in thisRoom.memory.spawns) { thisRoom.spawns.push(actions.getElement(thisRoom.name, thisRoom.memory.spawn[id])); }
             for (let id in thisRoom.memory.extensions) { thisRoom.extensions.push(actions.getElement(thisRoom.name, thisRoom.memory.extensions[id])); }
             for (let id in thisRoom.memory.structures.towers) { thisRoom.towers.push(actions.getElement(thisRoom.name, thisRoom.memory.towers[id])); }
-            for (let id in thisRoom.memory.storage) { thisRoom.storage.pushactions.getElement(thisRoom.name, thisRoom.memory.(storage[i].id)); }
+            for (let id in thisRoom.memory.storage) { thisRoom.storage.push(actions.getElement(thisRoom.name, thisRoom.memory.storage[i].id)); }
             for (let id in thisRoom.memory.links) { thisRoom.links.push(actions.getElement(thisRoom.name, thisRoom.memory.links[id])); }
             for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(sactions.getElement(thisRoom.name, thisRoom.memory.ourceLinks[id])); }
         }
@@ -163,9 +163,8 @@ let room = {
                 let bodyCost = 150;
                 let moveCount = 1;
                 let stepCost = 150;
-                memory = { role: 'harvester', source: source };
-
                 if (harvesterOnSource.length > 0) { source = 1; }
+                memory = { role: 'harvester', source: source };
 
                 while ((bodyCost + stepCost) < roomCapacity && bodyCost < 650) {
                     body = body.concat([WORK]);

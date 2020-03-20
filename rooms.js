@@ -8,8 +8,10 @@ let structures = require('structures');
 let room = {
 
     run: function () {
-        if (Memory.rooms.toClaim.length > 0) {
-            this.claimRooms();
+        if (typeof Memory.rooms.toClaim !== 'undefined') {
+            if (Memory.rooms.toClaim.length > 0) {
+                this.claimRooms();
+            }
         }
 
         for (const roomName in Game.rooms) {
@@ -53,15 +55,13 @@ let room = {
 
     memory: function (thisRoom) {
         if (typeof thisRoom.memory.limits === 'undefined') {
-            thisRoom.memory.limits.tran.value = 1;
-            thisRoom.memory.limits.tran.autoChange = true;
-            thisRoom.memory.limits.upgr.value = 1;
-            thisRoom.memory.limits.upgr.autoChange = false;
-            thisRoom.memory.limits.buil.value = 1;
-            thisRoom.memory.limits.buil.autoChange = true;
-            thisRoom.memory.limits.harv.value = 1;
-            thisRoom.memory.limits.harv.autoChange = false;
-            thisRoom.memory.limits.capacity = roomCapacity;
+            thisRoom.memory.limits = {
+                'tran': { 'value': 1, 'autoChange': true },
+                'upgr': { 'value': 1, 'autoChange': false },
+                'buil': { 'value': 1, 'autoChange': true },
+                'harv': { 'value': 1, 'autoChange': false },
+                'capacity': thisRoom.energyCapacityAvailable
+            };
         }
 
         thisRoom.visual.text(Game.cpu.bucket, 48, 48, { align: 'right', opacity: 0.8 });
@@ -95,23 +95,54 @@ let room = {
         if (thisRoom.memory.scanMode === true) {
             thisRoom.structuresAll = _.filter(Game.structures, s => s.room.name == thisRoom.name);
             thisRoom.container = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
-            thisRoom.controllerContainer = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
-            thisRoom.spawns = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_SPAWN);
+            thisRoom.controllerContainer = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_CONTAINER && s.pos.inRangeTo(s.room.controller, 5));
+            thisRoom.spawns = _.filter(Game.spawns, s => s.room.name == thisRoom.name);
             thisRoom.extensions = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_EXTENSION);
-            thisRoom.structures.towers = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_TOWER);
+            thisRoom.structures = {
+                'towers': _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_TOWER)
+            };
             thisRoom.links = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK);
             thisRoom.sourceLinks = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.sources[0], 3) || s.pos.inRangeTo(thisRoom.sources[1], 3)));
             thisRoom.storage = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_STORAGE);
 
-            for (i = 0; i < thisRoom.structuresAll.length; i++) { thisRoom.memory.structuresAll.push(structuresAll[i].id); }
-            for (i = 0; i < thisRoom.container.length; i++) { thisRoom.memory.container.push(container[i].id); }
-            for (i = 0; i < thisRoom.controllerContainer.length; i++) { thisRoom.memory.controllerContainer.push(controllerContainer[i].id); }
-            for (i = 0; i < thisRoom.spawns.length; i++) { thisRoom.memory.spawns.push(spawn[i].id); }
-            for (i = 0; i < thisRoom.extensions.length; i++) { thisRoom.memory.extensions.push(extensions[i].id); }
-            for (i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.towers.push(towers[i].id); }
-            for (i = 0; i < thisRoom.storage.length; i++) { thisRoom.memory.storage.push(storage[i].id); }
-            for (i = 0; i < thisRoom.links.length; i++) { thisRoom.memory.links.push(links[i].id); }
-            for (i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(sourceLinks[i].id); }
+            thisRoom.memory.structuresAll = [];
+            thisRoom.memory.container = [];
+            thisRoom.memory.controllerContainer = [];
+            thisRoom.memory.spawns = [];
+            thisRoom.memory.extensions = [];
+            thisRoom.memory.structures = [];
+            thisRoom.memory.storage = [];
+            thisRoom.memory.links = [];
+            thisRoom.memory.sourceLinks = [];
+
+            if (typeof thisRoom.structuresAll !== 'undefined') {
+                for (let i = 0; i < thisRoom.structuresAll.length; i++) { thisRoom.memory.structuresAll.push(thisRoom.structuresAll[i].id); }
+            }
+            if (typeof thisRoom.container !== 'undefined') {
+                for (let i = 0; i < thisRoom.container.length; i++) { thisRoom.memory.container.push(thisRoom.container[i].id); }
+            }
+            if (typeof thisRoom.controllerContainer !== 'undefined') {
+                for (let i = 0; i < thisRoom.controllerContainer.length; i++) { thisRoom.memory.controllerContainer.push(thisRoom.controllerContainer[i].id); }
+            }
+            if (typeof thisRoom.spawns !== 'undefined') {
+                for (let i = 0; i < thisRoom.spawns.length; i++) { thisRoom.memory.spawns.push(thisRoom.spawns[i].id); }
+            }
+            if (typeof thisRoom.extensions !== 'undefined') {
+                for (let i = 0; i < thisRoom.extensions.length; i++) { thisRoom.memory.extensions.push(thisRoom.extensions[i].id); }
+            }
+            if (typeof thisRoom.structures !== 'undefined') {
+                for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.towers.push(thisRoom.towers[i].id); }
+            }
+            if (typeof thisRoom.storage !== 'undefined') {
+                for (let i = 0; i < thisRoom.storage.length; i++) { thisRoom.memory.storage.push(thisRoom.storage[i].id); }
+            }
+            if (typeof thisRoom.links !== 'undefined') {
+                for (let i = 0; i < thisRoom.links.length; i++) { thisRoom.memory.links.push(thisRoom.links[i].id); }
+            }
+            if (typeof thisRoom.sourceLinks !== 'undefined') {
+                for (let i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(thisRoom.sourceLinks[i].id); }
+            }
+
 
             thisRoom.memory.scanMode = false;
         } else {
@@ -120,7 +151,9 @@ let room = {
             for (let id in thisRoom.memory.controllerContainer) { thisRoom.controllerContainer.push(actions.getElement(thisRoom.name, thisRoom.memory.controllerContainer[id])); }
             for (let id in thisRoom.memory.spawns) { thisRoom.spawns.push(actions.getElement(thisRoom.name, thisRoom.memory.spawn[id])); }
             for (let id in thisRoom.memory.extensions) { thisRoom.extensions.push(actions.getElement(thisRoom.name, thisRoom.memory.extensions[id])); }
-            for (let id in thisRoom.memory.structures.towers) { thisRoom.towers.push(actions.getElement(thisRoom.name, thisRoom.memory.towers[id])); }
+            if (typeof thisRoom.memory.structures !== 'undefined') {
+                for (let id in thisRoom.memory.structures.towers) { thisRoom.towers.push(actions.getElement(thisRoom.name, thisRoom.memory.towers[id])); }
+            }
             for (let id in thisRoom.memory.storage) { thisRoom.storage.push(actions.getElement(thisRoom.name, thisRoom.memory.storage[i].id)); }
             for (let id in thisRoom.memory.links) { thisRoom.links.push(actions.getElement(thisRoom.name, thisRoom.memory.links[id])); }
             for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(sactions.getElement(thisRoom.name, thisRoom.memory.ourceLinks[id])); }

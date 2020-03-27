@@ -134,7 +134,7 @@ let room = {
             }
             if (typeof thisRoom.structures !== 'undefined') {
                 if (typeof thisRoom.structures.towers !== 'undefined') {
-                    for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.towers.push(thisRoom.towers[i].id); }
+                    for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.towers.push(thisRoom.structures.towers[i].id); }
                 }
             }
             if (typeof thisRoom.storage !== 'undefined') {
@@ -187,7 +187,7 @@ let room = {
                 for (let id in thisRoom.memory.links) { thisRoom.links.push(actions.getElement(thisRoom.name, thisRoom.memory.links[id])); }
             }
             if (typeof thisRoom.memory.sourceLinks !== 'undefined') {
-                for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(sactions.getElement(thisRoom.name, thisRoom.memory.ourceLinks[id])); }
+                for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(actions.getElement(thisRoom.name, thisRoom.memory.sourceLinks[id])); }
             }
         }
     },

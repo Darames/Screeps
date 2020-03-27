@@ -14,12 +14,12 @@ let room = {
             }
         }
 
-        for (const roomName in Game.rooms) {
+        for (let roomName in Game.rooms) {
             let thisRoom = Game.rooms[roomName];
             if (typeof thisRoom.controller !== 'undefined') {
                 if (thisRoom.controller.my) {
                     this.memory(thisRoom);
-                    this.spawns(thisRoom);
+                    this.startSpawning(thisRoom, roomName);
                     transporter.targets(thisRoom);
                     actions.setEnergyTargets(thisRoom);
                     structures.run(thisRoom);
@@ -110,7 +110,9 @@ let room = {
             thisRoom.memory.controllerContainer = [];
             thisRoom.memory.spawns = [];
             thisRoom.memory.extensions = [];
-            thisRoom.memory.structures = [];
+            thisRoom.memory.structures = {
+                towers: []
+            };
             thisRoom.memory.storage = [];
             thisRoom.memory.links = [];
             thisRoom.memory.sourceLinks = [];
@@ -131,7 +133,9 @@ let room = {
                 for (let i = 0; i < thisRoom.extensions.length; i++) { thisRoom.memory.extensions.push(thisRoom.extensions[i].id); }
             }
             if (typeof thisRoom.structures !== 'undefined') {
-                for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.towers.push(thisRoom.towers[i].id); }
+                if (typeof thisRoom.structures.towers !== 'undefined') {
+                    for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.towers.push(thisRoom.towers[i].id); }
+                }
             }
             if (typeof thisRoom.storage !== 'undefined') {
                 for (let i = 0; i < thisRoom.storage.length; i++) { thisRoom.memory.storage.push(thisRoom.storage[i].id); }
@@ -143,27 +147,55 @@ let room = {
                 for (let i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(thisRoom.sourceLinks[i].id); }
             }
 
-
             thisRoom.memory.scanMode = false;
         } else {
-            for (let id in thisRoom.memory.structuresAll) { thisRoom.structuresAll.push(actions.getElement(thisRoom.name, thisRoom.memory.structuresAll[id])); }
-            for (let id in thisRoom.memory.container) { thisRoom.container.push(actions.getElement(thisRoom.name, thisRoom.memory.container[id])); }
-            for (let id in thisRoom.memory.controllerContainer) { thisRoom.controllerContainer.push(actions.getElement(thisRoom.name, thisRoom.memory.controllerContainer[id])); }
-            for (let id in thisRoom.memory.spawns) { thisRoom.spawns.push(actions.getElement(thisRoom.name, thisRoom.memory.spawn[id])); }
-            for (let id in thisRoom.memory.extensions) { thisRoom.extensions.push(actions.getElement(thisRoom.name, thisRoom.memory.extensions[id])); }
+            thisRoom.structuresAll = [];
+            thisRoom.container = [];
+            thisRoom.controllerContainer = [];
+            thisRoom.spawns = [];
+            thisRoom.extensions = [];
+            thisRoom.structures = {
+                towers: []
+            };
+            thisRoom.storage = [];
+            thisRoom.links = [];
+            thisRoom.sourceLinks = [];
+            if (typeof thisRoom.memory.structuresAll !== 'undefined') {
+                for (let id in thisRoom.memory.structuresAll) { thisRoom.structuresAll.push(actions.getElement(thisRoom.name, thisRoom.memory.structuresAll[id])); }
+            }
+            if (typeof thisRoom.memory.container !== 'undefined') {
+                for (let id in thisRoom.memory.container) { thisRoom.container.push(actions.getElement(thisRoom.name, thisRoom.memory.container[id])); }
+            }
+            if (typeof thisRoom.memory.controllerContainer !== 'undefined') {
+                for (let id in thisRoom.memory.controllerContainer) { thisRoom.controllerContainer.push(actions.getElement(thisRoom.name, thisRoom.memory.controllerContainer[id])); }
+            }
+            if (typeof thisRoom.memory.spawns !== 'undefined') {
+                for (let id in thisRoom.memory.spawns) { thisRoom.spawns.push(actions.getElement(thisRoom.name, thisRoom.memory.spawns[id])); }
+            } else {
+                thisRoom.memory.scanMode = true;
+            }
+            if (typeof thisRoom.memory.extensions !== 'undefined') {
+                for (let id in thisRoom.memory.extensions) { thisRoom.extensions.push(actions.getElement(thisRoom.name, thisRoom.memory.extensions[id])); }
+            }
             if (typeof thisRoom.memory.structures !== 'undefined') {
                 for (let id in thisRoom.memory.structures.towers) { thisRoom.towers.push(actions.getElement(thisRoom.name, thisRoom.memory.towers[id])); }
             }
-            for (let id in thisRoom.memory.storage) { thisRoom.storage.push(actions.getElement(thisRoom.name, thisRoom.memory.storage[i].id)); }
-            for (let id in thisRoom.memory.links) { thisRoom.links.push(actions.getElement(thisRoom.name, thisRoom.memory.links[id])); }
-            for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(sactions.getElement(thisRoom.name, thisRoom.memory.ourceLinks[id])); }
+            if (typeof thisRoom.memory.storage !== 'undefined') {
+                for (let id in thisRoom.memory.storage) { thisRoom.storage.push(actions.getElement(thisRoom.name, thisRoom.memory.storage[id].id)); }
+            }
+            if (typeof thisRoom.memory.links !== 'undefined') {
+                for (let id in thisRoom.memory.links) { thisRoom.links.push(actions.getElement(thisRoom.name, thisRoom.memory.links[id])); }
+            }
+            if (typeof thisRoom.memory.sourceLinks !== 'undefined') {
+                for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(sactions.getElement(thisRoom.name, thisRoom.memory.ourceLinks[id])); }
+            }
         }
     },
 
-    spawns: function (thisRoom) {
-        thisRoom.roomGotSpawn = false;
-        if (thisRoom.spawns.length > 0) { thisRoom.roomGotSpawn = true; }
-        if (thisRoom.roomGotSpawn == true) {
+    startSpawning: function (thisRoom) {
+        let roomGotSpawn = false;
+        if (thisRoom.spawns.length > 0) { roomGotSpawn = true; }
+        if (roomGotSpawn == true) {
             let roomCapacity = thisRoom.energyCapacityAvailable;
             let creeps = thisRoom.creeps;
             let spawn = thisRoom.spawns[0];
@@ -228,7 +260,7 @@ let room = {
                 let bodyCost = 250;
                 let carryCount = 1;
                 let stepCost = 250;
-                memory = { role: 'upgrader' };
+                memory = { role: 'upgrader', upgrading: false };
 
                 while ((bodyCost + stepCost) < roomCapacity && thisRoom.controller.level < 8 && bodyCost < 1400) {
                     body = body.concat([WORK, MOVE]);
@@ -253,10 +285,12 @@ let room = {
                     bodyCost = bodyCost + 250;
                     stepCost = 250;
                 }
-            } else if (creeps.claimers.length = 0 && thisRoom.memory.claiming) {
-                newName = 'Claimer' + Game.time;
-                body = [CLAIM, MOVE, MOVE];
-                memory = { role: 'claimer' };
+            } else if (thisRoom.memory.claiming) {
+                if (creeps.claimers.length = 0) {
+                    newName = 'Claimer' + Game.time;
+                    body = [CLAIM, MOVE, MOVE];
+                    memory = { role: 'claimer' };
+                }
             }
             // else if(mDefender.length < mDefenderLimit) {
             //     let newName = 'MeleeDefender' + Game.time;

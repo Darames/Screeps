@@ -3,18 +3,21 @@ var actions = require('actions');
 var transporter = {
 	/** @param {Creep} creep **/
 
-	targets: function (thisRoom) {
-		if (thisRoom.container) { var containers = thisRoom.container; }
-		var targets = new Array();
-		function priority(target) {
-			if (((target.energy * 100) / target.energyCapacity) < 60) {
+	priority: function (target) {
+		if (((target.energy * 100) / target.energyCapacity) < 60) {
+			target.priority = target.priority + 1;
+			if (((target.energy * 100) / target.energyCapacity) < 40) {
 				target.priority = target.priority + 1;
-				if (((target.energy * 100) / target.energyCapacity) < 40) {
-					target.priority = target.priority + 1;
-				}
 			}
 		}
-		for (var sId in thisRoom.spawns) {
+	},
+
+	targets: function (thisRoom) {
+		let containers;
+		if (thisRoom.container) { containers = thisRoom.container; }
+		let targets = new Array();
+	
+		for (let sId in thisRoom.spawns) {
 			let spawn = thisRoom.spawns[sId];
 			if (spawn.energy < spawn.energyCapacity) {
 				spawn.priority = 5;
@@ -22,41 +25,41 @@ var transporter = {
 			}
 		}
 		if (thisRoom.extensions.length > 0) {
-			for (var exId in thisRoom.extensions) {
-				let extension = thisRoom.extensions[sId];
+			for (let exId in thisRoom.extensions) {
+				let extension = thisRoom.extensions[exId];
 				if (extension !== null) {
 					if (extension.energy < extension.energyCapacity) {
 						extension.priority = 2;
-						priority(extension);
+						this.priority(extension);
 						targets.push(extension);
 					}
 				}
 			}
 		}
 		if (thisRoom.structures.towers.length > 0) {
-			for (var tId in thisRoom.structures.towers) {
+			for (let tId in thisRoom.structures.towers) {
 				let tower = thisRoom.structures.towers[tId];
 				if (tower.energy < tower.energyCapacity) {
 					tower.priority = 1;
-					priority(tower);
+					this.priority(tower);
 					targets.push(tower);
 				}
 			}
 		}
 		if (thisRoom.controllerContainer.length > 0) {
-			for (var ccId in thisRoom.controllerContainer) {
+			for (let ccId in thisRoom.controllerContainer) {
 				let controllerContainer = thisRoom.controllerContainer[ccId];
 				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.storeCapacity) {
 					controllerContainer.priority = 1;
-					priority(controllerContainer);
+					this.priority(controllerContainer);
 					controllerContainer.energy = controllerContainer.store[RESOURCE_ENERGY];
 					controllerContainer.energyCapacity = controllerContainer.storeCapacity;
 					targets.push(controllerContainer);
 				}
 			}
 		}
-		if (thisRoom.storage) {
-			var storage = thisRoom.storage;
+		if (thisRoom.storage.length > 0) {
+			let storage = thisRoom.storage;
 			if (storage.store[RESOURCE_ENERGY] < (storage.storeCapacity / 2)) {
 				storage.priority = -1;
 				storage.energy = storage.store[RESOURCE_ENERGY]; storage.energyCapacity = storage.storeCapacity;
@@ -68,8 +71,8 @@ var transporter = {
 	},
 
 	run: function (creep) {
-		var creepRoom = Game.rooms[creep.pos.roomName];
-		var target = Game.getObjectById(creep.memory.target);
+		let creepRoom = Game.rooms[creep.pos.roomName];
+		let target = Game.getObjectById(creep.memory.target);
 		// if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
 		// if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
 

@@ -4,7 +4,7 @@ var actions = {
 
     /** @param {Creep} creep **/
 
-    pickup: function (creep, target) {
+    pickupEnergy: function (creep, target) {
         if (!creep.pos.isNearTo(target)) {
             creep.moveTo(target, { reusePath: 20, maxOps: 300 });
         } else {
@@ -46,6 +46,14 @@ var actions = {
         thisRoom.energyTargets = targets;
     },
 
+    moveAndGetEnergy: function (creep, energyTarget) {
+        if (typeof energyTarget.structureType  !== 'undefined') {
+            this.withdraw(creep, energyTarget);
+        } else {
+            this.pickupEnergy(creep, energyTarget);
+        }
+    },
+
     getEnergy: function (creep) {
         var creepRoom = Game.rooms[creep.pos.roomName];
         var energyTargets = _.sortBy(creepRoom.energyTargets, s => s.pos.getRangeTo(creep));
@@ -54,25 +62,17 @@ var actions = {
             let targetCounter = 0;
             for (const target in energyTargets) {
                 targetCounter = targetCounter++;
-                if (target.structureType) {
+                if (typeof target.structureType !== 'undefined') {
                     if (target.store[RESOURCE_ENERGY] < creep.carryCapacity) {
                         if (targetCounter == energyTargets.length) {
-                            moveAndGetEnergy(creep, energyTargets[0]);
+                            this.moveAndGetEnergy(creep, energyTargets[0]);
                         } else {
                             continue;
                         }
-                    } else { moveAndGetEnergy(creep, target); }
-                } else { moveAndGetEnergy(creep, target); }
+                    } else { this.moveAndGetEnergy(creep, target); }
+                } else { this.moveAndGetEnergy(creep, target); }
             }
-        } else { moveAndGetEnergy(creep, energyTargets[0]); }
-
-        function moveAndGetEnergy(creep, energyTarget) {
-            if (energyTarget.structureType) {
-                this.withdraw(creep, energyTarget);
-            } else {
-                this.pickup(creep, energyTarget);
-            }
-        }
+        } else { this.moveAndGetEnergy(creep, energyTargets[0]); }
     },
 
     moveTo: function (creep, target) {

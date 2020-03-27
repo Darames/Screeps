@@ -4,10 +4,14 @@ var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        var creepRoom = Game.rooms[creep.pos.roomName];
-        var upgraderPos = "none";
-        var upgradeContainer = false;
-        if (typeof creepRoom.memory.controllerContainer !== 'undefined') { upgradeContainer = action.getElement(creepRoom, creepRoom.memory.controllerContainer) }
+        let creepRoom = Game.rooms[creep.pos.roomName];
+        let upgraderPos = "none";
+        let upgradeContainer = false;
+        let upgrading = false;
+
+        if (typeof creepRoom.memory.controllerContainer !== 'undefined') { upgradeContainer = action.getElement(creepRoom, creepRoom.memory.controllerContainer); }
+        if (typeof creep.memory.upgrading !== 'undefined') { upgrading = creep.memory.upgrading;
+        } else { creep.memory.upgrading = false; }
 
         // get upgrader position flag
         if (creepRoom.memory.upgraderPos) {
@@ -23,7 +27,7 @@ var roleUpgrader = {
             creep.memory.upgrading = true;
         }
         // upgrading Controller
-        if (creep.memory.upgrading) {
+        if (upgrading) {
             if (upgraderPos !== "none") {
                 if (creep.pos.inRangeTo(upgraderPos, 1)) {
                     creep.upgradeController(creepRoom.controller);

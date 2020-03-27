@@ -2,12 +2,14 @@ var structureTower = {
 
     run: function (thisRoom) {
         var towers = new Array();
-        for (i = 0; i < towerRoom.memory.towers.length; i++) {
-            let tower = Game.getObjectById(towerRoom.memory.towers[i]);
-            towers.push(tower);
+        if (typeof thisRoom.memory.structures.towers !== 'undefined') {
+            for (i = 0; i < thisRoom.memory.structures.towers.length; i++) {
+                let tower = Game.getObjectById(thisRoom.memory.structures.towers[i]);
+                towers.push(tower);
+            }
         }
         if (towers.length > 0) {
-            var hostiles = towerRoom.find(FIND_HOSTILE_CREEPS);
+            var hostiles = thisRoom.find(FIND_HOSTILE_CREEPS);
             if (hostiles.length > 0) {
                 let username = hostiles[0].owner.username;
                 Game.notify(`User ${username} spotted in room ${roomName}`);
@@ -16,10 +18,10 @@ var structureTower = {
 
             } else if (thisRoom.damagedStructures.length > 0) {
 
-                var roomSpawns = _.filter(Game.spawns, (spawn) => spawn.room == towerRoom);
+                var roomSpawns = _.filter(Game.spawns, (spawn) => spawn.room == thisRoom);
                 thisRoom.damagedStructures = _.filter(thisRoom.damagedStructures, (structures) => (structures.structureType != "constructedWall" && structures.structureType != "rampart") || (structures.structureType == "constructedWall" && !(structures.hits > 170000)) || (structures.structureType == "rampart" && !(structures.hits > 170000)));
 
-                for (i = 0; i < towerRoom.memory.towers.length; i++) {
+                for (i = 0; i < towers.length; i++) {
                     if (thisRoom.damagedStructures.length > 0) {
                         towers[i].repair(thisRoom.damagedStructures[0]);
                     }

@@ -47,10 +47,12 @@ var actions = {
     },
 
     moveAndGetEnergy: function (creep, energyTarget) {
-        if (typeof energyTarget.structureType  !== 'undefined') {
-            this.withdraw(creep, energyTarget);
-        } else {
-            this.pickupEnergy(creep, energyTarget);
+        if (typeof energyTarget !== 'undefined') {
+            if (typeof energyTarget.structureType  !== 'undefined') {
+                this.withdraw(creep, energyTarget);
+            } else {
+                this.pickupEnergy(creep, energyTarget);
+            }
         }
     },
 

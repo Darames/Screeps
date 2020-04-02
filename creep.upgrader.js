@@ -9,7 +9,9 @@ var roleUpgrader = {
         let upgradeContainer = false;
         let upgrading = false;
 
-        if (typeof creepRoom.memory.controllerContainer !== 'undefined') { upgradeContainer = action.getElement(creepRoom, creepRoom.memory.controllerContainer); }
+        if (creepRoom.memory.controllerContainer.length) {
+            upgradeContainer = actions.getElement(creepRoom, creepRoom.memory.controllerContainer);
+        }
         if (typeof creep.memory.upgrading !== 'undefined') { upgrading = creep.memory.upgrading;
         } else { creep.memory.upgrading = false; }
 

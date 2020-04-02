@@ -54,6 +54,8 @@ let room = {
     },
 
     memory: function (thisRoom) {
+        // thisRoom.memory.scanMode = true;
+
         if (typeof thisRoom.memory.limits === 'undefined') {
             thisRoom.memory.limits = {
                 'tran': { 'value': 1, 'autoChange': true },
@@ -79,15 +81,21 @@ let room = {
         thisRoom.damagedStructures = _.filter(thisRoom.damagedStructures, (structures) => (structures.structureType != "constructedWall" && structures.structureType != "rampart") || (structures.structureType == "constructedWall" && !(structures.hits > 170000)) || (structures.structureType == "rampart" && !(structures.hits > 170000)));
         thisRoom.droppedEnergy = thisRoom.find(FIND_DROPPED_RESOURCES, { filter: (r) => { return r.resourceType == RESOURCE_ENERGY } });
         thisRoom.limits = thisRoom.memory.limits;
-
+        
         if (typeof thisRoom.memory.scanMode === 'undefined') {
             thisRoom.memory.scanMode = true;
-            thisRoom.memory.constructionSites = thisRoom.constructionSites;
+            for (let i = 0; i < thisRoom.constructionSites.length; i++) { thisRoom.memory.constructionSites.push(thisRoom.constructionSites[i].id); }
         } else {
             if (thisRoom.constructionSites) {
-                if (thisRoom.constructionSites.length != thisRoom.memory.constructionSites.length) {
+                if (typeof thisRoom.memory.constructionSites  !== 'undefined') {
+                    if (thisRoom.constructionSites.length != thisRoom.memory.constructionSites.length) {
+                        thisRoom.memory.scanMode = true;
+                        for (let i = 0; i < thisRoom.constructionSites.length; i++) { thisRoom.memory.constructionSites.push(thisRoom.constructionSites[i].id); }
+                    }
+                } else {
                     thisRoom.memory.scanMode = true;
-                    thisRoom.memory.constructionSites = thisRoom.constructionSites;
+                    thisRoom.memory.constructionSites = [];
+                    for (let i = 0; i < thisRoom.constructionSites.length; i++) { thisRoom.memory.constructionSites.push(thisRoom.constructionSites[i].id); }
                 }
             }
         }
@@ -117,35 +125,35 @@ let room = {
             thisRoom.memory.links = [];
             thisRoom.memory.sourceLinks = [];
 
-            if (typeof thisRoom.structuresAll !== 'undefined') {
+            // if (typeof thisRoom.structuresAll !== 'undefined') {
                 for (let i = 0; i < thisRoom.structuresAll.length; i++) { thisRoom.memory.structuresAll.push(thisRoom.structuresAll[i].id); }
-            }
-            if (typeof thisRoom.container !== 'undefined') {
+            // }
+            // if (typeof thisRoom.container !== 'undefined') {
                 for (let i = 0; i < thisRoom.container.length; i++) { thisRoom.memory.container.push(thisRoom.container[i].id); }
-            }
-            if (typeof thisRoom.controllerContainer !== 'undefined') {
+            // }
+            // if (typeof thisRoom.controllerContainer !== 'undefined') {
                 for (let i = 0; i < thisRoom.controllerContainer.length; i++) { thisRoom.memory.controllerContainer.push(thisRoom.controllerContainer[i].id); }
-            }
-            if (typeof thisRoom.spawns !== 'undefined') {
+            // }
+            // if (typeof thisRoom.spawns !== 'undefined') {
                 for (let i = 0; i < thisRoom.spawns.length; i++) { thisRoom.memory.spawns.push(thisRoom.spawns[i].id); }
-            }
-            if (typeof thisRoom.extensions !== 'undefined') {
+            // }
+            // if (typeof thisRoom.extensions !== 'undefined') {
                 for (let i = 0; i < thisRoom.extensions.length; i++) { thisRoom.memory.extensions.push(thisRoom.extensions[i].id); }
-            }
-            if (typeof thisRoom.structures !== 'undefined') {
-                if (typeof thisRoom.structures.towers !== 'undefined') {
-                    for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.towers.push(thisRoom.structures.towers[i].id); }
-                }
-            }
-            if (typeof thisRoom.storage !== 'undefined') {
+            // }
+            // if (typeof thisRoom.structures !== 'undefined') {
+            //     if (typeof thisRoom.structures.towers !== 'undefined') {
+                    for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.structures.towers.push(thisRoom.structures.towers[i].id); }
+            //     }
+            // }
+            // if (typeof thisRoom.storage !== 'undefined') {
                 for (let i = 0; i < thisRoom.storage.length; i++) { thisRoom.memory.storage.push(thisRoom.storage[i].id); }
-            }
-            if (typeof thisRoom.links !== 'undefined') {
+            // }
+            // if (typeof thisRoom.links !== 'undefined') {
                 for (let i = 0; i < thisRoom.links.length; i++) { thisRoom.memory.links.push(thisRoom.links[i].id); }
-            }
-            if (typeof thisRoom.sourceLinks !== 'undefined') {
+            // }
+            // if (typeof thisRoom.sourceLinks !== 'undefined') {
                 for (let i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(thisRoom.sourceLinks[i].id); }
-            }
+            // }
 
             thisRoom.memory.scanMode = false;
         } else {

@@ -16,7 +16,7 @@ var transporter = {
 		let containers;
 		if (thisRoom.container) { containers = thisRoom.container; }
 		let targets = new Array();
-	
+
 		for (let sId in thisRoom.spawns) {
 			let spawn = thisRoom.spawns[sId];
 			if (spawn.energy < spawn.energyCapacity) {
@@ -24,7 +24,7 @@ var transporter = {
 				targets.push(spawn);
 			}
 		}
-		if (thisRoom.extensions.length > 0) {
+		if (typeof thisRoom.extensions !== 'undefined') {
 			for (let exId in thisRoom.extensions) {
 				let extension = thisRoom.extensions[exId];
 				if (extension !== null) {
@@ -36,7 +36,7 @@ var transporter = {
 				}
 			}
 		}
-		if (thisRoom.structures.towers.length > 0) {
+		if (typeof thisRoom.structures.towers !== 'undefined') {
 			for (let tId in thisRoom.structures.towers) {
 				let tower = thisRoom.structures.towers[tId];
 				if (tower.energy < tower.energyCapacity) {
@@ -46,7 +46,7 @@ var transporter = {
 				}
 			}
 		}
-		if (thisRoom.controllerContainer.length > 0) {
+		if (typeof thisRoom.controllerContainer !== 'undefined') {
 			for (let ccId in thisRoom.controllerContainer) {
 				let controllerContainer = thisRoom.controllerContainer[ccId];
 				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.storeCapacity) {
@@ -58,15 +58,15 @@ var transporter = {
 				}
 			}
 		}
-		if (thisRoom.storage.length > 0) {
-			let storage = thisRoom.storage;
-			if (storage.store[RESOURCE_ENERGY] < (storage.storeCapacity / 2)) {
-				storage.priority = -1;
-				storage.energy = storage.store[RESOURCE_ENERGY];
-				storage.energyCapacity = storage.storeCapacity;
-				targets.push(storage);
-			}
-		}
+		// if (thisRoom.storage) {
+		// 	let storage = thisRoom.storage;
+		// 	if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
+		// 		storage.priority = -1;
+		// 		storage.energy = storage.store[RESOURCE_ENERGY];
+		// 		storage.energyCapacity = storage.storeCapacity;
+		// 		targets.push(storage);
+		// 	}
+		// }
 		targets = _.sortBy(targets, s => s.priority);
 		thisRoom.transporterTargets = targets;
 	},
@@ -82,7 +82,7 @@ var transporter = {
 				creep.memory.target = targets[0].id;
 				target = targets[0];
 				if (creep.store[RESOURCE_ENERGY] >= (target.energyCapacity - target.energy)) {
-					removedTarget = targets.shift();
+					let removedTarget = targets.shift();
 					creepRoom.transporterTargets = targets;
 				}
 			} else {

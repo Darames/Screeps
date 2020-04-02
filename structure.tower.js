@@ -2,10 +2,12 @@ var structureTower = {
 
     run: function (thisRoom) {
         var towers = new Array();
-        if (typeof thisRoom.memory.structures.towers !== 'undefined') {
-            for (i = 0; i < thisRoom.memory.structures.towers.length; i++) {
-                let tower = Game.getObjectById(thisRoom.memory.structures.towers[i]);
-                towers.push(tower);
+        if (typeof thisRoom.memory.structures !== 'undefined') {
+            if (typeof thisRoom.memory.structures.towers !== 'undefined') {
+                for (i = 0; i < thisRoom.memory.structures.towers.length; i++) {
+                    let tower = Game.getObjectById(thisRoom.memory.structures.towers[i]);
+                    towers.push(tower);
+                }
             }
         }
         if (towers.length > 0) {
@@ -26,7 +28,6 @@ var structureTower = {
                         towers[i].repair(thisRoom.damagedStructures[0]);
                     }
                 }
-
             }
         }
     }

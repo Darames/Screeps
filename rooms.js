@@ -54,7 +54,6 @@ let room = {
     },
 
     memory: function (thisRoom) {
-        // thisRoom.memory.scanMode = true;
 
         if (typeof thisRoom.memory.limits === 'undefined') {
             thisRoom.memory.limits = {
@@ -99,6 +98,8 @@ let room = {
                 }
             }
         }
+
+        // thisRoom.memory.scanMode = true;
 
         if (thisRoom.memory.scanMode === true) {
             thisRoom.structuresAll = _.filter(Game.structures, s => s.room.name == thisRoom.name);
@@ -186,7 +187,9 @@ let room = {
                 for (let id in thisRoom.memory.extensions) { thisRoom.extensions.push(actions.getElement(thisRoom.name, thisRoom.memory.extensions[id])); }
             }
             if (typeof thisRoom.memory.structures !== 'undefined') {
-                for (let id in thisRoom.memory.structures.towers) { thisRoom.towers.push(actions.getElement(thisRoom.name, thisRoom.memory.towers[id])); }
+                if (typeof thisRoom.memory.structures.towers !== 'undefined') {
+                    for (let id in thisRoom.memory.structures.towers) { thisRoom.structures.towers.push(actions.getElement(thisRoom.name, thisRoom.memory.structures.towers[id])); }
+                }
             }
             if (typeof thisRoom.memory.storage !== 'undefined') {
                 for (let id in thisRoom.memory.storage) { thisRoom.storage.push(actions.getElement(thisRoom.name, thisRoom.memory.storage[id].id)); }

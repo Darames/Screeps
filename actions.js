@@ -37,11 +37,13 @@ var actions = {
 
     setEnergyTargets: function (thisRoom) {
         let targets;
-        if (thisRoom.storage && thisRoom.container) {
-            targets = thisRoom.container.concat(thisRoom.storage);
-        } else if (thisRoom.container) {
+        if (thisRoom.container) {
             targets = thisRoom.container;
-        } else if (thisRoom.droppedEnergy) {
+        } 
+        if (thisRoom.storage) {
+            targets = targets.concat(thisRoom.storage);
+        }
+        if (thisRoom.droppedEnergy) {
             targets = targets.concat(thisRoom.droppedEnergy);
         }
         thisRoom.energyTargets = targets;
@@ -60,8 +62,10 @@ var actions = {
     getEnergy: function (creep) {
         let creepRoom = Game.rooms[creep.pos.roomName];
         let energyTargets;
-        if (Array.isArray(creepRoom.energyTargets) && creepRoom.energyTargets.length) {
-            energyTargets = _.sortBy(creepRoom.energyTargets, s => s.pos.getRangeTo(creep));
+        if (typeof creepRoom.energyTargets !== 'undefined') {
+            if (creepRoom.energyTargets !== null) {
+                energyTargets = _.sortBy(creepRoom.energyTargets, s => s.pos.getRangeTo(creep));
+            }
         }
         if (energyTargets.length > 1) {
             let targetCounter = 0;

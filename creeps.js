@@ -13,7 +13,7 @@ var creeps = {
             let creep = Game.creeps[nameCreep];
             if (!creep) {
                 delete Memory.creeps[nameCreep];
-                console.log('Clearing non-existing creep memory:', nameCreep);
+                // console.log('Clearing non-existing creep memory:', nameCreep);
                 continue;
             }
             

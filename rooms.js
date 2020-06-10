@@ -180,8 +180,6 @@ let room = {
             }
             if (typeof thisRoom.memory.spawns !== 'undefined') {
                 for (let id in thisRoom.memory.spawns) { thisRoom.spawns.push(actions.getElement(thisRoom.name, thisRoom.memory.spawns[id])); }
-            } else {
-                thisRoom.memory.scanMode = true;
             }
             if (typeof thisRoom.memory.extensions !== 'undefined') {
                 for (let id in thisRoom.memory.extensions) { thisRoom.extensions.push(actions.getElement(thisRoom.name, thisRoom.memory.extensions[id])); }

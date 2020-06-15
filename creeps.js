@@ -9,15 +9,15 @@ var upgrader = require('creep.upgrader');
 
 var creeps = {
     run: function () {
+        for(var name in Memory.creeps) {
+            if(!Game.creeps[name]) {
+                delete Memory.creeps[name];
+                console.log('Clearing non-existing creep memory:', name);
+            }
+        }
         for (let nameCreep in Game.creeps) {
             let creep = Game.creeps[nameCreep];
-            if (!creep) {
-                delete Memory.creeps[nameCreep];
-                // console.log('Clearing non-existing creep memory:', nameCreep);
-                continue;
-            }
             
-
             // if(creep.memory.role == 'transporter') {
             //     var found = creep.pos.lookFor(LOOK_STRUCTURES);
             //     // console.log(found);

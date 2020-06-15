@@ -83,12 +83,14 @@ let room = {
         
         if (typeof thisRoom.memory.scanMode === 'undefined') {
             thisRoom.memory.scanMode = true;
+            thisRoom.memory.constructionSites = [];
             for (let i = 0; i < thisRoom.constructionSites.length; i++) { thisRoom.memory.constructionSites.push(thisRoom.constructionSites[i].id); }
         } else {
             if (thisRoom.constructionSites) {
                 if (typeof thisRoom.memory.constructionSites  !== 'undefined') {
                     if (thisRoom.constructionSites.length != thisRoom.memory.constructionSites.length) {
                         thisRoom.memory.scanMode = true;
+                        thisRoom.memory.constructionSites = [];
                         for (let i = 0; i < thisRoom.constructionSites.length; i++) { thisRoom.memory.constructionSites.push(thisRoom.constructionSites[i].id); }
                     }
                 } else {

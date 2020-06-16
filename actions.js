@@ -73,7 +73,8 @@ var actions = {
         }
         if (energyTargets.length > 1) {
             let targetCounter = 0;
-            for (const target in energyTargets) {
+            for (let index = 0; index < energyTargets.length; index++) {
+                const target = energyTargets[index];
                 targetCounter = targetCounter++;
                 if (typeof target.structureType !== 'undefined') {
                     if (target.store[RESOURCE_ENERGY] < creep.carryCapacity) {

@@ -227,6 +227,10 @@ let room = {
                 }
             }
 
+            if (thisRoom.energyAvailable == 300 && creeps.transporters.length == 0) {
+                roomCapacity = thisRoom.energyAvailable;
+            }
+
             let newName = '';
             let body = [];
             let memory = {};

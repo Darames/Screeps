@@ -25,7 +25,7 @@ var roleUpgrader = {
             creep.memory.upgrading = false;
         }
         // set geting energy mode
-        if (!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
+        if (!creep.memory.upgrading && creep.carry.energy == creep.store.getCapacity()) {
             creep.memory.upgrading = true;
         }
         // upgrading Controller

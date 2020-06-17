@@ -15,7 +15,7 @@ var roleBuilder = {
         }
 
         // set building or repairing mode
-        if (!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
+        if (!creep.memory.building && creep.carry.energy == creep.store.getCapacity()) {
             if (constructionSites.length) {
                 creep.memory.building = true;
                 creep.memory.repairing = false;

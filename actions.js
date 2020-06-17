@@ -69,24 +69,34 @@ var actions = {
         if (typeof creepRoom.energyTargets !== 'undefined') {
             if (creepRoom.energyTargets !== null) {
                 energyTargets = _.sortBy(creepRoom.energyTargets, s => s.pos.getRangeTo(creep));
-                
+                energyTargets = creepRoom.energyTargets[0];
             }
         }
         if (energyTargets.length > 1) {
             let targetCounter = 0;
             for (let index = 0; index < energyTargets.length; index++) {
-                const target = energyTargets[index];
+
+                let target = energyTargets[index];
                 targetCounter = targetCounter++;
+
                 if (typeof target.structureType !== 'undefined') {
-                    if (target.store[RESOURCE_ENERGY] < creep.carryCapacity) {
+
+                    if (target.store[RESOURCE_ENERGY] < creep.store.getCapacity()) {
+
                         if (targetCounter == energyTargets.length) {
+
                             this.moveAndGetEnergy(creep, energyTargets[0]);
+
                         } else {
+
                             continue;
-                        }
-                    } else { this.moveAndGetEnergy(creep, target); }
-                } else { this.moveAndGetEnergy(creep, target); }
-            }
+
+                        } // if targetCounter == energyTargets.length
+                    } else { this.moveAndGetEnergy(creep, target); } // if target.store[RESOURCE_ENERGY] 
+
+                } else { this.moveAndGetEnergy(creep, target); }// if typeof target.structureType
+
+            } //for energyTargets
         } else { this.moveAndGetEnergy(creep, energyTargets[0]); }
     },
 

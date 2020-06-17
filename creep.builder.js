@@ -50,7 +50,7 @@ var roleBuilder = {
             } else {
                 creep.memory.building = false;
                 // parking at spawn
-                var targets = creepRoom.spawn;
+                var targets = creepRoom.spawns;
                 creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' }, ignoreRoads: true, maxOps: 200 });
             }
         } else {

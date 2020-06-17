@@ -69,6 +69,7 @@ var actions = {
         if (typeof creepRoom.energyTargets !== 'undefined') {
             if (creepRoom.energyTargets !== null) {
                 energyTargets = _.sortBy(creepRoom.energyTargets, s => s.pos.getRangeTo(creep));
+                
             }
         }
         if (energyTargets.length > 1) {

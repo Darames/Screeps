@@ -21,7 +21,7 @@ var flags = {
                 operator = thisFlag.name.substr(4);
             }
 
-            if ((command === 'tran' || command === 'buil' || command === 'upgr') && (operator === '+' || operator === '-')) {
+            if ((command === 'tran' || command === 'buil' || command === 'upgr' || command === 'harv') && (operator === '+' || operator === '-')) {
                 let limit = thisRoom.memory.limits[command];
                 if (operator === '+') {
                     limit.value = limit.value + 1;

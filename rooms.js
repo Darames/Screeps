@@ -105,8 +105,8 @@ let room = {
 
         if (thisRoom.memory.scanMode === true) {
             thisRoom.structuresAll = _.filter(Game.structures, s => s.room.name == thisRoom.name);
-            thisRoom.container = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5));
-            thisRoom.controllerContainer = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_CONTAINER && s.pos.inRangeTo(s.room.controller, 5));
+            thisRoom.container = thisRoom.find(FIND_STRUCTURES, { filter: (s) => { return s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 5)}  });
+            thisRoom.controllerContainer = thisRoom.find(FIND_STRUCTURES, { filter: (s) => { return s.structureType == STRUCTURE_CONTAINER && s.pos.inRangeTo(s.room.controller, 5)}  });
             thisRoom.spawns = _.filter(Game.spawns, s => s.room.name == thisRoom.name);
             thisRoom.extensions = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_EXTENSION);
             thisRoom.structures = {

@@ -43,22 +43,18 @@ var actions = {
         if (thisRoom.storage) {
             targets = targets.concat(thisRoom.storage);
         }
-        // if (thisRoom.droppedEnergy) {
-        //     targets = targets.concat(thisRoom.droppedEnergy);
-        // }
+        if (thisRoom.droppedEnergy) {
+            targets = targets.concat(thisRoom.droppedEnergy);
+        }
         thisRoom.energyTargets = targets;
     },
 
     moveAndGetEnergy: function (creep, energyTarget) {
         if (typeof energyTarget !== 'undefined') {
-            if (!creep.pos.isNearTo(energyTarget)) {
-                creep.moveTo(energyTarget, { reusePath: 20, maxOps: 300 });
+            if (typeof energyTarget.structureType  !== 'undefined') {
+                this.withdraw(creep, energyTarget);
             } else {
-                if (typeof energyTarget.structureType  !== 'undefined') {
-                    this.withdraw(creep, energyTarget);
-                } else {
-                    this.pickupEnergy(creep, energyTarget);
-                }
+                this.pickupEnergy(creep, energyTarget);
             }
         }
     },
@@ -66,7 +62,6 @@ var actions = {
     getEnergy: function (creep) {
         let creepRoom = Game.rooms[creep.pos.roomName];
         let energyTargets = creepRoom.energyTargets;
-        let droppedEnergy = creepRoom.droppedEnergy;
 
         if (typeof energyTargets !== 'undefined') {
             if (energyTargets !== null) {

@@ -99,7 +99,7 @@ var transporter = {
 			target = newTarget(creep, targets);
 		}
 
-		if ((creep.memory.delivering && creep.store.store[RESOURCE_ENERGY] == 0) || !creep.memory.delivering) {
+		if ((creep.memory.delivering && creep.store[RESOURCE_ENERGY] == 0) || !creep.memory.delivering) {
 			actions.getEnergy(creep); // geting energy
 			creep.memory.target = "none";
 			if (creep.memory.delivering) { creep.memory.delivering = false; }// set refill mode

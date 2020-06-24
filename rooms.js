@@ -60,7 +60,7 @@ let room = {
                 'tran': { 'value': 1, 'autoChange': true },
                 'upgr': { 'value': 1, 'autoChange': false },
                 'buil': { 'value': 1, 'autoChange': true },
-                'harv': { 'value': 1, 'autoChange': false },
+                'harv': { 'value': 1, 'autoChange': true },
                 'capacity': thisRoom.energyCapacityAvailable
             };
         }
@@ -215,6 +215,7 @@ let room = {
             if (thisRoom.spawns.length > 1 && thisRoom.spawns[0].spawning) { spawn = thisRoom.spawns[1]; }
             if (roomCapacity > 1200) {
                 limits.harv.value = 2;
+                thisRoom.memory.limits.harv.autoChange = false;
                 limits.capacity = roomCapacity;
 
                 if (limits.capacity === roomCapacity && limits.tran.value <= 2 && limits.tran.autoChange) {

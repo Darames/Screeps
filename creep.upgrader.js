@@ -21,11 +21,11 @@ var roleUpgrader = {
         }
 
         // set upgrading mode
-        if (creep.memory.upgrading && creep.carry.energy == 0) {
+        if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.upgrading = false;
         }
         // set geting energy mode
-        if (!creep.memory.upgrading && creep.carry.energy == creep.store.getCapacity()) {
+        if (!creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == creep.store.getCapacity()) {
             creep.memory.upgrading = true;
         }
         // upgrading Controller

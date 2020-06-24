@@ -54,34 +54,6 @@ var creeps = {
                 default:
                   // nothing
             }
-
-            // if (creep.memory.role == 'harvester') {
-            //     harvester.run(creep);
-            //     continue;
-            // } else if (creep.memory.role == 'upgrader') {
-            //     upgrader.run(creep);
-            //     continue;
-            // } else if (creep.memory.role == 'builder') {
-            //     builder.run(creep);
-            //     continue;
-            // } else if (creep.memory.role == 'transporter') {
-            //     transporter.run(creep);
-            //     continue;
-            // } else if (creep.memory.role == 'claimer') {
-            //     // roleClaimer.run(creep);
-            //     continue;
-            // } else if (creep.memory.role == 'remoteBuilder') {
-            //     // roleRemoteBuilder.run(creep);
-            //     continue;
-            // } else if (creep.memory.role == 'scout') {
-
-            //     if (creep.pos.roomName != Memory.rooms.toScout[0]) {
-            //         creep.moveTo(new RoomPosition(25, 25, Memory.rooms.toScout[0]));
-            //     }
-            //     continue;
-            //     // Game.spawns['Darames'].spawnCreep([MOVE], "Scout", {memory: {role: 'scout'}});
-
-            // }
         }
     }
 };

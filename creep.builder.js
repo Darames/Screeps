@@ -9,13 +9,13 @@ var roleBuilder = {
         var damagedStructures = creepRoom.damagedStructures;
 
         // set get energy mode
-        if (creep.carry.energy == 0) {
+        if (creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
             creep.memory.repairing = false;
         }
 
         // set building or repairing mode
-        if (!creep.memory.building && creep.carry.energy == creep.store.getCapacity()) {
+        if (!creep.memory.building && creep.store[RESOURCE_ENERGY] == creep.store.getCapacity()) {
             if (constructionSites.length) {
                 creep.memory.building = true;
                 creep.memory.repairing = false;
@@ -24,7 +24,7 @@ var roleBuilder = {
                 creep.memory.repairing = true;
             }
         }
-        if(creep.memory.builderNr == 1 && damagedStructures.length > 0 && creep.carry.energy != 0 && creepRoom.structures.towers.length < 1) {
+        if(creep.memory.builderNr == 1 && damagedStructures.length > 0 && creep.store[RESOURCE_ENERGY] != 0 && creepRoom.structures.towers.length < 1) {
             creep.memory.repairing = true;
             creep.memory.building = false;
         }

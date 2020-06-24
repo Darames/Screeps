@@ -4,9 +4,9 @@ var transporter = {
 	/** @param {Creep} creep **/
 
 	priority: function (target) {
-		if (((target.energy * 100) / target.energyCapacity) < 60) {
+		if (((target.store[RESOURCE_ENERGY] * 100) / target.store.getCapacity(RESOURCE_ENERGY)) < 60) {
 			target.priority = target.priority + 1;
-			if (((target.energy * 100) / target.energyCapacity) < 40) {
+			if (((target.store[RESOURCE_ENERGY] * 100) / target.store.getCapacity(RESOURCE_ENERGY)) < 40) {
 				target.priority = target.priority + 1;
 			}
 		}
@@ -19,7 +19,7 @@ var transporter = {
 
 		for (let sId in thisRoom.spawns) {
 			let spawn = thisRoom.spawns[sId];
-			if (spawn.energy < spawn.energyCapacity) {
+			if (spawn.store[RESOURCE_ENERGY] < spawn.store.getCapacity(RESOURCE_ENERGY)) {
 				spawn.priority = 5;
 				targets.push(spawn);
 			}
@@ -28,7 +28,7 @@ var transporter = {
 			for (let exId in thisRoom.extensions) {
 				let extension = thisRoom.extensions[exId];
 				if (extension !== null) {
-					if (extension.energy < extension.energyCapacity) {
+					if (extension.store[RESOURCE_ENERGY] < extension.store.getCapacity(RESOURCE_ENERGY)) {
 						extension.priority = 2;
 						this.priority(extension);
 						targets.push(extension);
@@ -39,7 +39,7 @@ var transporter = {
 		if (typeof thisRoom.structures.towers !== 'undefined') {
 			for (let tId in thisRoom.structures.towers) {
 				let tower = thisRoom.structures.towers[tId];
-				if (tower.energy < tower.energyCapacity) {
+				if (tower.store[RESOURCE_ENERGY] < tower.store.getCapacity(RESOURCE_ENERGY)) {
 					tower.priority = 1;
 					this.priority(tower);
 					targets.push(tower);
@@ -49,11 +49,11 @@ var transporter = {
 		if (typeof thisRoom.controllerContainer !== 'undefined') {
 			for (let ccId in thisRoom.controllerContainer) {
 				let controllerContainer = thisRoom.controllerContainer[ccId];
-				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.storeCapacity) {
+				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.store.getCapacity()) {
 					controllerContainer.priority = 1;
 					this.priority(controllerContainer);
-					controllerContainer.energy = controllerContainer.store[RESOURCE_ENERGY];
-					controllerContainer.energyCapacity = controllerContainer.storeCapacity;
+					controllerContainer.store[RESOURCE_ENERGY] = controllerContainer.store[RESOURCE_ENERGY];
+					controllerContainer.store.getCapacity(RESOURCE_ENERGY) = controllerContainer.store.getCapacity();
 					targets.push(controllerContainer);
 				}
 			}
@@ -62,8 +62,8 @@ var transporter = {
 		// 	let storage = thisRoom.storage;
 		// 	if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
 		// 		storage.priority = -1;
-		// 		storage.energy = storage.store[RESOURCE_ENERGY];
-		// 		storage.energyCapacity = storage.storeCapacity;
+		// 		storage.store[RESOURCE_ENERGY] = storage.store[RESOURCE_ENERGY];
+		// 		storage.store.getCapacity(RESOURCE_ENERGY) = storage.store.getCapacity();
 		// 		targets.push(storage);
 		// 	}
 		// }
@@ -81,10 +81,10 @@ var transporter = {
 			if (targets.length > 0) {
 				creep.memory.target = targets[0].id;
 				target = targets[0];
-				if (creep.store[RESOURCE_ENERGY] >= (target.energyCapacity - target.energy)) {
+				if (creep.store[RESOURCE_ENERGY] >= (target.store.getCapacity(RESOURCE_ENERGY) - target.energy)) {
 					let removedTarget = targets.shift();
 					creepRoom.transporterTargets = targets;
-				}
+				}Z
 			} else {
 				creep.memory.target = "none";
 			}
@@ -94,16 +94,16 @@ var transporter = {
 		if (creep.memory.target === "none" && creep.memory.delivering) {
 			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.priority, s => creep.pos.getRangeTo(s)]);
 			target = newTarget(creep, targets);
-		} else if (creep.memory.target != "none" && target.energy == target.energyCapacity) {
+		} else if (creep.memory.target != "none" && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) {
 			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.priority, s => creep.pos.getRangeTo(s)]);
 			target = newTarget(creep, targets);
 		}
 
-		if ((creep.memory.delivering && creep.store.energy == 0) || !creep.memory.delivering) {
+		if ((creep.memory.delivering && creep.store.store[RESOURCE_ENERGY] == 0) || !creep.memory.delivering) {
 			actions.getEnergy(creep); // geting energy
 			creep.memory.target = "none";
 			if (creep.memory.delivering) { creep.memory.delivering = false; }// set refill mode
-			if (creep.store.energy == creep.store.getCapacity()) { creep.memory.delivering = true; } // set deliver mode
+			if (creep.store[RESOURCE_ENERGY]  == creep.store.getCapacity()) { creep.memory.delivering = true; } // set deliver mode
 		} else {
 			if (target) {
 				if (creep.pos.isNearTo(target)) {
@@ -112,7 +112,7 @@ var transporter = {
 					creep.moveTo(target, { visualizePathStyle: { stroke: '#ffffff' }, maxOps: 400 });
 				}
 			} else {
-				if (creep.store.energy < creep.store.getCapacity()) {
+				if (creep.store[RESOURCE_ENERGY]  < creep.store.getCapacity()) {
 					creep.memory.delivering = false;// set refill mode
 					creep.memory.target = "none";
 					actions.getEnergy(creep); // geting energy

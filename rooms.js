@@ -66,6 +66,10 @@ let room = {
         }
 
         thisRoom.visual.text(Game.cpu.bucket, 48, 48, { align: 'right', opacity: 0.8 });
+        if (Game.cpu.bucket > 9000) {
+            Game.cpu.generatePixel()
+            console.log('pixel generated')
+        }
         thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == thisRoom.name && c.my);
         thisRoom.creeps.harvesters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'harvester');
         thisRoom.creeps.transporters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'transporter');

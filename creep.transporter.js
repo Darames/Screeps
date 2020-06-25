@@ -52,8 +52,8 @@ var transporter = {
 				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.store.getCapacity()) {
 					controllerContainer.priority = 1;
 					this.priority(controllerContainer);
-					controllerContainer.store[RESOURCE_ENERGY] = controllerContainer.store[RESOURCE_ENERGY];
-					controllerContainer.store.getCapacity(RESOURCE_ENERGY) = controllerContainer.store.getCapacity();
+					// controllerContainer.store[RESOURCE_ENERGY] = controllerContainer.store[RESOURCE_ENERGY];
+					// controllerContainer.store.getCapacity(RESOURCE_ENERGY) = controllerContainer.store.getCapacity();
 					targets.push(controllerContainer);
 				}
 			}
@@ -84,7 +84,7 @@ var transporter = {
 				if (creep.store[RESOURCE_ENERGY] >= (target.store.getCapacity(RESOURCE_ENERGY) - target.energy)) {
 					let removedTarget = targets.shift();
 					creepRoom.transporterTargets = targets;
-				}Z
+				}
 			} else {
 				creep.memory.target = "none";
 			}

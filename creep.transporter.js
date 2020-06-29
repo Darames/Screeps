@@ -52,8 +52,6 @@ var transporter = {
 				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.store.getCapacity()) {
 					controllerContainer.priority = 1;
 					this.priority(controllerContainer);
-					// controllerContainer.store[RESOURCE_ENERGY] = controllerContainer.store[RESOURCE_ENERGY];
-					// controllerContainer.store.getCapacity(RESOURCE_ENERGY) = controllerContainer.store.getCapacity();
 					targets.push(controllerContainer);
 				}
 			}

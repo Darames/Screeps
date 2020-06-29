@@ -72,6 +72,8 @@ var actions = {
                     var y = b.pos.getRangeTo(creep);
                     if (x < y) {return 1;}
                     if (x > y) {return -1;}
+                    if (a.structureType === 'undefined' < b.structureType !== 'undefined') {return 1;}
+                    if (a.structureType !== 'undefined' > b.structureType === 'undefined') {return -1;}
                     return 0;
                   });
             }

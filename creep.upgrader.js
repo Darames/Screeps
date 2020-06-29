@@ -50,12 +50,14 @@ var roleUpgrader = {
             if (upgradeContainer) {
                 if (upgradeContainer.store[RESOURCE_ENERGY] > 0) {
                     actions.withdraw(creep, upgradeContainer);
-                    creep.memory.upgrading = true;
                 } else {
                     actions.getEnergy(creep);
                 }
             } else {
                 actions.getEnergy(creep);
+            }
+            if (!(creep.store[RESOURCE_ENERGY] == 0)) {
+                creep.memory.upgrading = true;
             }
         }
     }

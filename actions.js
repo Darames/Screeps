@@ -37,15 +37,16 @@ var actions = {
 
     setEnergyTargets: function (thisRoom) {
         let targets = [];
+        if (thisRoom.droppedEnergy) {
+            targets = targets.concat(thisRoom.droppedEnergy);
+        }
         if (thisRoom.container) {
             targets = targets.concat(thisRoom.container);
         } 
         if (thisRoom.storage) {
             targets = targets.concat(thisRoom.storage);
         }
-        if (thisRoom.droppedEnergy) {
-            targets = targets.concat(thisRoom.droppedEnergy);
-        }
+        
         thisRoom.energyTargets = targets;
     },
 
@@ -70,11 +71,17 @@ var actions = {
                 energyTargets.sort(function(a, b){
                     var x = a.pos.getRangeTo(creep);
                     var y = b.pos.getRangeTo(creep);
-                    if (x < y) {return 1;}
-                    if (x > y) {return -1;}
-                    if (a.structureType === 'undefined' < b.structureType !== 'undefined') {return 1;}
-                    if (a.structureType !== 'undefined' > b.structureType === 'undefined') {return -1;}
-                    return 0;
+                    if (x < y) {
+                        return 1;
+                    } else if (x > y) {
+                        return -1;
+                    } else if (a.structureType === 'undefined' < b.structureType !== 'undefined') {
+                        return 1;
+                    } else if (a.structureType !== 'undefined' > b.structureType === 'undefined') {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
                   });
             }
         }
@@ -90,17 +97,26 @@ var actions = {
                     if (target.store[RESOURCE_ENERGY] < creep.store.getCapacity()) {
 
                         if (targetCounter == energyTargets.length) {
-
                             this.moveAndGetEnergy(creep, target);
-
                         } else {
-
                             continue;
-
                         } // if targetCounter == energyTargets.length
+
                     } else { this.moveAndGetEnergy(creep, target); } // if target.store[RESOURCE_ENERGY] 
 
-                } else { this.moveAndGetEnergy(creep, target); }// if typeof target.structureType
+                } else {
+
+                    if (target.amount < creep.store.getCapacity()) {
+
+                        if (targetCounter == energyTargets.length) {
+                            this.moveAndGetEnergy(creep, target);
+                        } else {
+                            continue;
+                        } // if targetCounter == energyTargets.length
+
+                    } else { this.moveAndGetEnergy(creep, target); } // if target.amount
+
+                }// if typeof target.structureType
 
             } //for energyTargets
         } else { this.moveAndGetEnergy(creep, energyTargets[0]); }

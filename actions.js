@@ -36,9 +36,9 @@ var actions = {
     },
 
     setEnergyTargets: function (thisRoom) {
-        let targets;
+        let targets = [];
         if (thisRoom.container) {
-            targets = thisRoom.container;
+            targets = targets.concat(thisRoom.container);
         } 
         if (thisRoom.storage) {
             targets = targets.concat(thisRoom.storage);

@@ -266,7 +266,7 @@ let room = {
                 newName = 'Transporter' + Game.time;
                 body = [CARRY, MOVE, CARRY, MOVE];
                 let bodyCost = 200;
-                let stepCost = 200;
+                let stepCost = 100;
                 memory = { role: 'transporter', delivering: 'false', target: 'none' };
 
                 while ((bodyCost + stepCost) < roomCapacity && bodyCost < 1400) {

@@ -66,7 +66,7 @@ var transporter = {
 		// 	}
 		// }
 		// targets = _.sortBy(targets, s => s.transportPriority);
-		energyTargets.sort(function(a, b){
+		targets.sort(function(a, b){
 			var x = a.transportPriority;
 			var y = b.transportPriority;
 			if (x < y) {

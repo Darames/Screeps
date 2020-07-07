@@ -75,10 +75,14 @@ var actions = {
                         return 1;
                     } else if (x > y) {
                         return -1;
-                    } else if (a.structureType === 'undefined' < b.structureType !== 'undefined') {
-                        return 1;
-                    } else if (a.structureType !== 'undefined' > b.structureType === 'undefined') {
-                        return -1;
+                    } else if (x = y) {
+                        if (a.structureType === 'undefined' < b.structureType !== 'undefined') {
+                            return 1;
+                        } else if (a.structureType !== 'undefined' > b.structureType === 'undefined') {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
                     } else {
                         return 0;
                     }

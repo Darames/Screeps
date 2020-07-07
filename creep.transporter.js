@@ -3,11 +3,11 @@ var actions = require('actions');
 var transporter = {
 	/** @param {Creep} creep **/
 
-	priority: function (target) {
+	transportPriority: function (target) {
 		if (((target.store[RESOURCE_ENERGY] * 100) / target.store.getCapacity(RESOURCE_ENERGY)) < 60) {
-			target.priority = target.priority + 1;
+			target.transportPriority = target.transportPriority + 1;
 			if (((target.store[RESOURCE_ENERGY] * 100) / target.store.getCapacity(RESOURCE_ENERGY)) < 40) {
-				target.priority = target.priority + 1;
+				target.transportPriority = target.transportPriority + 1;
 			}
 		}
 	},
@@ -20,7 +20,7 @@ var transporter = {
 		for (let sId in thisRoom.spawns) {
 			let spawn = thisRoom.spawns[sId];
 			if (spawn.store[RESOURCE_ENERGY] < spawn.store.getCapacity(RESOURCE_ENERGY)) {
-				spawn.priority = 5;
+				spawn.transportPriority = 5;
 				targets.push(spawn);
 			}
 		}
@@ -29,8 +29,8 @@ var transporter = {
 				let extension = thisRoom.extensions[exId];
 				if (extension !== null) {
 					if (extension.store[RESOURCE_ENERGY] < extension.store.getCapacity(RESOURCE_ENERGY)) {
-						extension.priority = 2;
-						this.priority(extension);
+						extension.transportPriority = 2;
+						this.transportPriority(extension);
 						targets.push(extension);
 					}
 				}
@@ -40,8 +40,8 @@ var transporter = {
 			for (let tId in thisRoom.structures.towers) {
 				let tower = thisRoom.structures.towers[tId];
 				if (tower.store[RESOURCE_ENERGY] < tower.store.getCapacity(RESOURCE_ENERGY)) {
-					tower.priority = 1;
-					this.priority(tower);
+					tower.transportPriority = 1;
+					this.transportPriority(tower);
 					targets.push(tower);
 				}
 			}
@@ -50,8 +50,8 @@ var transporter = {
 			for (let ccId in thisRoom.controllerContainer) {
 				let controllerContainer = thisRoom.controllerContainer[ccId];
 				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.store.getCapacity()) {
-					controllerContainer.priority = 1;
-					this.priority(controllerContainer);
+					controllerContainer.transportPriority = 1;
+					this.transportPriority(controllerContainer);
 					targets.push(controllerContainer);
 				}
 			}
@@ -59,13 +59,24 @@ var transporter = {
 		// if (thisRoom.storage) {
 		// 	let storage = thisRoom.storage;
 		// 	if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
-		// 		storage.priority = -1;
+		// 		storage.transportPriority = -1;
 		// 		storage.store[RESOURCE_ENERGY] = storage.store[RESOURCE_ENERGY];
 		// 		storage.store.getCapacity(RESOURCE_ENERGY) = storage.store.getCapacity();
 		// 		targets.push(storage);
 		// 	}
 		// }
-		targets = _.sortBy(targets, s => s.priority);
+		// targets = _.sortBy(targets, s => s.transportPriority);
+		energyTargets.sort(function(a, b){
+			var x = a.transportPriority;
+			var y = b.transportPriority;
+			if (x < y) {
+				return 1;
+			} else if (x > y) {
+				return -1;
+			} else {
+				return 0;
+			}
+		  });
 		thisRoom.transporterTargets = targets;
 	},
 
@@ -90,10 +101,10 @@ var transporter = {
 		}
 
 		if (creep.memory.target === "none" && creep.memory.delivering) {
-			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.priority, s => creep.pos.getRangeTo(s)]);
+			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);
 			target = newTarget(creep, targets);
 		} else if (creep.memory.target != "none" && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) {
-			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.priority, s => creep.pos.getRangeTo(s)]);
+			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);
 			target = newTarget(creep, targets);
 		}
 

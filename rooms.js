@@ -232,7 +232,7 @@ let room = {
                 }
             }
 
-            if (thisRoom.energyAvailable == 300 && creeps.transporters.length == 0) {
+            if (thisRoom.energyAvailable <= 300 && creeps.transporters.length == 0) {
                 roomCapacity = thisRoom.energyAvailable;
             }
 
@@ -296,9 +296,14 @@ let room = {
             } else if (creeps.builders.length < limits.buil.value) {
                 newName = 'Builder' + Game.time;
                 body = [WORK, MOVE, CARRY, MOVE];
+                let builderNr = 1;
                 let bodyCost = 250;
                 let stepCost = 250;
-                memory = { role: 'builder' };
+
+                if (creeps.builders.length > 1) {
+                    builderNr = creeps.builders.length + 1;
+                }
+                memory = { role: 'builder', builderNr: builderNr };
 
                 while ((bodyCost + stepCost) < roomCapacity && bodyCost < 2000) {
                     body = body.concat([WORK, MOVE, CARRY, MOVE]);

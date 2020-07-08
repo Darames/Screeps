@@ -52,6 +52,9 @@ var roleBuilder = {
                 // parking at spawn
                 var targets = creepRoom.spawns;
                 creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' }, ignoreRoads: true, maxOps: 200 });
+                if (creep.store[RESOURCE_ENERGY] != creep.store.getCapacity()) {
+                    creep.memory.repairing = false;
+                }
             }
         } else {
             actions.getEnergy(creep);

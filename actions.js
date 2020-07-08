@@ -96,8 +96,8 @@ var actions = {
                 let target = energyTargets[index];
                 targetCounter = targetCounter + 1;
 
-                console.log('counter' + targetCounter);
-                console.log('length' + energyTargets.length);
+                // console.log('counter' + targetCounter);
+                // console.log('length' + energyTargets.length);
 
                 if (typeof target.structureType !== 'undefined') {
 

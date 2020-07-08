@@ -101,7 +101,8 @@ var transporter = {
 		}
 
 		if (creep.memory.target === "none" && creep.memory.delivering) {
-			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);
+			let targets = creepRoom.transporterTargets;
+			// targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);
 			target = newTarget(creep, targets);
 		} else if (creep.memory.target != "none" && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) {
 			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);

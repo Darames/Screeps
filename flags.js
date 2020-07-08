@@ -1,3 +1,5 @@
+var blueprint = require('blueprints');
+
 var flags = {
     run: function () {
         for (var flag in Game.flags) {
@@ -10,12 +12,18 @@ var flags = {
             if (thisFlag.name.substr(0, 4) === 'uPos') {
                 thisRoom.memory.upgraderPos = thisFlag.pos;
                 thisFlag.remove();
+                continue;
             } else if (thisFlag.name.substr(0, 5) === 'claim') {
                 Memory.rooms.toClaim.push(thisRoom);
                 thisFlag.remove();
+                continue;
             } else if (thisFlag.name.substr(0, 5) === 'scout') {
                 Memory.rooms.toScout.push(thisRoom);
                 thisFlag.remove();
+                continue;
+            } else if (thisFlag.name.substr(0, 8) === 'mainBase') {
+                this.showBuild(blueprint.mainBase, thisFlag)
+                continue;
             } else {
                 command = thisFlag.name.substr(0, 4);
                 operator = thisFlag.name.substr(4);
@@ -31,7 +39,32 @@ var flags = {
                 thisFlag.remove();
             }
         }
-    }
+    },
+    showBuild: function (buildBlueprint, thisFlag) {
+        const buildings = buildBlueprint.buildings;
+
+        for (const buildingskey in buildings) {
+            const building = buildings[buildingskey];
+
+            for (const buildingkey in building) {
+                const building = building[buildingkey];
+
+                for (const poskey in pos) {
+                    const pos = building[poskey];
+                    let color = 'red';
+                    if (buildingkey == 'spawn') {
+                        color = 'blue';
+                    }
+
+                    thisFlag.room.visual.circle(
+                        thisFlag.pos.x + pos.x, thisFlag.pos.y + pos.y,
+                    {fill: color, radius: 0.15, stroke: 'transparent'});
+                }
+
+            }
+
+        }
+    },
 };
 
 module.exports = flags;

@@ -47,10 +47,10 @@ var flags = {
             const building = buildings[buildingskey];
 
             for (const buildingkey in building) {
-                const pos = building[buildingkey];
+                const buildingpos = building[buildingkey];
 
-                for (const poskey in pos) {
-                    const pos = building[poskey];
+                for (const poskey in buildingpos) {
+                    const buildingpos = building[poskey];
                     let color = 'red';
                     if (buildingskey == 'spawn') {
                         color = 'blue';
@@ -63,7 +63,7 @@ var flags = {
                     }
 
                     thisFlag.room.visual.circle(
-                        thisFlag.pos.x + pos.x, thisFlag.pos.y + pos.y,
+                        thisFlag.pos.x + buildingpos.x, thisFlag.pos.y + pos.y,
                     {fill: color, radius: 0.15, stroke: 'transparent'});
                 }
 

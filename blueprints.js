@@ -1,5 +1,5 @@
 var blueprints = {
-    mainBase = {
+    mainBase: {
         name: "mainBase",
         shard: "shard1",
         rcl: "8",

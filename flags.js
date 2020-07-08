@@ -47,13 +47,19 @@ var flags = {
             const building = buildings[buildingskey];
 
             for (const buildingkey in building) {
-                const building = building[buildingkey];
+                const pos = building[buildingkey];
 
                 for (const poskey in pos) {
                     const pos = building[poskey];
                     let color = 'red';
-                    if (buildingkey == 'spawn') {
+                    if (buildingskey == 'spawn') {
                         color = 'blue';
+                    }
+                    if (buildingskey == 'road') {
+                        color = 'grey';
+                    }
+                    if (buildingskey == 'extension') {
+                        color = 'yellow';
                     }
 
                     thisFlag.room.visual.circle(

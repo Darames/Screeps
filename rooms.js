@@ -239,7 +239,7 @@ let room = {
                 }
             }
 
-            if (thisRoom.energyAvailable <= 300 && creeps.transporters.length == 0) {
+            if (thisRoom.energyAvailable <= roomCapacity && creeps.transporters.length == 0) {
                 roomCapacity = thisRoom.energyAvailable;
             }
 

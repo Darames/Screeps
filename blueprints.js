@@ -32,10 +32,12 @@ var blueprints = {
     },
     build: function (buildBlueprint, thisRoom) {
         const roomLvl = thisRoom.controller.level;
-
+        
         if (roomLvl != thisRoom.memory.blueprint.roomLvl) {
           const buildings = this[buildBlueprint].buildings;
           const markerPos = thisRoom.memory.blueprint.markerPos;
+          thisRoom.memory.blueprint.roomLvl = roomLvl;#
+          let counter = 0;
           
           for (const buildingsType in buildings) {
             const building = buildings[buildingsType];
@@ -44,62 +46,69 @@ var blueprints = {
               const buildingpositions = building[buildingIndex];
 
               for (const posIndex in buildingpositions) {
-                  const buildingpos = buildingpositions[posIndex];
-                  let structureType;
-                  let name = 'none';
-                  const x = markerPos.x + buildingpos.x;
-                  const y = markerPos.y + buildingpos.y
+                const buildingpos = buildingpositions[posIndex];
+                let structureType;
+                let name = 'none';
+                const x = markerPos.x + buildingpos.x;
+                const y = markerPos.y + buildingpos.y
 
-                  switch (buildingsType) {
-                    case "spawn":
-                      structureType = "STRUCTURE_SPAWN";
-                      name = 'Spawn' + (Game.spawns.length + 1)
-                      break;
-                    case "road":
-                      structureType = "STRUCTURE_ROAD";
-                      break;
-                    case "extension":
-                      structureType = "STRUCTURE_EXTENSION";
-                      break;
-                    case "tower":
-                      structureType = "STRUCTURE_TOWER";
-                      break;
-                    case "constructedWall":
-                      structureType = "STRUCTURE_WALL";
-                      break;
-                    case "rampart":
-                      structureType = "STRUCTURE_RAMPART";
-                      break;
-                    case "storage":
-                      structureType = "STRUCTURE_STORAGE";
-                      break;
-                    case "observer":
-                      structureType = "STRUCTURE_OBSERVER";
-                      break;
-                    case "terminal":
-                      structureType = "STRUCTURE_TERMINAL";
-                      break;
-                    case "container":
-                      structureType = "STRUCTURE_CONTAINER";
-                      break;
-                    default:
-                      break;
-                  }
+                switch (buildingsType) {
+                  case "spawn":
+                    structureType = "STRUCTURE_SPAWN";
+                    name = 'Spawn' + (Game.spawns.length + 1)
+                    break;
+                  case "road":
+                    structureType = "STRUCTURE_ROAD";
+                    break;
+                  case "extension":
+                    structureType = "STRUCTURE_EXTENSION";
+                    break;
+                  case "tower":
+                    structureType = "STRUCTURE_TOWER";
+                    break;
+                  case "constructedWall":
+                    structureType = "STRUCTURE_WALL";
+                    break;
+                  case "rampart":
+                    structureType = "STRUCTURE_RAMPART";
+                    break;
+                  case "storage":
+                    structureType = "STRUCTURE_STORAGE";
+                    break;
+                  case "observer":
+                    structureType = "STRUCTURE_OBSERVER";
+                    break;
+                  case "terminal":
+                    structureType = "STRUCTURE_TERMINAL";
+                    break;
+                  case "container":
+                    structureType = "STRUCTURE_CONTAINER";
+                    break;
+                  case "link":
+                    structureType = "STRUCTURE_LINK";
+                    break;
+                  default:
+                    break;
+                }
 
-                  const look = thisRoom.lookAt(target);
-                  let blocked = false;
-                  look.forEach(function(lookObject) {
-                      if(lookObject.type == LOOK_STRUCTURES) {
-                          
-                      }
-                  });
+                const look = thisRoom.lookAt(x, y);
+                let blocked = false;
+                look.forEach(function(lookObject) {
+                    if(lookObject.type == LOOK_STRUCTURES) {
+                        continue
+                    }
+                });
+                // console.log(x,' ', y, ' ', structureType);
+                if (counter >= 99) {
 
                   if (name == 'none' && blocked == false) {
-                    Game.rooms.sim.createConstructionSite(x, y, structureType);
+                    thisRoom.createConstructionSite(x, y, structureType);
+                    counter = counter + 1;
                   } else if (name != 'none' && blocked == false){
-                    Game.rooms.sim.createConstructionSite(x, y, structureType, name);
+                    thisRoom.createConstructionSite(x, y, structureType, name);
+                    counter = counter + 1;
                   }
-                  
+                }
               }
             }
           }

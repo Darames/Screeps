@@ -29,6 +29,7 @@ let flags = {
                         thisRoom.memory.blueprint.markerPos = {};
                         thisRoom.memory.blueprint.markerPos.x = thisFlag.pos.x;
                         thisRoom.memory.blueprint.markerPos.y = thisFlag.pos.y;
+                        thisRoom.memory.blueprint.roomLvl = 0;
                         thisFlag.remove();
                     }
                 }

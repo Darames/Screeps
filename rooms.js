@@ -1,6 +1,7 @@
 let actions = require('actions');
 let transporter = require('creep.transporter');
 let structures = require('structures');
+var blueprint = require('blueprints');
 
 // let letiables = require('letiables');
 
@@ -25,6 +26,9 @@ let room = {
                     structures.run(thisRoom);
                 }
             }
+        }
+        if (thisRoom.memory.blueprint.build === true) {
+            blueprint.build(thisRoom.memory.blueprint.template, thisRoom);
         }
     },
 

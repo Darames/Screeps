@@ -1,5 +1,111 @@
 var blueprints = {
-  mainBase: {
+    showBuild: function (buildBlueprint, thisFlag) {
+        const buildings = buildBlueprint.buildings;
+
+        for (const buildingskey in buildings) {
+            const building = buildings[buildingskey];
+
+            for (const buildingkey in building) {
+                const buildingpositions = building[buildingkey];
+
+                for (const poskey in buildingpositions) {
+                    const buildingpos = buildingpositions[poskey];
+                    let color = 'red';
+                    if (buildingskey == 'spawn') {
+                        color = 'blue';
+                    }
+                    if (buildingskey == 'road') {
+                        color = 'grey';
+                    }
+                    if (buildingskey == 'extension') {
+                        color = 'yellow';
+                    }
+
+                    thisFlag.room.visual.circle(
+                        thisFlag.pos.x + buildingpos.x, thisFlag.pos.y + buildingpos.y,
+                    {fill: color, radius: 0.15, stroke: 'transparent'});
+                }
+
+            }
+
+        }
+    },
+    build: function (buildBlueprint, thisRoom) {
+        const roomLvl = thisRoom.controller.level;
+
+        if (roomLvl != thisRoom.memory.blueprint.roomLvl) {
+          const buildings = buildBlueprint.buildings;
+          const markerPos = thisRoom.memory.blueprint.markerPos;
+          
+          for (const buildingsType in buildings) {
+            const building = buildings[buildingsType];
+
+            for (const buildingIndex in building) {
+              const buildingpositions = building[buildingIndex];
+
+              for (const posIndex in buildingpositions) {
+                  const buildingpos = buildingpositions[posIndex];
+                  let structureType;
+                  let name = 'none';
+                  const x = markerPos.x + buildingpos.x;
+                  const y = markerPos.y + buildingpos.y
+
+                  switch (buildingskey) {
+                    case "spawn":
+                      structureType = "STRUCTURE_SPAWN";
+                      name = 'Spawn' + (Game.spawns.length + 1)
+                      break;
+                    case "road":
+                      structureType = "STRUCTURE_ROAD";
+                      break;
+                    case "extension":
+                      structureType = "STRUCTURE_EXTENSION";
+                      break;
+                    case "tower":
+                      structureType = "STRUCTURE_TOWER";
+                      break;
+                    case "constructedWall":
+                      structureType = "STRUCTURE_WALL";
+                      break;
+                    case "rampart":
+                      structureType = "STRUCTURE_RAMPART";
+                      break;
+                    case "storage":
+                      structureType = "STRUCTURE_STORAGE";
+                      break;
+                    case "observer":
+                      structureType = "STRUCTURE_OBSERVER";
+                      break;
+                    case "terminal":
+                      structureType = "STRUCTURE_TERMINAL";
+                      break;
+                    case "container":
+                      structureType = "STRUCTURE_CONTAINER";
+                      break;
+                    default:
+                      break;
+                  }
+
+                  const look = thisRoom.lookAt(target);
+                  let blocked = false;
+                  look.forEach(function(lookObject) {
+                      if(lookObject.type == LOOK_STRUCTURES) {
+                          
+                      }
+                  });
+
+                  if (name == 'none' && blocked == false) {
+                    Game.rooms.sim.createConstructionSite(x, y, structureType);
+                  } else if (name != 'none' && blocked == false){
+                    Game.rooms.sim.createConstructionSite(x, y, structureType, name);
+                  }
+                  
+              }
+            }
+          }
+        }
+    },
+    mainBase: {
     name: "mainBase",
     shard: "shard1",
     rcl: "8",

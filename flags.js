@@ -1,8 +1,8 @@
-var blueprint = require('blueprints');
+let blueprint = require('blueprints');
 
-var flags = {
+let flags = {
     run: function () {
-        for (var flag in Game.flags) {
+        for (let flag in Game.flags) {
             let thisRoom = Game.rooms[Game.flags[flag].pos.roomName];
             let thisFlag = Game.flags[flag];
 
@@ -22,7 +22,17 @@ var flags = {
                 thisFlag.remove();
                 continue;
             } else if (thisFlag.name.substr(0, 8) === 'mainBase') {
-                this.showBuild(blueprint.mainBase, thisFlag)
+                blueprint.showBuild(blueprint.mainBase, thisFlag)
+                if (thisRoom.memory.blueprint.build === true) {
+                    thisRoom.memory.blueprint.template = 'mainBase';
+                    thisRoom.memory.blueprint.markerPos.x = thisFlag.pos.x;
+                    thisRoom.memory.blueprint.markerPos.y = thisFlag.pos.y;
+                    thisFlag.remove();
+                }
+                continue;
+            } else if (thisFlag.name.substr(0, 14) === 'buildBlueprint') {
+                thisRoom.memory.blueprint.build = true;
+                thisFlag.remove();
                 continue;
             } else {
                 command = thisFlag.name.substr(0, 4);
@@ -39,38 +49,7 @@ var flags = {
                 thisFlag.remove();
             }
         }
-    },
-    showBuild: function (buildBlueprint, thisFlag) {
-        const buildings = buildBlueprint.buildings;
-
-        for (const buildingskey in buildings) {
-            const building = buildings[buildingskey];
-
-            for (const buildingkey in building) {
-                const buildingpos = building[buildingkey];
-
-                for (const poskey in buildingpos) {
-                    const buildingpos = building[poskey];
-                    let color = 'red';
-                    if (buildingskey == 'spawn') {
-                        color = 'blue';
-                    }
-                    if (buildingskey == 'road') {
-                        color = 'grey';
-                    }
-                    if (buildingskey == 'extension') {
-                        color = 'yellow';
-                    }
-
-                    thisFlag.room.visual.circle(
-                        thisFlag.pos.x + buildingpos.x, thisFlag.pos.y + pos.y,
-                    {fill: color, radius: 0.15, stroke: 'transparent'});
-                }
-
-            }
-
-        }
-    },
+    }
 };
 
 module.exports = flags;

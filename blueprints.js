@@ -95,7 +95,7 @@ var blueprints = {
                 let blocked = false;
                 look.forEach(function(lookObject) {
                     if(lookObject.type == LOOK_STRUCTURES) {
-                        continue
+                      blocked = true;
                     }
                 });
                 // console.log(x,' ', y, ' ', structureType);

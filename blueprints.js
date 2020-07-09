@@ -36,7 +36,7 @@ var blueprints = {
         if (roomLvl != thisRoom.memory.blueprint.roomLvl) {
           const buildings = this[buildBlueprint].buildings;
           const markerPos = thisRoom.memory.blueprint.markerPos;
-          thisRoom.memory.blueprint.roomLvl = roomLvl;#
+          thisRoom.memory.blueprint.roomLvl = roomLvl;
           let counter = 0;
           
           for (const buildingsType in buildings) {

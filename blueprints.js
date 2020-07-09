@@ -34,7 +34,7 @@ var blueprints = {
         const roomLvl = thisRoom.controller.level;
 
         if (roomLvl != thisRoom.memory.blueprint.roomLvl) {
-          const buildings = buildBlueprint.buildings;
+          const buildings = this[buildBlueprint].buildings;
           const markerPos = thisRoom.memory.blueprint.markerPos;
           
           for (const buildingsType in buildings) {
@@ -50,7 +50,7 @@ var blueprints = {
                   const x = markerPos.x + buildingpos.x;
                   const y = markerPos.y + buildingpos.y
 
-                  switch (buildingskey) {
+                  switch (buildingsType) {
                     case "spawn":
                       structureType = "STRUCTURE_SPAWN";
                       name = 'Spawn' + (Game.spawns.length + 1)

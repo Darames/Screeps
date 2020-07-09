@@ -23,11 +23,13 @@ let flags = {
                 continue;
             } else if (thisFlag.name.substr(0, 8) === 'mainBase') {
                 blueprint.showBuild(blueprint.mainBase, thisFlag)
-                if (thisRoom.memory.blueprint.build === true) {
-                    thisRoom.memory.blueprint.template = 'mainBase';
-                    thisRoom.memory.blueprint.markerPos.x = thisFlag.pos.x;
-                    thisRoom.memory.blueprint.markerPos.y = thisFlag.pos.y;
-                    thisFlag.remove();
+                if (typeof thisRoom.memory.blueprint.build !== 'undefined') {
+                    if (thisRoom.memory.blueprint.build === true) {
+                        thisRoom.memory.blueprint.template = 'mainBase';
+                        thisRoom.memory.blueprint.markerPos.x = thisFlag.pos.x;
+                        thisRoom.memory.blueprint.markerPos.y = thisFlag.pos.y;
+                        thisFlag.remove();
+                    }
                 }
                 continue;
             } else if (thisFlag.name.substr(0, 14) === 'buildBlueprint') {

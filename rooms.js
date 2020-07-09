@@ -26,10 +26,13 @@ let room = {
                     structures.run(thisRoom);
                 }
             }
+            if (typeof thisRoom.memory.blueprint.build !== 'undefined') {
+                if (thisRoom.memory.blueprint.build === true) {
+                    blueprint.build(thisRoom.memory.blueprint.template, thisRoom);
+                }
+            }
         }
-        if (thisRoom.memory.blueprint.build === true) {
-            blueprint.build(thisRoom.memory.blueprint.template, thisRoom);
-        }
+        
     },
 
     claimRooms: function () {

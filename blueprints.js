@@ -54,38 +54,38 @@ var blueprints = {
 
                 switch (buildingsType) {
                   case "spawn":
-                    structureType = "STRUCTURE_SPAWN";
+                    structureType = STRUCTURE_SPAWN;
                     name = 'Spawn' + (Game.spawns.length + 1)
                     break;
                   case "road":
-                    structureType = "STRUCTURE_ROAD";
+                    structureType = STRUCTURE_ROAD;
                     break;
                   case "extension":
-                    structureType = "STRUCTURE_EXTENSION";
+                    structureType = STRUCTURE_EXTENSION;
                     break;
                   case "tower":
-                    structureType = "STRUCTURE_TOWER";
+                    structureType = STRUCTURE_TOWER;
                     break;
                   case "constructedWall":
-                    structureType = "STRUCTURE_WALL";
+                    structureType = STRUCTURE_WALL;
                     break;
                   case "rampart":
-                    structureType = "STRUCTURE_RAMPART";
+                    structureType = STRUCTURE_RAMPART;
                     break;
                   case "storage":
-                    structureType = "STRUCTURE_STORAGE";
+                    structureType = STRUCTURE_STORAGE;
                     break;
                   case "observer":
-                    structureType = "STRUCTURE_OBSERVER";
+                    structureType = STRUCTURE_OBSERVER;
                     break;
                   case "terminal":
-                    structureType = "STRUCTURE_TERMINAL";
+                    structureType = STRUCTURE_TERMINAL;
                     break;
                   case "container":
-                    structureType = "STRUCTURE_CONTAINER";
+                    structureType = STRUCTURE_CONTAINER;
                     break;
                   case "link":
-                    structureType = "STRUCTURE_LINK";
+                    structureType = STRUCTURE_LINK;
                     break;
                   default:
                     break;
@@ -99,7 +99,7 @@ var blueprints = {
                     }
                 });
                 // console.log(x,' ', y, ' ', structureType);
-                if (counter >= 99) {
+                if (counter <= 99) {
 
                   if (name == 'none' && blocked == false) {
                     thisRoom.createConstructionSite(x, y, structureType);

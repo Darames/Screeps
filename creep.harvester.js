@@ -6,8 +6,11 @@ var harvester = {
         var creepRoom = Game.rooms[creep.pos.roomName];
         var sources = creepRoom.sources;
         var targets = creepRoom.container;
+        if (targets === null) {
+            creepRoom.memory.scanMode = true;
+        }
         targets = _.filter(targets, s => s.pos.inRangeTo(sources[creep.memory.source], 2));
-
+        
         // harvest energy
         if (targets.length > 0) {
             if (creep.pos.isEqualTo(targets[0])) {

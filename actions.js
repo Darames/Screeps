@@ -105,11 +105,15 @@ var actions = {
 
                         if (targetCounter == energyTargets.length) {
                             this.moveAndGetEnergy(creep, target);
+                            break;
                         } else {
                             continue;
                         } // if targetCounter == energyTargets.length
 
-                    } else { this.moveAndGetEnergy(creep, target); } // if target.store[RESOURCE_ENERGY] 
+                    } else { 
+                        this.moveAndGetEnergy(creep, target);
+                        break;
+                    } // if target.store[RESOURCE_ENERGY] 
 
                 } else {
 
@@ -117,11 +121,15 @@ var actions = {
 
                         if (targetCounter == energyTargets.length) {
                             this.moveAndGetEnergy(creep, target);
+                            break;
                         } else {
                             continue;
                         } // if targetCounter == energyTargets.length
 
-                    } else { this.moveAndGetEnergy(creep, target); } // if target.amount
+                    } else {
+                        this.moveAndGetEnergy(creep, target);
+                        break;
+                    } // if target.amount
 
                 }// if typeof target.structureType
 

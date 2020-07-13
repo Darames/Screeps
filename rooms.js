@@ -77,10 +77,10 @@ let room = {
             Game.cpu.generatePixel()
             console.log('pixel generated')
         }
-        thisRoom.visual.text('tran: ' + thisRoom.memory.limits.tran, 0, 0, { align: 'left', opacity: 0.8 });
-        thisRoom.visual.text('upgr: ' + thisRoom.memory.limits.upgr, 0, 1, { align: 'left', opacity: 0.8 });
-        thisRoom.visual.text('buil: ' + thisRoom.memory.limits.buil, 0, 2, { align: 'left', opacity: 0.8 });
-        thisRoom.visual.text('harv: ' + thisRoom.memory.limits.harv, 0, 3, { align: 'left', opacity: 0.8 });
+        thisRoom.visual.text('tran: ' + thisRoom.memory.limits.tran.value, 0, 0, { align: 'left', opacity: 0.8 });
+        thisRoom.visual.text('upgr: ' + thisRoom.memory.limits.upgr.value, 0, 1, { align: 'left', opacity: 0.8 });
+        thisRoom.visual.text('buil: ' + thisRoom.memory.limits.buil.value, 0, 2, { align: 'left', opacity: 0.8 });
+        thisRoom.visual.text('harv: ' + thisRoom.memory.limits.harv.value, 0, 3, { align: 'left', opacity: 0.8 });
 
 
         thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == thisRoom.name && c.my);
@@ -313,7 +313,7 @@ let room = {
                 let bodyCost = 250;
                 let stepCost = 250;
 
-                if (creeps.builders.length > 1) {
+                if (creeps.builders.length >= 1) {
                     builderNr = creeps.builders.length + 1;
                 }
                 memory = { role: 'builder', builderNr: builderNr };

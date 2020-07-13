@@ -72,11 +72,17 @@ let room = {
             };
         }
 
-        thisRoom.visual.text(Game.cpu.bucket, 48, 48, { align: 'right', opacity: 0.8 });
+        thisRoom.visual.text(Game.cpu.bucket, 49, 49, { align: 'right', opacity: 0.8 });
         if (Game.cpu.bucket > 9000) {
             Game.cpu.generatePixel()
             console.log('pixel generated')
         }
+        thisRoom.visual.text('tran: ' + thisRoom.memory.limits.tran, 0, 0, { align: 'left', opacity: 0.8 });
+        thisRoom.visual.text('upgr: ' + thisRoom.memory.limits.upgr, 0, 1, { align: 'left', opacity: 0.8 });
+        thisRoom.visual.text('buil: ' + thisRoom.memory.limits.buil, 0, 2, { align: 'left', opacity: 0.8 });
+        thisRoom.visual.text('harv: ' + thisRoom.memory.limits.harv, 0, 3, { align: 'left', opacity: 0.8 });
+
+
         thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == thisRoom.name && c.my);
         thisRoom.creeps.harvesters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'harvester');
         thisRoom.creeps.transporters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'transporter');

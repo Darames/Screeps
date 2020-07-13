@@ -99,7 +99,9 @@ var transporter = {
 			}
 			return target;
 		}
-
+		if (target == null) {
+			creepRoom.memory.scanMode = true;
+		}
 		if (creep.memory.target === "none" && creep.memory.delivering) {
 			let targets = creepRoom.transporterTargets;
 			// targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);

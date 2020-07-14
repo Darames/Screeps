@@ -59,16 +59,17 @@ var transporter = {
     				}
     			}
     		}
+		
+			if (thisRoom.storage) {
+				let storage = thisRoom.storage;
+				if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
+					storage.transportPriority = -1;
+					storage.store[RESOURCE_ENERGY] = storage.store[RESOURCE_ENERGY];
+					storage.store.getCapacity(RESOURCE_ENERGY) = storage.store.getCapacity();
+					targets.push(storage);
+				}
+			}
 		}
-		// if (thisRoom.storage) {
-		// 	let storage = thisRoom.storage;
-		// 	if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
-		// 		storage.transportPriority = -1;
-		// 		storage.store[RESOURCE_ENERGY] = storage.store[RESOURCE_ENERGY];
-		// 		storage.store.getCapacity(RESOURCE_ENERGY) = storage.store.getCapacity();
-		// 		targets.push(storage);
-		// 	}
-		// }
 		// targets = _.sortBy(targets, s => s.transportPriority);
 		targets.sort(function(a, b){
 			var x = a.transportPriority;

@@ -60,7 +60,7 @@ var transporter = {
     			}
     		}
 		
-			if (typeof thisRoom.storage  !== 'undefined') {
+			if (typeof thisRoom.storage  !== 'undefined' && thisRoom.storage  != '') {
 				let storage = thisRoom.storage;
 				if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
 					storage.transportPriority = -1;

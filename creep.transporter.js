@@ -16,11 +16,12 @@ var transporter = {
 		let containers;
 		if (thisRoom.container) { containers = thisRoom.container; }
 		let targets = new Array();
+		let extensionEmpty = false;
 
 		for (let sId in thisRoom.spawns) {
 			let spawn = thisRoom.spawns[sId];
 			if (spawn.store[RESOURCE_ENERGY] < spawn.store.getCapacity(RESOURCE_ENERGY)) {
-				spawn.transportPriority = 5;
+				spawn.transportPriority = 20;
 				targets.push(spawn);
 			}
 		}
@@ -29,9 +30,10 @@ var transporter = {
 				let extension = thisRoom.extensions[exId];
 				if (extension !== null) {
 					if (extension.store[RESOURCE_ENERGY] < extension.store.getCapacity(RESOURCE_ENERGY)) {
-						extension.transportPriority = 2;
+						extension.transportPriority = 17;
 						this.transportPriority(extension);
 						targets.push(extension);
+						extensionEmpty = true;
 					}
 				}
 			}
@@ -46,15 +48,17 @@ var transporter = {
 				}
 			}
 		}
-		if (typeof thisRoom.controllerContainer !== 'undefined') {
-			for (let ccId in thisRoom.controllerContainer) {
-				let controllerContainer = thisRoom.controllerContainer[ccId];
-				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.store.getCapacity()) {
-					controllerContainer.transportPriority = 1;
-					this.transportPriority(controllerContainer);
-					targets.push(controllerContainer);
-				}
-			}
+		if (!extensionEmpty){
+    		if (typeof thisRoom.controllerContainer !== 'undefined') {
+    			for (let ccId in thisRoom.controllerContainer) {
+    				let controllerContainer = thisRoom.controllerContainer[ccId];
+    				if (controllerContainer.store[RESOURCE_ENERGY] < controllerContainer.store.getCapacity()) {
+    					controllerContainer.transportPriority = 1;
+    					this.transportPriority(controllerContainer);
+    					targets.push(controllerContainer);
+    				}
+    			}
+    		}
 		}
 		// if (thisRoom.storage) {
 		// 	let storage = thisRoom.storage;

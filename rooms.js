@@ -96,6 +96,7 @@ let room = {
         thisRoom.damagedStructures = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return ((structures.structureType != "constructedWall") && (100 * structure.hits) / structure.hitsMax != 100) && structure.structureType != STRUCTURE_CONTROLLER; } });
         thisRoom.damagedStructures = _.filter(thisRoom.damagedStructures, (structures) => (structures.structureType != "constructedWall" && structures.structureType != "rampart") || (structures.structureType == "constructedWall" && !(structures.hits > 170000)) || (structures.structureType == "rampart" && !(structures.hits > 170000)));
         thisRoom.droppedEnergy = thisRoom.find(FIND_DROPPED_RESOURCES, { filter: (r) => { return r.resourceType == RESOURCE_ENERGY } });
+        thisRoom.find(FIND_TOMBSTONES).forEach(tombstone => { if(tombstone.store[RESOURCE_ENERGY] > 0) { thisRoom.droppedEnergy.push(tombstone); } });
         thisRoom.limits = thisRoom.memory.limits;
         
         if (typeof thisRoom.memory.scanMode === 'undefined') {

@@ -139,7 +139,7 @@ let room = {
             };
             thisRoom.links = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK);
             thisRoom.sourceLinks = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.sources[0], 3) || s.pos.inRangeTo(thisRoom.sources[1], 3)));
-            thisRoom.storage = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_STORAGE);
+            // thisRoom.storage = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_STORAGE);
 
             thisRoom.memory.structuresAll = [];
             thisRoom.memory.container = [];
@@ -149,7 +149,7 @@ let room = {
             thisRoom.memory.structures = {
                 towers: []
             };
-            thisRoom.memory.storage = [];
+            // thisRoom.memory.storage = [];
             thisRoom.memory.links = [];
             thisRoom.memory.sourceLinks = [];
 
@@ -174,7 +174,7 @@ let room = {
             //     }
             // }
             // if (typeof thisRoom.storage !== 'undefined') {
-                for (let i = 0; i < thisRoom.storage.length; i++) { thisRoom.memory.storage.push(thisRoom.storage[i].id); }
+                // for (let i = 0; i < thisRoom.storage.length; i++) { thisRoom.memory.storage.push(thisRoom.storage[i].id); }
             // }
             // if (typeof thisRoom.links !== 'undefined') {
                 for (let i = 0; i < thisRoom.links.length; i++) { thisRoom.memory.links.push(thisRoom.links[i].id); }
@@ -193,7 +193,7 @@ let room = {
             thisRoom.structures = {
                 towers: []
             };
-            thisRoom.storage = [];
+            // thisRoom.storage = [];
             thisRoom.links = [];
             thisRoom.sourceLinks = [];
             if (typeof thisRoom.memory.structuresAll !== 'undefined') {
@@ -216,9 +216,9 @@ let room = {
                     for (let id in thisRoom.memory.structures.towers) { thisRoom.structures.towers.push(actions.getElement(thisRoom.name, thisRoom.memory.structures.towers[id])); }
                 }
             }
-            if (typeof thisRoom.memory.storage !== 'undefined') {
-                for (let id in thisRoom.memory.storage) { thisRoom.storage.push(actions.getElement(thisRoom.name, thisRoom.memory.storage[id].id)); }
-            }
+            // if (typeof thisRoom.memory.storage !== 'undefined') {
+            //     for (let id in thisRoom.memory.storage) { thisRoom.storage.push(actions.getElement(thisRoom.name, thisRoom.memory.storage[id].id)); }
+            // }
             if (typeof thisRoom.memory.links !== 'undefined') {
                 for (let id in thisRoom.memory.links) { thisRoom.links.push(actions.getElement(thisRoom.name, thisRoom.memory.links[id])); }
             }

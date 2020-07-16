@@ -23,8 +23,10 @@ var transporter = {
 			if (spawn.store[RESOURCE_ENERGY] < spawn.store.getCapacity(RESOURCE_ENERGY)) {
 				spawn.transportPriority = 20;
 				targets.push(spawn);
+				extensionEmpty = true;
 			}
 		}
+		
 		if (typeof thisRoom.extensions !== 'undefined') {
 			for (let exId in thisRoom.extensions) {
 				let extension = thisRoom.extensions[exId];
@@ -38,17 +40,18 @@ var transporter = {
 				}
 			}
 		}
-		if (typeof thisRoom.structures.towers !== 'undefined') {
-			for (let tId in thisRoom.structures.towers) {
-				let tower = thisRoom.structures.towers[tId];
-				if (tower.store[RESOURCE_ENERGY] < tower.store.getCapacity(RESOURCE_ENERGY)) {
-					tower.transportPriority = 1;
-					this.transportPriority(tower);
-					targets.push(tower);
-				}
-			}
-		}
 		if (!extensionEmpty){
+    		if (typeof thisRoom.structures.towers !== 'undefined') {
+    			for (let tId in thisRoom.structures.towers) {
+    				let tower = thisRoom.structures.towers[tId];
+    				if (tower.store[RESOURCE_ENERGY] < tower.store.getCapacity(RESOURCE_ENERGY)) {
+    					tower.transportPriority = 1;
+    					this.transportPriority(tower);
+    					targets.push(tower);
+    				}
+    			}
+    		}
+		
     		if (typeof thisRoom.controllerContainer !== 'undefined') {
     			for (let ccId in thisRoom.controllerContainer) {
     				let controllerContainer = thisRoom.controllerContainer[ccId];
@@ -60,15 +63,15 @@ var transporter = {
     			}
     		}
 		
-			if (typeof thisRoom.storage  !== 'undefined' && thisRoom.storage  != '') {
-				let storage = thisRoom.storage;
-				if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
-					storage.transportPriority = -1;
-					storage.store[RESOURCE_ENERGY] = storage.store[RESOURCE_ENERGY];
-					storage.store.getCapacity(RESOURCE_ENERGY) = storage.store.getCapacity();
-					targets.push(storage);
-				}
-			}
+// 			if (typeof thisRoom.storage  !== 'undefined' && thisRoom.storage  != '') {
+// 				let storage = thisRoom.storage;
+// 				if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
+// 					storage.transportPriority = -1;
+// 					storage.store[RESOURCE_ENERGY] = storage.store[RESOURCE_ENERGY];
+// 					storage.store.getCapacity(RESOURCE_ENERGY) = storage.store.getCapacity();
+// 					targets.push(storage);
+// 				}
+// 			}
 		}
 		// targets = _.sortBy(targets, s => s.transportPriority);
 		targets.sort(function(a, b){
@@ -109,7 +112,8 @@ var transporter = {
 		}
 		if (creep.memory.target === "none" && creep.memory.delivering) {
 			let targets = creepRoom.transporterTargets;
-			// targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);
+			targets = _.sortByAll(targets, [s => creep.pos.getRangeTo(s)]);
+			targets = _.sortByAll(targets, [s => s.transportPriority]);
 			target = newTarget(creep, targets);
 		} else if (creep.memory.target != "none" && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) {
 			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);

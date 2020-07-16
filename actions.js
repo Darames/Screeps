@@ -69,7 +69,9 @@ var actions = {
                 // energyTargets = _.sortBy(energyTargets, s => s.pos.getRangeTo(creep));
 
                 energyTargets.sort(function(a, b){
+                    if(a == null){creepRoom.memory.scanMode = true; return 0}
                     var x = a.pos.getRangeTo(creep);
+                    if(b == null){creepRoom.memory.scanMode = true; return 0}
                     var y = b.pos.getRangeTo(creep);
                     if (x < y) {
                         return -1;

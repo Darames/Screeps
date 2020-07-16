@@ -72,15 +72,22 @@ let room = {
             };
         }
 
-        thisRoom.visual.text(Game.cpu.bucket, 49, 49, { align: 'right', opacity: 0.8 });
+        thisRoom.visual.text('bucket: ' + Game.cpu.bucket, 3, 1, { align: 'left', opacity: 0.8 });
         if (Game.cpu.bucket > 9000) {
             Game.cpu.generatePixel()
             console.log('pixel generated')
         }
-        thisRoom.visual.text('tran: ' + thisRoom.memory.limits.tran.value, 0, 0, { align: 'left', opacity: 0.8 });
-        thisRoom.visual.text('upgr: ' + thisRoom.memory.limits.upgr.value, 0, 1, { align: 'left', opacity: 0.8 });
-        thisRoom.visual.text('buil: ' + thisRoom.memory.limits.buil.value, 0, 2, { align: 'left', opacity: 0.8 });
-        thisRoom.visual.text('harv: ' + thisRoom.memory.limits.harv.value, 0, 3, { align: 'left', opacity: 0.8 });
+        let visualPos = 3;
+        for (const key in thisRoom.memory.limits) {
+            if(key != 'capacity'){
+                thisRoom.visual.text(key + ': ' + thisRoom.memory.limits[key].value, 0, visualPos, { align: 'left', opacity: 0.8 });
+                visualPos = visualPos + 1;
+            }
+        }
+        
+        // thisRoom.visual.text('upgr: ' + thisRoom.memory.limits.upgr.value, 0, 2, { align: 'left', opacity: 0.8 });
+        // thisRoom.visual.text('buil: ' + thisRoom.memory.limits.buil.value, 0, 3, { align: 'left', opacity: 0.8 });
+        // thisRoom.visual.text('harv: ' + thisRoom.memory.limits.harv.value, 0, 4, { align: 'left', opacity: 0.8 });
 
 
         thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == thisRoom.name && c.my);

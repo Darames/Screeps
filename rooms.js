@@ -77,7 +77,7 @@ let room = {
             Game.cpu.generatePixel()
             console.log('pixel generated')
         }
-        let visualPos = 3;
+        let visualPos = 1;
         for (const key in thisRoom.memory.limits) {
             if(key != 'capacity'){
                 thisRoom.visual.text(key + ': ' + thisRoom.memory.limits[key].value, 0, visualPos, { align: 'left', opacity: 0.8 });

@@ -67,8 +67,6 @@ var transporter = {
 				let storage = thisRoom.storage;
 				if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
 					storage.transportPriority = -1;
-					storage.store[RESOURCE_ENERGY] = storage.store[RESOURCE_ENERGY];
-					storage.store.getCapacity(RESOURCE_ENERGY) = storage.store.getCapacity();
 					targets.push(storage);
 				}
 			}

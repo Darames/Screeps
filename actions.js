@@ -73,7 +73,11 @@ var actions = {
                     var x = a.pos.getRangeTo(creep);
                     if(b == null){creepRoom.memory.scanMode = true; return 0}
                     var y = b.pos.getRangeTo(creep);
-                    if (x < y) {
+                    if (b.structureType === STRUCTURE_STORAGE) {
+                        return -1;
+                    } else if (a.structureType === STRUCTURE_STORAGE) {
+                        return 1;
+                    } else if (x < y) {
                         return -1;
                     } else if (x > y) {
                         return 1;

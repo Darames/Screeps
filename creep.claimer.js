@@ -1,8 +1,8 @@
-import { moveTo } from 'actions';
+let actions = require('actions');
 
 let roleClaimer = {
     /** @param {Creep} creep **/
-    claimer: function(creep) {
+    run: function(creep) {
         const creepRoom = Game.rooms[creep.pos.roomName];
         const claimRoom = creepRoom.memory.claiming.room;
         const roomToClaim = Game.rooms[claimRoom];
@@ -10,9 +10,9 @@ let roleClaimer = {
         if( creep.pos.isNearTo({x: 25, y: 25, roomName: claimRoom}) ) {
             creep.claimController(creepRoom.controller)
         } else {
-            moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
+            actions.moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
         }
     }
 };
 
-export default roleClaimer;
+module.exports = roleClaimer;

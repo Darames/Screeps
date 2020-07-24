@@ -1,15 +1,14 @@
-var harvester = require('creep.harvester');
-var builder = require('creep.builder');
-var transporter = require('creep.transporter');
-var upgrader = require('creep.upgrader');
+let harvester = require('creep.harvester');
+let builder = require('creep.builder');
+let transporter = require('creep.transporter');
+let upgrader = require('creep.upgrader');
 
+let remoteBuilder = require('creep.remoteBuilder');
+let claimer = require('creep.claimer');
 
-// var claimer = require('role.claimer');
-// var remoteBuilder = require('role.remoteBuilder');
-
-var creeps = {
+let creeps = {
     run: function () {
-        for(var name in Memory.creeps) {
+        for(let name in Memory.creeps) {
             if(!Game.creeps[name]) {
                 delete Memory.creeps[name];
                 console.log('Clearing non-existing creep memory:', name);
@@ -19,7 +18,7 @@ var creeps = {
             let creep = Game.creeps[nameCreep];
             
             // if(creep.memory.role == 'transporter') {
-            //     var found = creep.pos.lookFor(LOOK_STRUCTURES);
+            //     let found = creep.pos.lookFor(LOOK_STRUCTURES);
             //     // console.log(found);
             //     if(!found.length) {
             //         creep.pos.createConstructionSite(STRUCTURE_ROAD);
@@ -40,10 +39,10 @@ var creeps = {
                     transporter.run(creep);
                     break;
                 case 'claimer':
-                    // roleClaimer.run(creep);
+                    claimer.claimer(creep);
                     break;
                 case 'remoteBuilder':
-                    // roleRemoteBuilder.run(creep);
+                    remoteBuilder.remoteBuilder(creep);
                     break;
                 case 'scout':
                     if (creep.pos.roomName != Memory.rooms.toScout[0]) {

@@ -4,12 +4,12 @@ var transporter = {
 	/** @param {Creep} creep **/
 
 	transportPriority: function (target) {
-		if (((target.store[RESOURCE_ENERGY] * 100) / target.store.getCapacity(RESOURCE_ENERGY)) < 60) {
-			target.transportPriority = target.transportPriority + 1;
-			if (((target.store[RESOURCE_ENERGY] * 100) / target.store.getCapacity(RESOURCE_ENERGY)) < 40) {
-				target.transportPriority = target.transportPriority + 1;
-			}
-		}
+		// if (((target.store[RESOURCE_ENERGY] * 100) / target.store.getCapacity(RESOURCE_ENERGY)) < 60) {
+		// 	target.transportPriority = target.transportPriority + 1;
+		// 	if (((target.store[RESOURCE_ENERGY] * 100) / target.store.getCapacity(RESOURCE_ENERGY)) < 40) {
+		// 		target.transportPriority = target.transportPriority + 1;
+		// 	}
+		// }
 	},
 
 	targets: function (thisRoom) {
@@ -63,25 +63,26 @@ var transporter = {
     			}
     		}
 		
-			if (typeof thisRoom.storage  !== 'undefined' && thisRoom.storage  != '') {
-				let storage = thisRoom.storage;
-				if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
-					storage.transportPriority = -1;
-					targets.push(storage);
-				}
-			}
+			// if (typeof thisRoom.storage  !== 'undefined' && thisRoom.storage  != '') {
+			// 	let storage = thisRoom.storage;
+			// 	if (storage.store[RESOURCE_ENERGY] < (storage.store.getCapacity() / 2)) {
+			// 		storage.transportPriority = -1;
+			// 		targets.push(storage);
+			// 	}
+			// }
 		}
 		// targets = _.sortBy(targets, s => s.transportPriority);
 		targets.sort(function(a, b){
-			var x = a.transportPriority;
-			var y = b.transportPriority;
-			if (x < y) {
-				return 1;
-			} else if (x > y) {
-				return -1;
-			} else {
-				return 0;
-			}
+			// var x = a.transportPriority;
+			// var y = b.transportPriority;
+			// if (x < y) {
+			// 	return 1;
+			// } else if (x > y) {
+			// 	return -1;
+			// } else {
+			// 	return 0;
+			// }
+			return b.transportPriority - a.transportPriority;
 		  });
 		thisRoom.transporterTargets = targets;
 	},
@@ -111,7 +112,10 @@ var transporter = {
 		if (creep.memory.target === "none" && creep.memory.delivering) {
 			let targets = creepRoom.transporterTargets;
 			targets = _.sortByAll(targets, [s => creep.pos.getRangeTo(s)]);
-			targets = _.sortByAll(targets, [s => s.transportPriority]);
+			// targets = _.sortByAll(targets, [s => s.transportPriority]);
+			targets.sort(function(a, b){
+				return b.transportPriority - a.transportPriority;
+			});
 			target = newTarget(creep, targets);
 		} else if (creep.memory.target != "none" && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) {
 			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);

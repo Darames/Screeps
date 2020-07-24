@@ -39,10 +39,10 @@ let creeps = {
                     transporter.run(creep);
                     break;
                 case 'claimer':
-                    claimer.claimer(creep);
+                    claimer.run(creep);
                     break;
                 case 'remoteBuilder':
-                    remoteBuilder.remoteBuilder(creep);
+                    remoteBuilder.run(creep);
                     break;
                 case 'scout':
                     if (creep.pos.roomName != Memory.rooms.toScout[0]) {

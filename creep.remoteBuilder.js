@@ -1,8 +1,8 @@
-import { moveTo } from 'actions';
+let actions = require('actions');
 
 let roleRemoteBuilder = {
     /** @param {Creep} creep **/
-    remoteBuilder: function(creep) {
+    run: function(creep) {
         const claimRoom = creep.memory.claimRoom;
         const room = Game.rooms[claimRoom];
         // console.log(claimRoom);
@@ -24,7 +24,7 @@ let roleRemoteBuilder = {
 	    if(creep.memory.building) {
 	        if(creep.pos.roomName != room.name){
                 // creep.moveTo(25, 25, claimRoom);
-                moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
+                actions.moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
 	        } else {
 	            if(constructionSites.length) {
                     if(creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE) {
@@ -47,6 +47,6 @@ let roleRemoteBuilder = {
 	}
 };
 
-export default roleRemoteBuilder;
+module.exports = roleRemoteBuilder;
 
 // Game.spawns['Darames'].spawnCreep([WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE], "RemoteBuilder", {memory: {role: 'remoteBuilder'}});

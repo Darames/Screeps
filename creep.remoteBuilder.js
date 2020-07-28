@@ -5,10 +5,7 @@ let roleRemoteBuilder = {
     run: function(creep) {
         const claimRoom = creep.memory.claimRoom;
         const room = Game.rooms[claimRoom];
-        // console.log(claimRoom);
-
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
-
         
         // set get energy mode
 	    if(creep.memory.building && creep.carry.energy == 0) {
@@ -23,7 +20,6 @@ let roleRemoteBuilder = {
 
 	    if(creep.memory.building) {
 	        if(creep.pos.roomName != room.name){
-                // creep.moveTo(25, 25, claimRoom);
                 actions.moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
 	        } else {
 	            if(constructionSites.length) {
@@ -34,7 +30,7 @@ let roleRemoteBuilder = {
 	        }
 		} else {
 		    if(creep.pos.roomName != claimRoom){
-	            creep.moveTo(ClaimFlag);
+	            actions.moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
 	        } else {
 	            let sources = room.find(FIND_SOURCES);
     			sources = _.sortBy( sources, s => creep.pos.getRangeTo(s) )

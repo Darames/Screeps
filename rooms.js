@@ -73,6 +73,11 @@ let room = {
                 'capacity': thisRoom.energyCapacityAvailable
             };
         }
+        if (typeof thisRoom.memory.claiming === 'undefined') {
+            thisRoom.memory.claiming = [];
+            thisRoom.memory.claiming.room = 'none'
+            thisRoom.memory.claiming.status = 'idle'
+        }
 
         thisRoom.visual.text('bucket: ' + Game.cpu.bucket, 3, 1, { align: 'left', opacity: 0.8 });
         if (Game.cpu.bucket > 9000) {

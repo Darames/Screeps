@@ -70,29 +70,19 @@ var actions = {
 
                 energyTargets.sort(function(a, b){
                     if(a == null){creepRoom.memory.scanMode = true; return 0}
-                    var x = a.pos.getRangeTo(creep);
                     if(b == null){creepRoom.memory.scanMode = true; return 0}
+                    var x = a.pos.getRangeTo(creep);
                     var y = b.pos.getRangeTo(creep);
-                    if (b.structureType === STRUCTURE_STORAGE) {
-                        return -1;
-                    } else if (a.structureType === STRUCTURE_STORAGE) {
-                        return 1;
-                    } else if (x < y) {
-                        return -1;
-                    } else if (x > y) {
-                        return 1;
+                    if (b.structureType === STRUCTURE_STORAGE) { return -1;
+                    } else if (a.structureType === STRUCTURE_STORAGE) { return 1;
+                    } else if (x < y) { return -1;
+                    } else if (x > y) { return 1;
                     } else if (x = y) {
-                        if (a.structureType === 'undefined' && b.structureType !== 'undefined') {
-                            return -1;
-                        } else if (a.structureType !== 'undefined' && b.structureType === 'undefined') {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    } else {
-                        return 0;
-                    }
-                  });
+                        if (a.structureType === 'undefined' && b.structureType !== 'undefined') { return -1;
+                        } else if (a.structureType !== 'undefined' && b.structureType === 'undefined') { return 1;
+                        } else { return 0; }
+                    } else { return 0; }
+                });
             }
         }
         if (energyTargets.length > 1) {

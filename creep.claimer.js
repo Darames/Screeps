@@ -7,8 +7,13 @@ let roleClaimer = {
         const claimRoom = creepRoom.memory.claiming.room;
         const roomToClaim = Game.rooms[claimRoom];
         
-        if( creep.pos.isNearTo({x: 25, y: 25, roomName: claimRoom}) ) {
-            creep.claimController(creepRoom.controller)
+        if( creepRoom.name == claimRoom ) {
+            if (creep.pos.isNearTo(creepRoom.controller)) {
+                creep.claimController(creepRoom.controller)
+            } else {
+                actions.moveTo(creep, creepRoom.controller);
+            }
+            
         } else {
             actions.moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
         }

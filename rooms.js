@@ -42,11 +42,6 @@ let room = {
         for (const roomName in Game.rooms) {
             let thisRoom = Game.rooms[roomName];
 
-            if (typeof thisRoom.memory.claiming === 'undefined') {
-                thisRoom.memory.claiming = {};
-                thisRoom.memory.claiming.room = 'none';
-                thisRoom.memory.claiming.status = 'none';
-            }
             if (typeof thisRoom.controller !== 'undefined') {
                 if (thisRoom.controller.my) {
                     let roomX = thisRoom.name.slice(1, 3), 
@@ -85,7 +80,7 @@ let room = {
             };
         }
         if (typeof thisRoom.memory.claiming === 'undefined') {
-            thisRoom.memory.claiming = [];
+            thisRoom.memory.claiming = {};
             thisRoom.memory.claiming.room = 'none'
             thisRoom.memory.claiming.status = 'idle'
         }
@@ -108,8 +103,11 @@ let room = {
         thisRoom.creeps.transporters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'transporter');
         thisRoom.creeps.upgraders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'upgrader');
         thisRoom.creeps.builders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'builder');
-        if (thisRoom.memory.claiming) {
+        if (thisRoom.memory.claiming.status == 'claiming') {
             thisRoom.creeps.claimers = _.filter(Game.creeps, (creep) => creep.memory.homeRoom == thisRoom.name && creep.memory.role == 'claimer');
+        }
+        if (thisRoom.memory.claiming.status == 'buildSpawn') {
+            thisRoom.creeps.remoteBuilder = _.filter(Game.creeps, (creep) => creep.memory.homeRoom == thisRoom.name && creep.memory.role == 'remoteBuilder');
         }
         thisRoom.sources = thisRoom.find(FIND_SOURCES);
         thisRoom.constructionSites = _.filter(Game.constructionSites, cS => cS.room.name == thisRoom.name);
@@ -243,6 +241,13 @@ let room = {
             let spawn = thisRoom.spawns[0];
             let limits = thisRoom.limits;
 
+            if (thisRoom.memory.claiming.status == 'claiming') {
+                limits.clai.value = 1;
+            }
+            if (thisRoom.memory.claiming.status == 'buildSpawn') {
+                limits.remB.value = 1;
+            }
+
             if (thisRoom.spawns.length > 1 && thisRoom.spawns[0].spawning) { spawn = thisRoom.spawns[1]; }
             if (roomCapacity > 1200) {
                 limits.harv.value = 2;
@@ -340,17 +345,17 @@ let room = {
                     bodyCost = bodyCost + 250;
                     stepCost = 250;
                 }
-            } else if (thisRoom.memory.claiming.status = 'claiming') {
+            } else if (thisRoom.memory.claiming.status == 'claiming') {
                 if (creeps.claimers.length = 0) {
                     newName = 'Claimer' + Game.time;
                     body = [CLAIM, MOVE, MOVE];
-                    memory = { role: 'claimer' };
+                    memory = { role: 'claimer', homeRoom: thisRoom.name };
                 }
-            } else if (thisRoom.memory.claiming.status = 'readyForSpawn') {
+            } else if (thisRoom.memory.claiming.status = 'buildSpawn') {
                 if (creeps.remoteBuilder.length = 0) {
                     newName = 'RemoteBuilder' + Game.time;
                     body = [WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
-                    memory = { role: 'remoteBuilder' };
+                    memory = { role: 'remoteBuilder', homeRoom: thisRoom.name };
                 }
             }
             // else if(mDefender.length < mDefenderLimit) {

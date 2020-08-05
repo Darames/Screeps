@@ -3,7 +3,8 @@ let actions = require('actions');
 let roleRemoteBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
-        const claimRoom = creep.memory.claimRoom;
+        const creepRoom = Game.rooms[creep.pos.roomName];
+        const claimRoom = Game.rooms[creepRoom.memory.homeRoom].memory.claiming.room;
         const room = Game.rooms[claimRoom];
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         
@@ -20,7 +21,8 @@ let roleRemoteBuilder = {
 
 	    if(creep.memory.building) {
 	        if(creep.pos.roomName != room.name){
-                actions.moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
+                creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
+                // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
 	        } else {
 	            if(constructionSites.length) {
                     if(creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE) {
@@ -30,7 +32,8 @@ let roleRemoteBuilder = {
 	        }
 		} else {
 		    if(creep.pos.roomName != claimRoom){
-	            actions.moveTo(creep, {x: 25, y: 25, roomName: claimRoom});
+                creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
+	            // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
 	        } else {
 	            let sources = room.find(FIND_SOURCES);
     			sources = _.sortBy( sources, s => creep.pos.getRangeTo(s) )

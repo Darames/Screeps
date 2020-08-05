@@ -14,11 +14,11 @@ let flags = {
                 thisFlag.remove();
                 continue;
             } else if (thisFlag.name.substr(0, 5) === 'claim') {
-                Memory.rooms.toClaim.push(thisRoom);
+                Memory.rooms.toClaim.push(thisFlag.pos.roomName);
                 thisFlag.remove();
                 continue;
             } else if (thisFlag.name.substr(0, 5) === 'scout') {
-                Memory.rooms.toScout.push(thisRoom);
+                Memory.rooms.toScout.push(thisFlag.pos.roomName);
                 thisFlag.remove();
                 continue;
             } else if (thisFlag.name.substr(0, 8) === 'mainBase') {

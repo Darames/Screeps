@@ -36,9 +36,17 @@ let room = {
     claimRooms: function () {
         let rangeToClaimRoom = [];
         let claimRoom = Memory.rooms.toClaim[0];
-
+        if (claimRoom == null) {
+            Memory.rooms.toClaim.shift();
+        }
         for (const roomName in Game.rooms) {
             let thisRoom = Game.rooms[roomName];
+
+            if (typeof thisRoom.memory.claiming === 'undefined') {
+                thisRoom.memory.claiming = {};
+                thisRoom.memory.claiming.room = 'none';
+                thisRoom.memory.claiming.status = 'none';
+            }
             if (typeof thisRoom.controller !== 'undefined') {
                 if (thisRoom.controller.my) {
                     let roomX = thisRoom.name.slice(1, 3), 
@@ -46,8 +54,7 @@ let room = {
                         claimRoomX = claimRoom.slice(1, 3), 
                         claimRoomY = claimRoom.slice(4),
                         roomRange = Math.abs(roomX - claimRoomX) + Math.abs(roomY - claimRoomY);
-                    if (roomRange = 1) {
-                        thisRoom.memory.claiming = [];
+                    if (roomRange == 1) {
                         thisRoom.memory.claiming.room = claimRoom;
                         thisRoom.memory.claiming.status = 'claiming';
                         Memory.rooms.toClaim.shift();
@@ -57,9 +64,13 @@ let room = {
                 }
             }
         }
-
+        console.log(Game.rooms[rangeToClaimRoom[0][0]]);
         if (rangeToClaimRoom.length > 1) { rangeToClaimRoom.sort(function (a, b) { return a[1] - b[1]; }); }
-        if (rangeToClaimRoom.length >= 1) { Game.rooms[rangeToClaimRoom[0][0]].memory.claiming = claimRoom; }
+        if (rangeToClaimRoom.length) { 
+            Game.rooms[rangeToClaimRoom[0][0]].memory.claiming.room = claimRoom;
+            Game.rooms[rangeToClaimRoom[0][0]].memory.claiming.status = 'claiming';
+            Memory.rooms.toClaim.shift();
+        }
     },
 
     memory: function (thisRoom) {
@@ -91,11 +102,6 @@ let room = {
                 visualPos = visualPos + 1;
             }
         }
-        
-        // thisRoom.visual.text('upgr: ' + thisRoom.memory.limits.upgr.value, 0, 2, { align: 'left', opacity: 0.8 });
-        // thisRoom.visual.text('buil: ' + thisRoom.memory.limits.buil.value, 0, 3, { align: 'left', opacity: 0.8 });
-        // thisRoom.visual.text('harv: ' + thisRoom.memory.limits.harv.value, 0, 4, { align: 'left', opacity: 0.8 });
-
 
         thisRoom.creeps = _.filter(Game.creeps, c => c.room.name == thisRoom.name && c.my);
         thisRoom.creeps.harvesters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'harvester');
@@ -355,19 +361,6 @@ let room = {
             //         spawn.spawnCreep([TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,ATTACK,ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'defender'}});
             //     } else {
             //         spawn.spawnCreep([TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,ATTACK,ATTACK,ATTACK,ATTACK,MOVE,MOVE,MOVE,MOVE], newName, {memory: {role: 'defender'}});
-            //     }
-            // }
-
-            // if (thisRoom.energyAvailable <= 300 && thisRoom.energyAvailable != roomCapacity) {
-            //     if (creeps.harvesters.length < 1) {
-            //         //backup harvester
-            //         let newName = 'BHarvester' + Game.time;
-            //         spawn.spawnCreep([WORK, WORK, MOVE, MOVE], newName, { memory: { role: 'harvester', source: 1 } });
-            //     } else if (creeps.transporters.length < 1) {
-            //         //backup transporter
-            //         let newName = 'BTransporter' + Game.time;
-            //         spawn.spawnCreep([CARRY, CARRY, MOVE, MOVE], newName,
-            //             { memory: { role: 'transporter', delivering: 'false', target: 'none' } });
             //     }
             // }
 

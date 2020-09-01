@@ -31,6 +31,11 @@ let room = {
             }
         }
         
+        for (const room in Memory.rooms) {
+            if (typeof Memory.rooms[room].scanMode == 'undefined' && room != 'toClaim') {
+                delete Memory.rooms[room];
+            }
+        }
     },
 
     claimRooms: function () {
@@ -110,6 +115,7 @@ let room = {
             thisRoom.creeps.remoteBuilder = _.filter(Game.creeps, (creep) => creep.memory.homeRoom == thisRoom.name && creep.memory.role == 'remoteBuilder');
         }
         thisRoom.sources = thisRoom.find(FIND_SOURCES);
+        thisRoom.minerals = thisRoom.find(FIND_MINERALS);
         thisRoom.constructionSites = _.filter(Game.constructionSites, cS => cS.room.name == thisRoom.name);
         thisRoom.damagedStructures = thisRoom.find(FIND_STRUCTURES, { filter: (structure) => { return ((structures.structureType != "constructedWall") && (100 * structure.hits) / structure.hitsMax != 100) && structure.structureType != STRUCTURE_CONTROLLER; } });
         thisRoom.damagedStructures = _.filter(thisRoom.damagedStructures, (structures) => (structures.structureType != "constructedWall" && structures.structureType != "rampart") || (structures.structureType == "constructedWall" && !(structures.hits > 170000)) || (structures.structureType == "rampart" && !(structures.hits > 170000)));
@@ -150,6 +156,7 @@ let room = {
             };
             thisRoom.links = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK);
             thisRoom.sourceLinks = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.sources[0], 3) || s.pos.inRangeTo(thisRoom.sources[1], 3)));
+            thisRoom.extractor = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_EXTRACTOR);
 
             thisRoom.memory.structuresAll = [];
             thisRoom.memory.container = [];
@@ -163,32 +170,15 @@ let room = {
             thisRoom.memory.links = [];
             thisRoom.memory.sourceLinks = [];
 
-            // if (typeof thisRoom.structuresAll !== 'undefined') {
-                for (let i = 0; i < thisRoom.structuresAll.length; i++) { thisRoom.memory.structuresAll.push(thisRoom.structuresAll[i].id); }
-            // }
-            // if (typeof thisRoom.container !== 'undefined') {
-                for (let i = 0; i < thisRoom.container.length; i++) { thisRoom.memory.container.push(thisRoom.container[i].id); }
-            // }
-            // if (typeof thisRoom.controllerContainer !== 'undefined') {
-                for (let i = 0; i < thisRoom.controllerContainer.length; i++) { thisRoom.memory.controllerContainer.push(thisRoom.controllerContainer[i].id); }
-            // }
-            // if (typeof thisRoom.spawns !== 'undefined') {
-                for (let i = 0; i < thisRoom.spawns.length; i++) { thisRoom.memory.spawns.push(thisRoom.spawns[i].id); }
-            // }
-            // if (typeof thisRoom.extensions !== 'undefined') {
-                for (let i = 0; i < thisRoom.extensions.length; i++) { thisRoom.memory.extensions.push(thisRoom.extensions[i].id); }
-            // }
-            // if (typeof thisRoom.structures !== 'undefined') {
-            //     if (typeof thisRoom.structures.towers !== 'undefined') {
-                    for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.structures.towers.push(thisRoom.structures.towers[i].id); }
-            //     }
-            // }
-            // if (typeof thisRoom.links !== 'undefined') {
-                for (let i = 0; i < thisRoom.links.length; i++) { thisRoom.memory.links.push(thisRoom.links[i].id); }
-            // }
-            // if (typeof thisRoom.sourceLinks !== 'undefined') {
-                for (let i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(thisRoom.sourceLinks[i].id); }
-            // }
+            for (let i = 0; i < thisRoom.structuresAll.length; i++) { thisRoom.memory.structuresAll.push(thisRoom.structuresAll[i].id); }
+            for (let i = 0; i < thisRoom.container.length; i++) { thisRoom.memory.container.push(thisRoom.container[i].id); }
+            for (let i = 0; i < thisRoom.controllerContainer.length; i++) { thisRoom.memory.controllerContainer.push(thisRoom.controllerContainer[i].id); }
+            for (let i = 0; i < thisRoom.spawns.length; i++) { thisRoom.memory.spawns.push(thisRoom.spawns[i].id); }
+            for (let i = 0; i < thisRoom.extensions.length; i++) { thisRoom.memory.extensions.push(thisRoom.extensions[i].id); }
+            for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.structures.towers.push(thisRoom.structures.towers[i].id); }
+            for (let i = 0; i < thisRoom.links.length; i++) { thisRoom.memory.links.push(thisRoom.links[i].id); }
+            for (let i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(thisRoom.sourceLinks[i].id); }
+            for (let i = 0; i < thisRoom.extractor.length; i++) { thisRoom.memory.extractor.push(thisRoom.extractor[i].id); }
 
             thisRoom.memory.scanMode = false;
         } else {
@@ -229,6 +219,9 @@ let room = {
             if (typeof thisRoom.memory.sourceLinks !== 'undefined') {
                 for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(actions.getElement(thisRoom.name, thisRoom.memory.sourceLinks[id])); }
             }
+            if (typeof thisRoom.memory.extractor !== 'undefined') {
+                for (let id in thisRoom.memory.extractor) { thisRoom.extractor.push(actions.getElement(thisRoom.name, thisRoom.memory.extractor[id])); }
+            }
         }
     },
 
@@ -242,9 +235,11 @@ let room = {
             let limits = thisRoom.limits;
 
             if (thisRoom.memory.claiming.status == 'claiming') {
+                limits.clai = {};
                 limits.clai.value = 1;
             }
             if (thisRoom.memory.claiming.status == 'buildSpawn') {
+                limits.remB = {};
                 limits.remB.value = 1;
             }
 
@@ -346,13 +341,13 @@ let room = {
                     stepCost = 250;
                 }
             } else if (thisRoom.memory.claiming.status == 'claiming') {
-                if (creeps.claimers.length = 0) {
+                if (creeps.claimers.length == 0) {
                     newName = 'Claimer' + Game.time;
                     body = [CLAIM, MOVE, MOVE];
                     memory = { role: 'claimer', homeRoom: thisRoom.name };
                 }
             } else if (thisRoom.memory.claiming.status = 'buildSpawn') {
-                if (creeps.remoteBuilder.length = 0) {
+                if (creeps.remoteBuilder.length == 0) {
                     newName = 'RemoteBuilder' + Game.time;
                     body = [WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];
                     memory = { role: 'remoteBuilder', homeRoom: thisRoom.name };

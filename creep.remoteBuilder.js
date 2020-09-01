@@ -4,7 +4,7 @@ let roleRemoteBuilder = {
     /** @param {Creep} creep **/
     run: function(creep) {
         const creepRoom = Game.rooms[creep.pos.roomName];
-        const claimRoom = Game.rooms[creepRoom.memory.homeRoom].memory.claiming.room;
+        const claimRoom = Game.rooms[creep.memory.homeRoom].memory.claiming.room;
         const room = Game.rooms[claimRoom];
         const constructionSites = room.find(FIND_CONSTRUCTION_SITES);
         

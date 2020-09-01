@@ -4,7 +4,7 @@ let roleClaimer = {
     /** @param {Creep} creep **/
     run: function(creep) {
         const creepRoom = Game.rooms[creep.pos.roomName];
-        const claimRoom = Game.rooms[creepRoom.memory.homeRoom].memory.claiming.room;
+        const claimRoom = Game.rooms[creep.memory.homeRoom].memory.claiming.room;
         const roomToClaim = Game.rooms[claimRoom];
         
         if( creepRoom.name == claimRoom ) {
@@ -17,6 +17,10 @@ let roleClaimer = {
         } else {
             creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
             // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
+        }
+
+        if (claimRoom.controller.my) {
+            Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'buildSpawn';
         }
     }
 };

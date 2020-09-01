@@ -24,14 +24,22 @@ let flags = {
             } else if (thisFlag.name.substr(0, 8) === 'mainBase') {
                 blueprint.showBuild(blueprint.mainBase, thisFlag)
                 if (typeof thisRoom.memory.blueprint !== 'undefined') {
-                    if (thisRoom.memory.blueprint.build === true) {
-                        thisRoom.memory.blueprint.template = 'mainBase';
-                        thisRoom.memory.blueprint.markerPos = {};
-                        thisRoom.memory.blueprint.markerPos.x = thisFlag.pos.x;
-                        thisRoom.memory.blueprint.markerPos.y = thisFlag.pos.y;
-                        thisRoom.memory.blueprint.roomLvl = 0;
-                        thisFlag.remove();
+                    if (thisRoom.memory.blueprint.build == true) {
+                        this.setBlueprint('mainBase', thisFlag);
                     }
+                } else {
+                    thisRoom.memory.blueprint = {}
+                }
+                continue;
+            } else if (thisFlag.name.substr(0, 4) === 'labs') {
+                blueprint.showBuild(blueprint.labs, thisFlag)
+                
+                if (typeof thisRoom.memory.blueprint !== 'undefined') {
+                    if (thisRoom.memory.blueprint.buildLabs == true) {
+                        this.setBlueprint('labs', thisFlag);
+                    }
+                } else {
+                    thisRoom.memory.blueprint = {}
                 }
                 continue;
             } else if (thisFlag.name.substr(0, 14) === 'buildBlueprint') {
@@ -39,7 +47,12 @@ let flags = {
                 thisRoom.memory.blueprint.build = true;
                 thisFlag.remove();
                 continue;
-            } else {
+            } else if (thisFlag.name.substr(0, 14) === 'buildBlueprintLabs') {
+                thisRoom.memory.blueprint = {};
+                thisRoom.memory.blueprint.buildLabs = true;
+                thisFlag.remove();
+                continue;
+            }  else {
                 command = thisFlag.name.substr(0, 4);
                 operator = thisFlag.name.substr(4);
             }
@@ -54,6 +67,29 @@ let flags = {
                 thisFlag.remove();
             }
         }
+    },
+    setBlueprint: function (print, thisFlag){
+        
+            if (typeof thisRoom.memory.blueprint.template !== 'undefined') {
+                thisRoom.memory.blueprint.template.push({
+                    name: print,
+                    markerPos: {
+                        x: thisFlag.pos.x,
+                        y: thisFlag.pos.y
+                    },
+                    roomLvl: 0,
+                });
+            } else {
+                thisRoom.memory.blueprint.template = [{
+                    name: print,
+                    markerPos: {
+                        x: thisFlag.pos.x,
+                        y: thisFlag.pos.y
+                    },
+                    roomLvl: 0
+                }];
+            }
+            thisFlag.remove();
     }
 };
 

@@ -108,10 +108,10 @@ let room = {
         thisRoom.creeps.transporters = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'transporter');
         thisRoom.creeps.upgraders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'upgrader');
         thisRoom.creeps.builders = _.filter(thisRoom.creeps, (creep) => creep.memory.role == 'builder');
-        if (thisRoom.memory.claiming.status == 'claiming') {
+        if (thisRoom.memory.claiming.status === 'claiming') {
             thisRoom.creeps.claimers = _.filter(Game.creeps, (creep) => creep.memory.homeRoom == thisRoom.name && creep.memory.role == 'claimer');
         }
-        if (thisRoom.memory.claiming.status == 'buildSpawn') {
+        if (thisRoom.memory.claiming.status === 'buildSpawn') {
             thisRoom.creeps.remoteBuilder = _.filter(Game.creeps, (creep) => creep.memory.homeRoom == thisRoom.name && creep.memory.role == 'remoteBuilder');
         }
         thisRoom.sources = thisRoom.find(FIND_SOURCES);
@@ -169,6 +169,7 @@ let room = {
             // thisRoom.memory.storage = [];
             thisRoom.memory.links = [];
             thisRoom.memory.sourceLinks = [];
+            thisRoom.memory.extractor = [];
 
             for (let i = 0; i < thisRoom.structuresAll.length; i++) { thisRoom.memory.structuresAll.push(thisRoom.structuresAll[i].id); }
             for (let i = 0; i < thisRoom.container.length; i++) { thisRoom.memory.container.push(thisRoom.container[i].id); }
@@ -193,6 +194,7 @@ let room = {
             // thisRoom.storage = [];
             thisRoom.links = [];
             thisRoom.sourceLinks = [];
+            thisRoom.extractor = [];
             if (typeof thisRoom.memory.structuresAll !== 'undefined') {
                 for (let id in thisRoom.memory.structuresAll) { thisRoom.structuresAll.push(actions.getElement(thisRoom.name, thisRoom.memory.structuresAll[id])); }
             }
@@ -340,13 +342,13 @@ let room = {
                     bodyCost = bodyCost + 250;
                     stepCost = 250;
                 }
-            } else if (thisRoom.memory.claiming.status == 'claiming') {
+            } else if (thisRoom.memory.claiming.status === 'claiming') {
                 if (creeps.claimers.length == 0) {
                     newName = 'Claimer' + Game.time;
                     body = [CLAIM, MOVE, MOVE];
                     memory = { role: 'claimer', homeRoom: thisRoom.name };
                 }
-            } else if (thisRoom.memory.claiming.status = 'buildSpawn') {
+            } else if (thisRoom.memory.claiming.status === 'buildSpawn') {
                 if (creeps.remoteBuilder.length == 0) {
                     newName = 'RemoteBuilder' + Game.time;
                     body = [WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE,MOVE];

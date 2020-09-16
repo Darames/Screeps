@@ -71,7 +71,7 @@ let flags = {
     setBlueprint: function (print, thisFlag){
         
             if (typeof thisRoom.memory.blueprint.template !== 'undefined') {
-                thisRoom.memory.blueprint.template.push({
+                thisRoom.memory.blueprint.templates.push({
                     name: print,
                     markerPos: {
                         x: thisFlag.pos.x,

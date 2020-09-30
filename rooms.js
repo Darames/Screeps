@@ -26,7 +26,7 @@ let room = {
             }
             if (typeof thisRoom.memory.blueprint !== 'undefined') {
                 if (thisRoom.memory.blueprint.build === true) {
-                    blueprint.build(thisRoom.memory.blueprint.template, thisRoom);
+                    blueprint.build(thisRoom.memory.blueprint.template[0], thisRoom);
                 }
             }
         }

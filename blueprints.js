@@ -37,14 +37,8 @@ var blueprints = {
         const roomLvl = thisRoom.controller.level;
         
         if (roomLvl != thisRoom.memory.blueprint.roomLvl) {
-          let buildings;
-          if (buildBlueprint == 'mainBase') {
-            buildings = this.mainBase.buildings;
-          } else {
-            buildings = this.labs.buildings;
-          }
-          // const buildings = this[buildBlueprint].buildings;
-          const markerPos = thisRoom.memory.blueprint.markerPos;
+          const buildings = this[buildBlueprint.name].buildings;
+          const markerPos = buildBlueprint.markerPos;
           thisRoom.memory.blueprint.roomLvl = roomLvl;
           let counter = 0;
           

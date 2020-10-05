@@ -25,7 +25,7 @@ let flags = {
                 blueprint.showBuild(blueprint.mainBase, thisFlag)
                 if (typeof thisRoom.memory.blueprint !== 'undefined') {
                     if (thisRoom.memory.blueprint.build == true) {
-                        this.setBlueprint('mainBase', thisFlag);
+                        this.setBlueprint('mainBase', thisFlag, thisRoom);
                     }
                 } else {
                     thisRoom.memory.blueprint = {}
@@ -36,7 +36,7 @@ let flags = {
                 
                 if (typeof thisRoom.memory.blueprint !== 'undefined') {
                     if (thisRoom.memory.blueprint.buildLabs == true) {
-                        this.setBlueprint('labs', thisFlag);
+                        this.setBlueprint('labs', thisFlag, thisRoom);
                     }
                 } else {
                     thisRoom.memory.blueprint = {}
@@ -68,8 +68,12 @@ let flags = {
             }
         }
     },
+<<<<<<< HEAD
     setBlueprint: function (print, thisFlag){
         let thisRoom = Game.rooms[thisFlag.pos.roomName];
+=======
+    setBlueprint: function (print, thisFlag, thisRoom){
+>>>>>>> 0dcfa6ac5bc3de9dc87b7061d98a6a919178608e
             if (typeof thisRoom.memory.blueprint.template !== 'undefined') {
                 thisRoom.memory.blueprint.templates.push({
                     name: print,

@@ -26,7 +26,7 @@ let room = {
             }
             if (typeof thisRoom.memory.blueprint !== 'undefined') {
                 if (thisRoom.memory.blueprint.build === true) {
-                    blueprint.build(thisRoom.memory.blueprint.template, thisRoom);
+                    blueprint.build(thisRoom.memory.blueprint.template[0], thisRoom);
                 }
             }
             if (thisRoom.controller.level >= 6 && thisRoom.extractor.lenght == 0) {
@@ -332,12 +332,27 @@ let room = {
                 newName = 'Builder' + Game.time;
                 body = [WORK, MOVE, CARRY, MOVE];
                 let builderNr = 1;
+                let haveBuilderOne = false
                 let bodyCost = 250;
                 let stepCost = 250;
 
-                if (creeps.builders.length >= 1) {
-                    builderNr = creeps.builders.length + 1;
-                }
+                // if (creeps.builders.length >= 1) {
+                //     builderNr = creeps.builders.length + 1;
+                // }
+
+                creeps.builders.forEach(c => {
+                    if(c.memory.builderNr == 1) {
+                        builderNr = creeps.builders.length + 1;
+                        haveBuilderOne = true;
+                    } else {
+                        if (c.memory.builderNr > 1 && !haveBuilderOne) {
+                            builderNr = creeps.builders.length + 1;
+                        } else {
+                            builderNr = 1;
+                        }
+                    }
+                });
+
                 memory = { role: 'builder', builderNr: builderNr };
 
                 while ((bodyCost + stepCost) < roomCapacity && bodyCost < 2000) {

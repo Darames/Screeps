@@ -68,8 +68,8 @@ let flags = {
             }
         }
     },
-    setBlueprint: function (print, thisFlag, thisRoom){
-        let thisRoom = Game.rooms[Game.flags[flag].pos.roomName];
+    setBlueprint: function (print, thisFlag){
+        let thisRoom = Game.rooms[thisFlag.pos.roomName];
             if (typeof thisRoom.memory.blueprint.template !== 'undefined') {
                 thisRoom.memory.blueprint.templates.push({
                     name: print,

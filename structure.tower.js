@@ -13,8 +13,8 @@ var structureTower = {
         if (towers.length > 0) {
             var hostiles = thisRoom.find(FIND_HOSTILE_CREEPS);
             if (hostiles.length > 0) {
-                let username = hostiles[0].owner.username;
-                Game.notify(`User ${username} spotted in room ${roomName}`);
+                // let username = hostiles[0].owner.username;
+                // Game.notify(`User ${username} spotted in room ${roomName}`);
 
                 towers.forEach(tower => tower.attack(hostiles[0]));
 

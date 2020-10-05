@@ -29,6 +29,9 @@ let room = {
                     blueprint.build(thisRoom.memory.blueprint.template, thisRoom);
                 }
             }
+            if (thisRoom.controller.level >= 6 && thisRoom.extractor.lenght == 0) {
+                thisRoom.createConstructionSite(thisRoom.minerals[0].pos, STRUCTURE_EXTRACTOR);
+            }
         }
         
         for (const room in Memory.rooms) {

@@ -66,7 +66,7 @@ let roleRemoteBuilder = {
 	        }
         }
         if(creep.pos.roomName == claimRoom){
-            if (thisRoom.spawns.length > 0) { 
+            if (creepRoom.spawns.length > 0) { 
                 Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'idle';
             }
         }

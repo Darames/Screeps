@@ -23,14 +23,14 @@ let roleClaimer = {
             // creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
             // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
             
-            if (creep.memory.wayPoint == 'reached') {
+            // if (creep.memory.wayPoint == 'reached') {
                 creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
-            } else {
-                creep.moveTo(new RoomPosition(25, 25, 'W9N50'), { reusePath: 100 });
-                if (creepRoom.name == 'W9N50' ) {
-                    creep.memory.wayPoint = 'reached';
-                }
-            }
+            // } else {
+            //     creep.moveTo(new RoomPosition(25, 25, 'W9N50'), { reusePath: 100 });
+            //     if (creepRoom.name == 'W9N50' ) {
+            //         creep.memory.wayPoint = 'reached';
+            //     }
+            // }
             
         }
 

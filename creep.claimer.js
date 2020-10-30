@@ -34,7 +34,7 @@ let roleClaimer = {
             
         }
 
-        if (typeof claimRoom.controller != 'undefined' && claimRoom.controller.my) {
+        if (typeof roomToClaim.controller != 'undefined' && roomToClaim.controller.my) {
             Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'buildSpawn';
         }
     }

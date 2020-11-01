@@ -29,6 +29,13 @@ let room = {
                     blueprint.build(thisRoom.memory.blueprint.template[0], thisRoom);
                 }
             }
+            if (typeof thisRoom.controller !== 'undefined') {
+                if (thisRoom.controller.my) {
+                    if (thisRoom.controller.level >= 6 && thisRoom.extractor.lenght == 0) {
+                        thisRoom.createConstructionSite(thisRoom.minerals[0].pos, STRUCTURE_EXTRACTOR);
+                    }
+                }
+            }
         }
         
         for (const room in Memory.rooms) {
@@ -266,6 +273,9 @@ let room = {
             }
             if (thisRoom.constructionSites.length > 0 && limits.buil.value == 0) {
                 limits.buil.value = 1;
+            }
+            if (thisRoom.constructionSites.length == 0 && limits.buil.value > 0 && roomCapacity > 1200) {
+                limits.buil.value = 0;
             }
 
             let newName = '';

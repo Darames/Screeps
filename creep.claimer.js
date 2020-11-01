@@ -19,16 +19,21 @@ let roleClaimer = {
             }
             
         } else {
-            if (creep.memory.wayPoint == 'reached') {
+            // creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
+            // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
+            
+            // if (creep.memory.wayPoint == 'reached') {
                 creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
-            } else {
-                creep.moveTo(new RoomPosition(25, 25, 'W9N50'), { reusePath: 100 });
-                if (creepRoom.name == 'W9N50' ) {
-                    creep.memory.wayPoint = 'reached';
-                }
-            }
+            // } else {
+            //     creep.moveTo(new RoomPosition(25, 25, 'W9N50'), { reusePath: 100 });
+            //     if (creepRoom.name == 'W9N50' ) {
+            //         creep.memory.wayPoint = 'reached';
+            //     }
+            // }
+            
         }
-        if (typeof claimRoom.controller != 'undefined' && claimRoom.controller.my) {
+
+        if (typeof roomToClaim.controller != 'undefined' && roomToClaim.controller.my) {
             Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'buildSpawn';
         }
     }

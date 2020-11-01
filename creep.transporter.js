@@ -74,31 +74,37 @@ var transporter = {
 		targets.sort(function(a, b){ return b.transportPriority - a.transportPriority;});
 		thisRoom.transporterTargets = targets;
 	},
+	newTarget: function(creep, targets) {
+		let creepRoom = Game.rooms[creep.pos.roomName];
+		if (targets.length > 0) {
+			creep.memory.target = targets[0].id;
+			target = targets[0];
+			if (creep.store[RESOURCE_ENERGY] >= (target.store.getCapacity(RESOURCE_ENERGY) - target.energy)) {
+				let removedTarget = targets.shift();
+				creepRoom.transporterTargets = targets;
+			}
+			return target;
+		} else {
+			creep.memory.target = "none";
+		}
+	},
 
 	run: function (creep) {
 		let creepRoom = Game.rooms[creep.pos.roomName];
 		let target = Game.getObjectById(creep.memory.target);
+		let targets = creepRoom.transporterTargets;
+
+		if ( targets.length == 1 && targets[0].id == creep.memory.target && (creep.store[RESOURCE_ENERGY] >= (targets[0].store.getCapacity(RESOURCE_ENERGY) - targets[0].energy)) ) {
+			let removedTarget = targets.shift();
+			creepRoom.transporterTargets = targets;
+		}
 		// if( typeof creep.memory.delivering === 'undefined' ){ creep.memory.delivering = false; }
 		// if( typeof creep.memory.target === 'undefined' ){ creep.memory.target = "none"; }
 
-		function newTarget(creep, targets) {
-			if (targets.length > 0) {
-				creep.memory.target = targets[0].id;
-				target = targets[0];
-				if (creep.store[RESOURCE_ENERGY] >= (target.store.getCapacity(RESOURCE_ENERGY) - target.energy)) {
-					let removedTarget = targets.shift();
-					creepRoom.transporterTargets = targets;
-				}
-			} else {
-				creep.memory.target = "none";
-			}
-			return target;
-		}
 		if (target == null) {
 			creepRoom.memory.scanMode = true;
 		}
 		if (creep.memory.target === "none" && creep.memory.delivering) {
-			let targets = creepRoom.transporterTargets;
 			targets = _.sortByAll(targets, [s => creep.pos.getRangeTo(s)]);
 			// targets = _.sortByAll(targets, [s => s.transportPriority]);
 			targets.sort(function(a, b){
@@ -110,10 +116,10 @@ var transporter = {
 					return b.transportPriority - a.transportPriority;
 				}
 			});
-			target = newTarget(creep, targets);
+			target = this.newTarget(creep, targets);
 		} else if (creep.memory.target != "none" && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) {
 			let targets = creepRoom.transporterTargets; targets = _.sortByAll(targets, [s => s.transportPriority, s => creep.pos.getRangeTo(s)]);
-			target = newTarget(creep, targets);
+			target = this.newTarget(creep, targets);
 		}
 
 		if ((creep.memory.delivering && creep.store[RESOURCE_ENERGY] == 0) || !creep.memory.delivering) {

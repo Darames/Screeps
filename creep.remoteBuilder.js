@@ -28,14 +28,14 @@ let roleRemoteBuilder = {
                 // creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
                 // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
                 
-                if (creep.memory.wayPoint == 'reached') {
+                // if (creep.memory.wayPoint == 'reached') {
                     creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
-                } else {
-                    creep.moveTo(new RoomPosition(25, 25, 'W9N50'), { reusePath: 100 });
-                    if (creepRoom.name == 'W9N50' ) {
-                        creep.memory.wayPoint = 'reached';
-                    }
-                }
+                // } else {
+                //     creep.moveTo(new RoomPosition(25, 25, 'W9N50'), { reusePath: 100 });
+                //     if (creepRoom.name == 'W9N50' ) {
+                //         creep.memory.wayPoint = 'reached';
+                //     }
+                // }
 	        } else {
 	            if(constructionSites.length) {
                     if(creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE) {
@@ -48,14 +48,14 @@ let roleRemoteBuilder = {
                 // creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
 	            // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
 	            
-	            if (creep.memory.wayPoint == 'reached') {
+	            // if (creep.memory.wayPoint == 'reached') {
                     creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
-                } else {
-                    creep.moveTo(new RoomPosition(25, 25, 'W9N50'), { reusePath: 100 });
-                    if (creepRoom.name == 'W9N50' ) {
-                        creep.memory.wayPoint = 'reached';
-                    }
-                }
+                // } else {
+                //     creep.moveTo(new RoomPosition(25, 25, 'W9N50'), { reusePath: 100 });
+                //     if (creepRoom.name == 'W9N50' ) {
+                //         creep.memory.wayPoint = 'reached';
+                //     }
+                // }
 	        } else {
 	            let sources = room.find(FIND_SOURCES);
     			sources = _.sortBy( sources, s => creep.pos.getRangeTo(s) )
@@ -65,9 +65,8 @@ let roleRemoteBuilder = {
                 }
 	        }
         }
-        
-        if (typeof room.controller != 'undefined' && room.controller.my) {
-            if (room.find(FIND_MY_SPAWNS).length > 0) {
+        if(creep.pos.roomName == claimRoom){
+            if (creepRoom.spawns.length > 0) { 
                 Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'idle';
             }
         }

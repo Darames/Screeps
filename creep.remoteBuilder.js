@@ -64,7 +64,13 @@ let roleRemoteBuilder = {
                     creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}, maxOps: 200});
                 }
 	        }
-	    }
+        }
+        
+        if (typeof room.controller != 'undefined' && room.controller.my) {
+            if (room.find(FIND_MY_SPAWNS).length > 0) {
+                Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'idle';
+            }
+        }
 	}
 };
 

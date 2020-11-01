@@ -68,10 +68,10 @@ let flags = {
             }
         }
     },
-    setBlueprint: function (print, thisFlag, thisRoom){
+    setBlueprint: function (name, thisFlag, thisRoom){
             if (typeof thisRoom.memory.blueprint.template !== 'undefined') {
                 thisRoom.memory.blueprint.templates.push({
-                    name: print,
+                    name,
                     markerPos: {
                         x: thisFlag.pos.x,
                         y: thisFlag.pos.y
@@ -80,7 +80,7 @@ let flags = {
                 });
             } else {
                 thisRoom.memory.blueprint.template = [{
-                    name: print,
+                    name,
                     markerPos: {
                         x: thisFlag.pos.x,
                         y: thisFlag.pos.y

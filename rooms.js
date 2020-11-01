@@ -342,7 +342,7 @@ let room = {
                         builderNr = creeps.builders.length + 1;
                         haveBuilderOne = true;
                     } else {
-                        if (c.memory.builderNr > 1 && !haveBuilderOne) {
+                        if (c.memory.builderNr >= 1 && haveBuilderOne) {
                             builderNr = creeps.builders.length + 1;
                         } else {
                             builderNr = 1;

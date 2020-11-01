@@ -14,15 +14,11 @@ let roleClaimer = {
             if (creep.pos.isNearTo(creepRoom.controller)) {
                 creep.claimController(creepRoom.controller)
             } else {
-                // actions.moveTo(creep, creepRoom.controller);
                 creep.moveTo(creepRoom.controller);
                 // creep.move(TOP);
             }
             
         } else {
-            // creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
-            // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
-            
             if (creep.memory.wayPoint == 'reached') {
                 creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
             } else {
@@ -31,9 +27,7 @@ let roleClaimer = {
                     creep.memory.wayPoint = 'reached';
                 }
             }
-            
         }
-
         if (typeof claimRoom.controller != 'undefined' && claimRoom.controller.my) {
             Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'buildSpawn';
         }

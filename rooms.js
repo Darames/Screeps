@@ -82,15 +82,6 @@ let room = {
 
     memory: function (thisRoom) {
 
-        if (typeof thisRoom.memory.limits === 'undefined') {
-            thisRoom.memory.limits = {
-                'tran': { 'value': 1, 'autoChange': true },
-                'upgr': { 'value': 1, 'autoChange': false },
-                'buil': { 'value': 1, 'autoChange': true },
-                'harv': { 'value': 1, 'autoChange': true },
-                'capacity': thisRoom.energyCapacityAvailable
-            };
-        }
         if (typeof thisRoom.memory.claiming === 'undefined') {
             thisRoom.memory.claiming = {};
             thisRoom.memory.claiming.room = 'none'
@@ -128,8 +119,18 @@ let room = {
         thisRoom.damagedStructures = _.filter(thisRoom.damagedStructures, (structures) => (structures.structureType != "constructedWall" && structures.structureType != "rampart") || (structures.structureType == "constructedWall" && !(structures.hits > 170000)) || (structures.structureType == "rampart" && !(structures.hits > 170000)));
         thisRoom.droppedEnergy = thisRoom.find(FIND_DROPPED_RESOURCES, { filter: (r) => { return r.resourceType == RESOURCE_ENERGY } });
         // thisRoom.find(FIND_TOMBSTONES).forEach(tombstone => { if(tombstone.store[RESOURCE_ENERGY] > 0) { thisRoom.droppedEnergy.push(tombstone); } });
-        thisRoom.limits = thisRoom.memory.limits;
         
+        if (typeof thisRoom.memory.limits === 'undefined') {
+            thisRoom.memory.limits = {
+                'tran': { 'value': 1, 'autoChange': true },
+                'upgr': { 'value': 1, 'autoChange': false },
+                'buil': { 'value': 1, 'autoChange': true },
+                'harv': { 'value': thisRoom.sources, 'autoChange': true },
+                'capacity': thisRoom.energyCapacityAvailable
+            };
+        }
+        thisRoom.limits = thisRoom.memory.limits;
+
         if (typeof thisRoom.memory.scanMode === 'undefined') {
             thisRoom.memory.scanMode = true;
             thisRoom.memory.constructionSites = [];

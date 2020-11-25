@@ -154,15 +154,15 @@ let room = {
 
         if (thisRoom.memory.scanMode === true) {
             thisRoom.structuresAll = _.filter(Game.structures, s => s.room.name == thisRoom.name);
-            thisRoom.container = thisRoom.find(FIND_STRUCTURES, { filter: (s) => { return s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 3)}  });
-            thisRoom.controllerContainer = thisRoom.find(FIND_STRUCTURES, { filter: (s) => { return s.structureType == STRUCTURE_CONTAINER && s.pos.inRangeTo(s.room.controller, 3)}  });
+            thisRoom.container = thisRoom.find(FIND_STRUCTURES, { filter: (s) => { return s.structureType == STRUCTURE_CONTAINER && !s.pos.inRangeTo(s.room.controller, 2)}  });
+            thisRoom.controllerContainer = thisRoom.find(FIND_STRUCTURES, { filter: (s) => { return s.structureType == STRUCTURE_CONTAINER && s.pos.inRangeTo(s.room.controller, 2)}  });
             thisRoom.spawns = _.filter(Game.spawns, s => s.room.name == thisRoom.name);
             thisRoom.extensions = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_EXTENSION);
             thisRoom.structures = {
                 'towers': _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_TOWER)
             };
             thisRoom.links = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK);
-            thisRoom.sourceLinks = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.sources[0], 3) || s.pos.inRangeTo(thisRoom.sources[1], 3)));
+            // thisRoom.sourceLinks = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_LINK && (s.pos.inRangeTo(thisRoom.sources[0], 3) || s.pos.inRangeTo(thisRoom.sources[1], 3)));
             thisRoom.extractor = _.filter(thisRoom.structuresAll, s => s.structureType == STRUCTURE_EXTRACTOR);
 
             thisRoom.memory.structuresAll = [];
@@ -185,7 +185,7 @@ let room = {
             for (let i = 0; i < thisRoom.extensions.length; i++) { thisRoom.memory.extensions.push(thisRoom.extensions[i].id); }
             for (let i = 0; i < thisRoom.structures.towers.length; i++) { thisRoom.memory.structures.towers.push(thisRoom.structures.towers[i].id); }
             for (let i = 0; i < thisRoom.links.length; i++) { thisRoom.memory.links.push(thisRoom.links[i].id); }
-            for (let i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(thisRoom.sourceLinks[i].id); }
+            // for (let i = 0; i < thisRoom.sourceLinks.length; i++) { thisRoom.memory.sourceLinks.push(thisRoom.sourceLinks[i].id); }
             for (let i = 0; i < thisRoom.extractor.length; i++) { thisRoom.memory.extractor.push(thisRoom.extractor[i].id); }
 
             thisRoom.memory.scanMode = false;
@@ -225,9 +225,10 @@ let room = {
             if (typeof thisRoom.memory.links !== 'undefined') {
                 for (let id in thisRoom.memory.links) { thisRoom.links.push(actions.getElement(thisRoom.name, thisRoom.memory.links[id])); }
             }
-            if (typeof thisRoom.memory.sourceLinks !== 'undefined') {
-                for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(actions.getElement(thisRoom.name, thisRoom.memory.sourceLinks[id])); }
-            }
+            // if (typeof thisRoom.memory.sourceLinks !== 'undefined') {
+            //     for (let id in thisRoom.memory.sourceLinks) { thisRoom.sourceLinks.push(actions.getElement(thisRoom.name, thisRoom.memory.sourceLinks[id])); }
+            //     // thisRoom.memory.sourceLinks = [];
+            // }
             if (typeof thisRoom.memory.extractor !== 'undefined') {
                 for (let id in thisRoom.memory.extractor) { thisRoom.extractor.push(actions.getElement(thisRoom.name, thisRoom.memory.extractor[id])); }
             }
@@ -254,8 +255,10 @@ let room = {
 
             if (thisRoom.spawns.length > 1 && thisRoom.spawns[0].spawning) { spawn = thisRoom.spawns[1]; }
             if (roomCapacity > 1200) {
-                limits.harv.value = 2;
-                thisRoom.memory.limits.harv.autoChange = false;
+                if(thisRoom.memory.limits.harv.autoChange){
+                    limits.harv.value = 2;
+                    thisRoom.memory.limits.harv.autoChange = false;
+                }
                 limits.capacity = roomCapacity;
 
                 if (limits.capacity === roomCapacity && limits.tran.value <= 2 && limits.tran.autoChange) {

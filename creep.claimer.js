@@ -17,7 +17,11 @@ let roleClaimer = {
                 creep.moveTo(creepRoom.controller);
                 // creep.move(TOP);
             }
-            
+            if (typeof roomToClaim.controller != 'undefined') {
+                if (roomToClaim.controller.my) {
+                    Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'buildSpawn';
+                }
+            }
         } else {
             // creep.moveTo(new RoomPosition(25, 25, claimRoom), { reusePath: 100 });
             // actions.moveTo(creep, new RoomPosition(25, 25, claimRoom));
@@ -31,10 +35,6 @@ let roleClaimer = {
             //     }
             // }
             
-        }
-
-        if (typeof roomToClaim.controller != 'undefined' && roomToClaim.controller.my) {
-            Game.rooms[creep.memory.homeRoom].memory.claiming.status = 'buildSpawn';
         }
     }
 };
